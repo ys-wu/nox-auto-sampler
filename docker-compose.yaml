@@ -1,0 +1,40 @@
+version: "3"
+
+services:
+  web:
+    build: ./backend
+    restart: always
+    environment:
+      DEPLOYMENT: 'true'
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - static:/static
+      - ./dbdata:/app/dbdata
+    depends_on:
+      - redis
+  nginx:
+    build: ./nginx
+    volumes:
+      - static:/static
+    ports:
+      - "80:80"
+    depends_on:
+      - web
+  worker:
+    build: ./worker
+    restart: always
+    environment:
+      DEPLOYMENT: 'true'
+    command: python run.py
+    depends_on:
+      - redis
+  redis:
+    image: "redis:6.0.10-alpine"
+    restart: always
+    ports:
+      - "6379:6379"
+
+volumes:
+  static:
