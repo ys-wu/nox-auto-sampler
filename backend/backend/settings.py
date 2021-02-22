@@ -118,8 +118,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_ROOT = '/static/'
-STATIC_URL = '/static/'
+# STATIC_ROOT = '/static/'
+# STATIC_URL = '/static/'
+
+MEDIA_URL = '/media/'
+STATIC_URL = '/django_static/' 
+STATIC_ROOT = BASE_DIR / 'django_static'
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
