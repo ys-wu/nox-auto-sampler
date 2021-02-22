@@ -1,7 +1,17 @@
 import logo from './logo.svg';
 import './App.css';
 
+// import { useEffect } from 'react'
+
+
 function App() {
+  // useEffect(() => {
+  //   fetch('http://localhost/series/')
+  //     .then(res => res.json())
+  //     .then(console.log)
+  //     .catch(console.error);
+  // });
+
   return (
     <div className="App">
       <header className="App-header">

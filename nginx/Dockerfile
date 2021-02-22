@@ -6,7 +6,8 @@ ENV PATH /app/node_modules/.bin:$PATH
 COPY ./frontend/package.json ./
 # COPY ./frontend/package-lock.json ./
 RUN npm install
-COPY ./frontend ./
+COPY ./frontend/src/ ./src/
+COPY ./frontend/public/ ./public/
 RUN npm run build
 
 

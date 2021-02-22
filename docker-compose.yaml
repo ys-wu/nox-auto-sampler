@@ -10,14 +10,14 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - static:/static
+      - static_volume:/app/django_static/
       - ./dbdata:/app/dbdata
     # depends_on:
     #   - redis
   nginx:
     build: ./nginx
     volumes:
-      - static:/static
+      - static_volume:/app/django_static/
     ports:
       - "80:80"
     depends_on:
@@ -37,4 +37,4 @@ services:
   #     - "6379:6379"
 
 volumes:
-  static:
+  static_volume: {}

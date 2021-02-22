@@ -2,3 +2,5 @@ docs/
 playground/
 __pycache__/
 dbdata/
+.vscode/
+venv/
