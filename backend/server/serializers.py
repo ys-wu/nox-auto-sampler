@@ -7,4 +7,4 @@ class SeriesSerializer(serializers.HyperlinkedModelSerializer):
 
   class Meta:
     model = Series
-    fields = ('url', 'id', 'name', 'date')
+    fields = ('url', 'id', 'created', 'name')
