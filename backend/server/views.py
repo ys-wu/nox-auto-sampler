@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.views import View
 from rest_framework import viewsets
 
-# import json
+import json
 
 from server.models import Series
 from server.serializers import SeriesSerializer
@@ -18,9 +18,9 @@ class SeriesViewSet(viewsets.ModelViewSet):
 
 class Setting(View):
   def get(self, request):
-    # with open(setting_url) as data_file:
-    #   data = json.load(data_file)
-    return JsonResponse({"hello":1})
+    with open(setting_url) as data_file:
+      data = json.load(data_file)
+      return JsonResponse(data, safe=False)
 
 #   def post(self, request):
 #     return JsonResponse({"hello": 1}

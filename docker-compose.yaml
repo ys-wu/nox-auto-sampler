@@ -12,7 +12,7 @@ services:
     volumes:
       - static_volume:/app/django_static/
       - ./dbdata:/app/dbdata
-      # - ./setting:/app/setting
+      - ./setting:/app/setting
     # depends_on:
     #   - redis
   nginx:
