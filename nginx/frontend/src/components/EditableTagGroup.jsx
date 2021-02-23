@@ -7,23 +7,18 @@ import PlusOutlined from '@ant-design/icons/PlusOutlined';
 
 
 export default class EditableTagGroup extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+  state = {
     tags: this.props.tags,
     inputVisible: false,
     inputValue: '',
     editInputIndex: -1,
     editInputValue: '',
-    };
-    this.handleClose = this.handleClose.bind(this);
-    this.showInput = this.showInput.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleInputConfirm = this.handleInputConfirm.bind(this);
-    this.handleEditInputChange = this.handleEditInputChange.bind(this);
-    this.handleEditInputConfirm = this.handleEditInputConfirm.bind(this);
-    this.saveInputRef = this.saveInputRef.bind(this);
-    this.saveEditInputRef = this.saveEditInputRef.bind(this);
+  };
+  
+  // update DOM whenever receives new Props.
+  componentWillReceiveProps(nextProps, nextState) {
+    const tags = nextProps.tags;
+    this.setState({ tags });
   };
 
   componentDidUpdate() {
@@ -32,7 +27,6 @@ export default class EditableTagGroup extends React.Component {
 
   handleClose = removedTag => {
     const tags = this.state.tags.filter(tag => tag !== removedTag);
-    console.log(tags);
     this.setState({ tags });
   };
 
@@ -50,7 +44,6 @@ export default class EditableTagGroup extends React.Component {
     if (inputValue && tags.indexOf(inputValue) === -1) {
       tags = [...tags, inputValue];
     }
-    console.log(tags);
     this.setState({
       tags,
       inputVisible: false,
