@@ -6,18 +6,25 @@ import { useEffect } from 'react'
 
 function App() {
   useEffect(() => {
-    // fetch('http://localhost/series/')
+    // const hostname = window.location.hostname;
+    // const url = `http://${hostname}/series/
+    // fetch(url)
     //   .then(res => res.json())
     //   .then(console.log)
     //   .catch(console.error);
-    fetch('http://localhost/series/', {
-      method: "POST",
-      headers: {
-        'Accept': 'application/json, text/plain',
-        'Content-Type': 'application/json;charset=UTF-8'
-      },
-      body: JSON.stringify({"name": "yusheng"})
-      // body: {"name": "yusheng"}
+
+    const hostname = window.location.hostname;
+    const url = `http://${hostname}/series/`
+    fetch(url, {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json, text/plain',
+          'Content-Type': 'application/json;charset=UTF-8'
+        },
+        body: JSON.stringify({
+          "name": "yusheng"
+        })
+        // body: {"name": "yusheng"}
       })
       .then(res => res.json())
       .then(console.log)
