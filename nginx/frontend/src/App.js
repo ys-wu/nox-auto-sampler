@@ -33,7 +33,7 @@ function App() {
   const updateSetting = data => {
     const obj = tidySetting(data);
     setSetting(obj);
-    console.log('update setting:', obj);
+    console.log('App update setting:', obj);
   };
 
   return (
