@@ -13,9 +13,27 @@ function App() {
 
   const [setting, setSetting] = useState();
 
+  // tidy up setting data from array to obj
+  const tidySetting = data => {
+    const nameMapping = {
+      "类型": "type",
+      "偏差": "bias",
+      "气瓶压力": "bottlePres",
+      "气瓶类型": "bottleType",
+      "检测人员": "operator"
+    };
+    const obj ={};
+    data.forEach(element => {
+      obj[nameMapping[element['name']]] = element['tags'];
+    });
+    return obj;
+  };
+
+  // update setting state, data from SettingList component
   const updateSetting = data => {
-    setSetting(data);
-    console.log('update setting:', data);
+    const obj = tidySetting(data);
+    setSetting(obj);
+    console.log('update setting:', obj);
   };
 
   return (
