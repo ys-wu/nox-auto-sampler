@@ -23,6 +23,7 @@ class Setting(View):
       return JsonResponse(data, safe=False)
 
   def post(self, request):
-    print(type(request))
-    print(request)
-    return JsonResponse({"hello": 1})
+    with open(setting_url, 'w') as data_file:
+      data = json.loads(request.body)
+      json.dump(data, data_file)
+      return JsonResponse(data, safe=False)

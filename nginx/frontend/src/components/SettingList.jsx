@@ -3,7 +3,7 @@ import './SettingList.css'
 import Button from 'antd/lib/button';
 import List from 'antd/lib/list';
 import EditableTagGroup from './EditableTagGroup'
-import Cookies from 'universal-cookie';
+// import Cookies from 'universal-cookie';
 
 export default function SettingList() {
 
@@ -34,7 +34,7 @@ export default function SettingList() {
 
   const hostname = window.location.hostname;
   const url = `http://${hostname}/setting/`;
-  const csrftoken = new Cookies();
+  // const csrftoken = new Cookies();
 
   const getSetting = () => {
     fetch(url)
@@ -49,12 +49,9 @@ export default function SettingList() {
       headers: {
         'Accept': 'application/json, text/plain',
         'Content-Type': 'application/json; charset=UTF-8',
-        'X-CSRFToken': csrftoken
+        // 'X-CSRFToken': csrftoken
       },
-      body: JSON.stringify({
-        "name": "yusheng"
-      })
-      // body: {"name": "yusheng"}
+      body: JSON.stringify(current)
     })
       .then(res => res.json())
       .then(console.log)
