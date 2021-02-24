@@ -30,7 +30,7 @@ export default function SettingList({ onUpdateSetting = f => f }) {
   // update to temp
   const updateTemp = data => {
     setTemp(data);
-    // setCurrent(data);
+    setCurrent(data);
     return data;
   };
 
@@ -87,12 +87,11 @@ export default function SettingList({ onUpdateSetting = f => f }) {
     getSetting();
   }, []);
 
-  // use when clicked save button, post current setting to backend
-  // and update setting to state of App component
+  // update setting to state of App component, post current setting to backend
   useLayoutEffect(() => {
     if (current) {
-      postSetting();
       onUpdateSetting(current);
+      postSetting();
     };
   }, [current]);
 
