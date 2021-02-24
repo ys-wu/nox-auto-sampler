@@ -1,11 +1,11 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import './SettingList.css'
 import Button from 'antd/lib/button';
 import List from 'antd/lib/list';
 import EditableTagGroup from './EditableTagGroup'
 // import Cookies from 'universal-cookie';
 
-export default function SettingList() {
+export default function SettingList({ onUpdateSetting = f => f }) {
 
   const defaultSetting = [
     { 'name': '类型', 'tags': ['校准', '质控', '样品'] },
@@ -30,6 +30,7 @@ export default function SettingList() {
   // update to temp
   const updateTemp = data => {
     setTemp(data);
+    // setCurrent(data);
     return data;
   };
 
@@ -38,7 +39,7 @@ export default function SettingList() {
     fetch(url)
       .then(res => res.json())
       .then(updateTemp)
-      .then((res) => console.log('Get Setting: ', res))
+      .then((res) => console.log('Get Setting:', res))
       .catch(console.error);
   };
 
@@ -54,7 +55,7 @@ export default function SettingList() {
       body: JSON.stringify(current)
     })
       .then(res => res.json())
-      .then((res) => console.log('Post Setting: ', res))
+      .then((res) => console.log('Post Setting:', res))
       .catch(console.error);
   };
 
@@ -81,15 +82,19 @@ export default function SettingList() {
     setTemp([...defaultSetting]);
   };
 
-  // use once when page loaded, get setting from backend
+  // get setting from backend
   useEffect(() => {
     getSetting();
   }, []);
 
   // use when clicked save button, post current setting to backend
-  useEffect(() => {
-    postSetting()
-  }, [current])
+  // and update setting to state of App component
+  useLayoutEffect(() => {
+    if (current) {
+      postSetting();
+      onUpdateSetting(current);
+    };
+  }, [current]);
 
   return (
     <>

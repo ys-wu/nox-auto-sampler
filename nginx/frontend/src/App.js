@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import 'antd/dist/antd.css';
 import './index.css';
 import js_logo from './img/js_logo.png'
@@ -10,6 +10,14 @@ import Status from './components/Status'
 
 
 function App() {
+
+  const [setting, setSetting] = useState();
+
+  const updateSetting = data => {
+    setSetting(data);
+    console.log('update setting:', data);
+  };
+
   return (
     <div className="App">
       <Row>
@@ -25,7 +33,7 @@ function App() {
       </Row>
       <Row>
         <Col span={18} offset={3}>
-          <Tabframe/>
+          <Tabframe onUpdateSetting={ updateSetting }/>
         </Col>
       </Row>
       <Row>
@@ -39,6 +47,6 @@ function App() {
       </Row>
     </div>
   );
-}
+};
 
 export default App;
