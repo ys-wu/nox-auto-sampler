@@ -3,7 +3,7 @@ import './SettingList.css'
 import Button from 'antd/lib/button';
 import List from 'antd/lib/list';
 import EditableTagGroup from './EditableTagGroup'
-
+import Cookies from 'universal-cookie';
 
 export default function SettingList() {
 
@@ -33,28 +33,36 @@ export default function SettingList() {
   const [temp, setTemp] = useState([...tempSetting]); 
 
   const hostname = window.location.hostname;
-  const url = `http://${hostname}/setting/`
+  const url = `http://${hostname}/setting/`;
+  const csrftoken = new Cookies();
 
-  useEffect(() => {
+  const getSetting = () => {
     fetch(url)
       .then(res => res.json())
       .then(console.log)
       .catch(console.error);
+  };
 
-    // fetch(url, {
-    //   method: "POST",
-    //   headers: {
-    //     'Accept': 'application/json, text/plain',
-    //     'Content-Type': 'application/json;charset=UTF-8'
-    //   },
-    //   body: JSON.stringify({
-    //     "name": "yusheng"
-    //   })
-    //   // body: {"name": "yusheng"}
-    // })
-    //   .then(res => res.json())
-    //   .then(console.log)
-    //   .catch(console.error);
+  const postSetting = () => {
+    fetch(url, {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json, text/plain',
+        'Content-Type': 'application/json; charset=UTF-8',
+        'X-CSRFToken': csrftoken
+      },
+      body: JSON.stringify({
+        "name": "yusheng"
+      })
+      // body: {"name": "yusheng"}
+    })
+      .then(res => res.json())
+      .then(console.log)
+      .catch(console.error);
+  };
+
+  useEffect(() => {
+    getSetting();
   });
 
   const onUpdate = function(name, tags) {
@@ -70,6 +78,7 @@ export default function SettingList() {
   const saveCurrent = () => {
     setCurrent([...tempSetting]);
     setTemp([...tempSetting]);
+    postSetting();
   };
 
   const getDefault = () => {
