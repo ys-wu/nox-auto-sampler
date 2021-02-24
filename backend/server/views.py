@@ -19,11 +19,17 @@ class SeriesViewSet(viewsets.ModelViewSet):
 class Setting(View):
   def get(self, request):
     with open(setting_url) as data_file:
-      data = json.load(data_file)
-      return JsonResponse(data, safe=False)
+      try:
+        data = json.load(data_file)
+        return JsonResponse(data, safe=False)
+      except:
+        return JsonResponse({'status': 'failure'}, safe=False)
 
   def post(self, request):
     with open(setting_url, 'w') as data_file:
-      data = json.loads(request.body)
-      json.dump(data, data_file)
-      return JsonResponse(data, safe=False)
+      try:
+        data = json.loads(request.body)
+        json.dump(data, data_file)
+        return JsonResponse(data, safe=False)
+      except:
+        return JsonResponse({'status': 'failure'}, safe=False)

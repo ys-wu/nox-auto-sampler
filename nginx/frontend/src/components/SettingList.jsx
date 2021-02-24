@@ -7,17 +7,6 @@ import EditableTagGroup from './EditableTagGroup'
 
 export default function SettingList() {
 
-  let tempSetting = [
-    { 'name': '类型', 'tags': ['校准', '质控', '样品'] },
-    { 'name': '偏差', 'tags': ['0.1 %', '0.5 %', '1 %'] },
-    {
-      'name': '气瓶类型',
-      'tags': ['美托 2 升', '美托 4 升', '美托 8 升', '科金 2 升', '科金 4 升', '科金 8 升']
-    },
-    { 'name': '气瓶压力', 'tags': ['11.0 MPa', '10.9 MPa', '10.8 MPa', '10.7 MPa'] },
-    { 'name': '检测人员', 'tags': ['倪才倩', '范洁'] },
-  ];
-
   const defaultSetting = [
     { 'name': '类型', 'tags': ['校准', '质控', '样品'] },
     { 'name': '偏差', 'tags': ['0.1 %', '0.5 %', '1 %'] },
@@ -29,20 +18,31 @@ export default function SettingList() {
     { 'name': '检测人员', 'tags': ['倪才倩', '范洁'] },
   ];
 
-  const [current, setCurrent] = useState([...tempSetting]);
-  const [temp, setTemp] = useState([...tempSetting]); 
+  let tempSetting = [...defaultSetting];
+
+  const [current, setCurrent] = useState();
+  const [temp, setTemp] = useState(); 
 
   const hostname = window.location.hostname;
   const url = `http://${hostname}/setting/`;
   // const csrftoken = new Cookies();
 
+  // update to temp
+  const updateTemp = data => {
+    setTemp(data);
+    return data;
+  };
+
+  // get setting JSON from backend
   const getSetting = () => {
     fetch(url)
       .then(res => res.json())
-      .then(console.log)
+      .then(updateTemp)
+      .then((res) => console.log('Get Setting: ', res))
       .catch(console.error);
   };
 
+  // post current setting to backend
   const postSetting = () => {
     fetch(url, {
       method: "POST",
@@ -54,38 +54,47 @@ export default function SettingList() {
       body: JSON.stringify(current)
     })
       .then(res => res.json())
-      .then(console.log)
+      .then((res) => console.log('Post Setting: ', res))
       .catch(console.error);
   };
 
-  useEffect(() => {
-    getSetting();
-  });
-
+  // update view
   const onUpdate = function(name, tags) {
     tempSetting = tempSetting.map(
       item => item['name'] !== name ? item : {name : name, 'tags': tags }
      );
   };
   
+  // cancel temp setting
   const cancelTemp = () => {
     setTemp([...current]);
   };
 
+  // save temp setting to current
   const saveCurrent = () => {
-    setCurrent([...tempSetting]);
     setTemp([...tempSetting]);
-    postSetting();
+    setCurrent([...tempSetting]);
   };
 
+  // save default setting to current
   const getDefault = () => {
     setTemp([...defaultSetting]);
   };
 
+  // use once when page loaded, get setting from backend
+  useEffect(() => {
+    getSetting();
+  }, []);
+
+  // use when clicked save button, post current setting to backend
+  useEffect(() => {
+    postSetting()
+  }, [current])
+
   return (
     <>
-      <Button onClick={cancelTemp}>撤销</Button>  （返回至上次保存状态）
-      <Button onClick={ saveCurrent }>保存</Button> （保存使当前显示设置生效！）
+      <Button onClick={cancelTemp}>撤销</Button>  （点击“撤销”返回至上次保存状态）
+      <Button onClick={ saveCurrent }>保存</Button> （点击“保存”使当前显示设置生效！）
       <Button style={{ float: 'right' }} onClick={ getDefault }>获取出厂设置</Button>
       <List
         itemLayout="horizontal"
