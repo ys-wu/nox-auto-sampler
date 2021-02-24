@@ -1,4 +1,4 @@
-import React, { useState, useMemo} from 'react';
+import React, { useState, useEffect} from 'react';
 import './SettingList.css'
 import Button from 'antd/lib/button';
 import List from 'antd/lib/list';
@@ -18,10 +18,7 @@ export default function SettingList() {
     { 'name': '检测人员', 'tags': ['倪才倩', '范洁'] },
   ];
 
-  const [current, setCurrent] = useState([...tempSetting]);
-  const [temp, setTemp] = useState([...tempSetting]); 
-
-  let defaultSetting = [
+  const defaultSetting = [
     { 'name': '类型', 'tags': ['校准', '质控', '样品'] },
     { 'name': '偏差', 'tags': ['0.1 %', '0.5 %', '1 %'] },
     {
@@ -31,6 +28,34 @@ export default function SettingList() {
     { 'name': '气瓶压力', 'tags': ['11.0 MPa', '10.9 MPa', '10.8 MPa', '10.7 MPa'] },
     { 'name': '检测人员', 'tags': ['倪才倩', '范洁'] },
   ];
+
+  const [current, setCurrent] = useState([...tempSetting]);
+  const [temp, setTemp] = useState([...tempSetting]); 
+
+  const hostname = window.location.hostname;
+  const url = `http://${hostname}/setting/`
+
+  useEffect(() => {
+    fetch(url)
+      .then(res => res.json())
+      .then(console.log)
+      .catch(console.error);
+
+    // fetch(url, {
+    //   method: "POST",
+    //   headers: {
+    //     'Accept': 'application/json, text/plain',
+    //     'Content-Type': 'application/json;charset=UTF-8'
+    //   },
+    //   body: JSON.stringify({
+    //     "name": "yusheng"
+    //   })
+    //   // body: {"name": "yusheng"}
+    // })
+    //   .then(res => res.json())
+    //   .then(console.log)
+    //   .catch(console.error);
+  });
 
   const onUpdate = function(name, tags) {
     tempSetting = tempSetting.map(

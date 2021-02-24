@@ -22,5 +22,7 @@ class Setting(View):
       data = json.load(data_file)
       return JsonResponse(data, safe=False)
 
-#   def post(self, request):
-#     return JsonResponse({"hello": 1}
+  def post(self, request):
+    print(type(request))
+    print(request)
+    return JsonResponse({"hello": 1})
