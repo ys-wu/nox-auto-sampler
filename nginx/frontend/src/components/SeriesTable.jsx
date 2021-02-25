@@ -7,6 +7,13 @@ export default function SeriesTable({ setting }) {
 
   const [state, setState] = useState([]);
   const [data, setData] = useState([])
+  // const [copiedData, setCopiedData] = useState();
+  const [nextIndex, setNextIndex] = useState(1);
+
+  const blankLine = {
+    type: null,
+    name: null,
+  };
 
   const fakeSetting = {
     type: ['校准', '质控',]
@@ -26,11 +33,10 @@ export default function SeriesTable({ setting }) {
   ];
 
   const blankDataFatory = () => {
-    return {
-      id: data.length + 1,
-      type: null,
-      name: null,
-    };
+    const newBlankLine = {...blankLine};
+    newBlankLine['id'] = nextIndex;
+    setNextIndex(nextIndex + 1);
+    return newBlankLine;
   };
 
   const onUpdate = (index, value) => {
@@ -48,7 +54,19 @@ export default function SeriesTable({ setting }) {
     const newData = [...data];
     newData.push(blankDataFatory());
     setData(newData);
-    console.log('SeriesTable new data:', newData);
+    console.log('SeriesTable after a new line, new data:', newData);
+  };
+
+  const handleDeleteLine = index => {
+    // console.log('SeriesTable delete line:', index);
+    const newData = [...data];
+    const newState = [...state];
+    newData.splice(index, 1);
+    newState.splice(index, 1);
+    setData(newData);
+    setState(newState);
+    console.log('SeriesTable after deltele a line, new data:', newData);
+    console.log('SeriesTable after deltele a line, new state:', newState);
   };
 
   return (
@@ -66,7 +84,14 @@ export default function SeriesTable({ setting }) {
       </Row>
         {
           !data ? null : 
-            data.map((item, index) => <SampleLine key={ item['id'] } index={ index } setting={ fakeSetting } data={ item } onUpdate={ onUpdate } /> )
+            data.map((item, index) => <SampleLine 
+              key={ item['id'] }
+              index={ index }
+              setting={ fakeSetting }
+              data={ item }
+              onUpdate={ onUpdate }
+              onDeleteLine={ handleDeleteLine }
+            /> )
         }
       <Row>
         <Col span={18} offset={1}>

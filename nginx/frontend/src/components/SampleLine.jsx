@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
-import { Row, Col, Select, Input } from 'antd';
+import { Row, Col, Select, Input, Button } from 'antd';
 
 const { Option } = Select;
 
-export default function SampleLine({ index, setting, data, onUpdate=f=>f }) {
+export default function SampleLine({ index, setting, data, onUpdate=f=>f, onDeleteLine=f=>f }) {
 
   const [state, setState] = useState();
 
@@ -26,6 +26,11 @@ export default function SampleLine({ index, setting, data, onUpdate=f=>f }) {
       onUpdate(index, state);
     };
   }, [state]);
+
+  const handleDelete = () => {
+    // console.log('SampleLine handleDelte:', index);
+    onDeleteLine(index);
+  };
 
   const onSelectType = value => {
     // console.log('SampleLine onSelectType:', index, value);
@@ -60,7 +65,9 @@ export default function SampleLine({ index, setting, data, onUpdate=f=>f }) {
         <Col span={4}>
           <Row>
             <Col span={12}>copy</Col>
-            <Col span={12}>delete</Col>
+            <Col span={12}>
+              <Button block onClick={ handleDelete }>删除</Button>
+            </Col>
           </Row>
         </Col>
       </Row>
