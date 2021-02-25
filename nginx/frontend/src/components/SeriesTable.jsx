@@ -6,11 +6,12 @@ const { Option } = Select;
 
 export default function SeriesTable({ setting }) {
 
+  const [data, setData] = useState([]);
   const [state, setState] = useState([]);
-  const [data, setData] = useState([])
   const [copiedData, setCopiedData] = useState();
   const [nextIndex, setNextIndex] = useState(1);
-  const [pasteIndex, setPasteIndex] = useState();
+  const [addIndex, setAddIndex] = useState(-1);
+  const [pasteIndex, setPasteIndex] = useState(-1);
 
   const blankLine = {
     type: null,
@@ -41,26 +42,61 @@ export default function SeriesTable({ setting }) {
     return newBlankLine;
   };
 
-  const onUpdate = (index, value) => {
-    // console.log('SeriesTable onUpdate', index, value);
-    // console.log('SeriesTable old state:', state);
-    const newState = [...state];
-    newState[index] = value;
+  const onUpdate = (value) => {
+    // console.log('SeriesTable onUpdate', value);
+    const oldState = [...state];
+    // console.log('SeriesTable old state:', oldState);
+    const newState = oldState.map(item => item['id'] === value['id'] ? value : item);
     setState(newState);
-    console.log('SeriesTable new state:', newState);
+    console.log('SeriesTable updated new state:', newState);
+  };
+
+  const handleAddIndex = value => {
+    const index = value === "末行" ? -1 : value - 1;
+    setAddIndex(index);
+    console.log('SeriesTable selete add index:', index); 
   };
 
   const handleAddNewLine = e => {
-    // console.log('SeriesTable click add a new line');
-    // console.log('SeriesTable old data:', data);
+    const newLine = blankDataFatory();
+    newLine['id'] = nextIndex;
+    setNextIndex(nextIndex + 1)
+    console.log('SeriesTable paste new line data:', `${nextIndex + 1}`, newLine);
+    const index = addIndex === -1 ? data.length : addIndex;
     const newData = [...data];
-    newData.push(blankDataFatory());
+    newData.splice(index, 0, newLine);
     setData(newData);
-    console.log('SeriesTable after a new line, new data:', newData);
+    const newState = [...state];
+    newState.splice(index, 0, newLine);
+    setState(newState);
+  };
+
+  const handleCopyLine = index => {
+    console.log('SeriesTable copy line:', index);
+    setCopiedData(state[index]);
+  };
+
+  const handlePasteIndex = value => {
+    const index = value === "末行" ? -1 : value - 1;
+    setPasteIndex(index);
+    console.log('SeriesTable selete paste index:', index);
+  };
+
+  const handlePasteNewLine = () => {
+    const newLine = {...copiedData};
+    newLine['id'] = nextIndex;
+    setNextIndex(nextIndex + 1);
+    console.log('SeriesTable paste new line data:', `${pasteIndex + 1}`, newLine);
+    const index = pasteIndex === -1 ? data.length : pasteIndex;
+    const newData = [...data];
+    newData.splice(index, 0, newLine);
+    setData(newData);
+    const newState = [...state];
+    newState.splice(index, 0, newLine);
+    setState(newState);
   };
 
   const handleDeleteLine = index => {
-    // console.log('SeriesTable delete line:', index);
     const newData = [...data];
     const newState = [...state];
     newData.splice(index, 1);
@@ -69,19 +105,6 @@ export default function SeriesTable({ setting }) {
     setState(newState);
     console.log('SeriesTable after deltele a line, new data:', newData);
     console.log('SeriesTable after deltele a line, new state:', newState);
-  };
-
-  const handleCopyLine = index => {
-    console.log('SeriesTable copy line:', index);
-    setCopiedData(state[index]);
-  };
-
-  const handlePasteNewLine = () => {
-    console.log();
-  };
-
-  const handlePasteIndex = value => {
-    console.log('SeriesTable selete paste index:', value);
   };
 
   return (
@@ -106,7 +129,7 @@ export default function SeriesTable({ setting }) {
             key={ item['id'] }
             index={ index }
             setting={ fakeSetting }
-            data={ item }
+            data={ {...item} }
             onUpdate={ onUpdate }
             onDeleteLine={ handleDeleteLine }
             onCopyLine={ handleCopyLine }
@@ -115,11 +138,25 @@ export default function SeriesTable({ setting }) {
 
       <Row style={{ marginTop: 10 }}>
         <Col span={10} offset={1}>
-          <Button
-            block style={state.length === 0 ? { height: 40, fontSize: "1.2em", backgroundColor: "ghostwhite"} : null}
-            onClick={handleAddNewLine}> {state.length === 0 ? "+ 添加新序列列表" : "+ 添加新空白行"} 
-           </Button>
+          <Row>
+            <Col span={10} offset={1}>
+              <Button
+                style={ data.length === 0 ? { height: 40, fontSize: "1.2em", backgroundColor: "ghostwhite" } : { width: 100, float: "right" }}
+                onClick={handleAddNewLine}> {data.length === 0 ? "+ 新序列列表" : "+ 空白行至"}
+              </Button>
+            </Col>
+
+            <Col span={10} offset={0}>
+              { data.length === 0 ?
+                null :
+                <Select style={{ width: 75, float: "left" }} placeholder='行号' defaultValue="末行" onSelect={handleAddIndex}>
+                  {[...[...Array(data.length + 1).keys()].slice(1), "末行"].map(item => <Option key={item} value={item}>{item}</Option>)}
+                </Select>
+              }
+            </Col>
+          </Row>
         </Col>
+
         { 
           copiedData ?
             <Col span={10} offset={1}>
@@ -127,9 +164,10 @@ export default function SeriesTable({ setting }) {
                 <Col span={10} offset={1}>
                   <Button style={{ width: 100, float: "right" }} onClick={handlePasteNewLine}> + 粘贴至 </Button>
                 </Col>
+                
                 <Col span={10} offset={0}>
-                  <Select style={{ width: 100, float: "left" }} placeholder='行号' defaultValue="末行" onSelect={handlePasteIndex}>
-                    {[...Array(state.length).keys(), "末行"].map(item => <Option key={item} value={item}>{item}</Option>)}
+                  <Select style={{ width: 75, float: "left" }} placeholder='行号' defaultValue="末行" onSelect={handlePasteIndex}>
+                    {[...[...Array(data.length + 1).keys()].slice(1), "末行"].map(item => <Option key={item} value={item}>{item}</Option>)}
                   </Select>
                 </Col>
               </Row>

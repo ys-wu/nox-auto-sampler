@@ -30,7 +30,7 @@ export default function SampleLine({
 
   useLayoutEffect(() => {
     if ( state !== undefined ) {
-      onUpdate(index, state);
+      onUpdate(state);
     };
   }, [state]);
 
@@ -40,7 +40,7 @@ export default function SampleLine({
   };
 
   const handleCopy = () => {
-    console.log('SampleLine handleDelte:', index);
+    // console.log('SampleLine handleCopy:', index);
     onCopyLine(index);
   };
 
