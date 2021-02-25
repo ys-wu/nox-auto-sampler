@@ -9,22 +9,26 @@ export default function SampleLine({ index, setting, data, onUpdate=f=>f }) {
 
   const typeSetting = setting['type'];
 
-  const { type, name } = data;
+  const { id, type, name } = data;
 
   useEffect(() => {
-    setState({
+    const newState = {
+      id: id,
       type: type,
       name: name,
-    });
-    console.log('SampleLine state:', state);
+    };
+    setState(newState);
+    // console.log('SampleLine state:', newState);
   }, []);
 
   useLayoutEffect(() => {
-    onUpdate(index, state);
-  }, [state])
+    if ( state !== undefined ) {
+      onUpdate(index, state);
+    };
+  }, [state]);
 
   const onSelectType = value => {
-    console.log('SampleLine onSelectType:', index, value);
+    // console.log('SampleLine onSelectType:', index, value);
     const newState = {...state};
     newState['type'] = value;
     setState(newState);
@@ -32,7 +36,7 @@ export default function SampleLine({ index, setting, data, onUpdate=f=>f }) {
 
   const onChangeName = e => {
     const value = e.target.value;
-    console.log('SampleLine onChangeName:', index, value); 
+    // console.log('SampleLine onChangeName:', index, value); 
     const newState = { ...state };
     newState['name'] = value;
     setState(newState);
@@ -44,7 +48,7 @@ export default function SampleLine({ index, setting, data, onUpdate=f=>f }) {
         <Col span={20}>
           <Row>
             <Col span={12}>
-              <Select defaultValue={ type } onSelect={ onSelectType }>
+              <Select placeholder='选择类型' defaultValue={ type } onSelect={ onSelectType }>
                 { typeSetting.map( (item, index) => <Option key={ index } value={ item }>{ item }</Option> ) }
               </Select>
             </Col>
