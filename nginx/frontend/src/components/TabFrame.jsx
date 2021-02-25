@@ -5,11 +5,11 @@ import SeriesTable from './SeriesTable'
 
 const { TabPane } = Tabs;
 
-export default function TabFrame({ setting, onUpdateSetting = f => f }) {
+export default function TabFrame({ setting, onUpdateSetting=f=>f, onSaveSeries=f=>f }) {
   return(
     <Tabs defaultActiveKey="6">
       <TabPane tab="序列列表" key="1">
-        <SeriesTable setting={ setting } />
+        <SeriesTable setting={setting} onSaveSeries={onSaveSeries}/>
       </TabPane>
       <TabPane tab="原始记录" key="2">
         Content of Tab Pane
@@ -24,7 +24,7 @@ export default function TabFrame({ setting, onUpdateSetting = f => f }) {
         Content of Tab Pane
       </TabPane>
       <TabPane tab="设置" key="6" >
-        <SettingList onUpdateSetting={ onUpdateSetting } />
+        <SettingList onUpdateSetting={onUpdateSetting} />
       </TabPane>
     </Tabs>
   );

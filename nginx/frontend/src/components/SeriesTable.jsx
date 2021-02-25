@@ -1,10 +1,13 @@
-import React , { useState } from 'react';
-import { Row, Col, Button, Select } from 'antd';
+import React , { useState, useEffect } from 'react';
+import Row from 'antd/lib/row';
+import Col from 'antd/lib/col';
+import Select from 'antd/lib/select';
+import Button from 'antd/lib/button';
 import SampleLine from './SampleLine'
 
 const { Option } = Select;
 
-export default function SeriesTable({ setting }) {
+export default function SeriesTable({ setting, onSaveSeries = f => f }) {
 
   const [data, setData] = useState([]);
   const [state, setState] = useState([]);
@@ -13,27 +16,37 @@ export default function SeriesTable({ setting }) {
   const [addIndex, setAddIndex] = useState(-1);
   const [pasteIndex, setPasteIndex] = useState(-1);
 
+  // remove copy button if there is no data
+  useEffect(() => {
+    if (data.length === 0) {
+      setCopiedData(null);
+    }
+  }, [data])
+
+  // define table columns
   const blankLine = {
     type: null,
     name: null,
+    position: null,
+    bias: null,
   };
 
-  const fakeSetting = {
-    type: ['校准', '质控',]
-  };
+  // const fakeSetting = {
+  //   type: ['校准', '质控',]
+  // };
 
-  const fakedData = [
-    {
-      id: 1,
-      type: '校准',
-      name: '基准1',
-    },
-    {
-      id: 2,
-      type: '质控',
-      name: '质控1',
-    },
-  ];
+  // const fakedData = [
+  //   {
+  //     id: 1,
+  //     type: '校准',
+  //     name: '基准1',
+  //   },
+  //   {
+  //     id: 2,
+  //     type: '质控',
+  //     name: '质控1',
+  //   },
+  // ];
 
   const blankDataFatory = () => {
     const newBlankLine = {...blankLine};
@@ -107,6 +120,10 @@ export default function SeriesTable({ setting }) {
     console.log('SeriesTable after deltele a line, new state:', newState);
   };
 
+  const handleSaveTable = () => {
+    onSaveSeries(state);
+  };
+
   return (
     <>
       { state.length === 0 ? null :
@@ -140,7 +157,7 @@ export default function SeriesTable({ setting }) {
       }
 
       <Row style={{ marginTop: 10 }}>
-        <Col span={10} offset={1}>
+        <Col span={9} offset={1}>
           <Row>
             <Col span={10} offset={1}>
               <Button
@@ -162,7 +179,7 @@ export default function SeriesTable({ setting }) {
 
         { 
           copiedData ?
-            <Col span={10} offset={1}>
+            <Col span={9} offset={1}>
               <Row>
                 <Col span={10} offset={1}>
                   <Button style={{ width: 100, float: "right" }} onClick={handlePasteNewLine}> + 粘贴至 </Button>
@@ -178,6 +195,14 @@ export default function SeriesTable({ setting }) {
             : null
         }
       </Row>
+
+      {
+        data.length === 0 ? null :
+          <Button
+            style={{ height: 40, fontSize: "1.2em", color: "DarkBlue", width: 100, float: "right" }}
+            onClick={ handleSaveTable }> 保存
+          </Button>
+      }
     </>
   );
 };

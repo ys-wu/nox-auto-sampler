@@ -1,5 +1,9 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
-import { Row, Col, Select, Input, Button } from 'antd';
+import Row from 'antd/lib/row';
+import Col from 'antd/lib/col';
+import Select from 'antd/lib/select';
+import Input from 'antd/lib/input';
+import Button from 'antd/lib/button';
 
 const { Option } = Select;
 
@@ -24,6 +28,8 @@ export default function SampleLine({
       id: id,
       type: type,
       name: name,
+      position: position,
+      bias: bias
     };
     setState(newState);
     // console.log('SampleLine state:', newState);
@@ -110,10 +116,10 @@ export default function SampleLine({
         <Col span={4}>
           <Row>
             <Col span={12}>
-              <Button block onClick={ handleCopy }>复制</Button>
+              <Button block style={{ color: "DarkSlateBlue" }} onClick={ handleCopy }>复制</Button>
             </Col>
             <Col span={12}>
-              <Button block onClick={ handleDelete }>删除</Button>
+              <Button block style={{ color: "DarkRed" }} onClick={ handleDelete }>删除</Button>
             </Col>
           </Row>
         </Col>

@@ -12,7 +12,8 @@ import Status from './components/Status'
 function App() {
 
   const [setting, setSetting] = useState();
-
+  const [series, setSeries] = useState();
+  
   // tidy up setting data from array to obj
   const tidySetting = data => {
     const nameMapping = {
@@ -36,6 +37,20 @@ function App() {
     console.log('App update setting:', obj);
   };
 
+  // tidy up series data before setSeries
+  const tidySeries = data => {
+    const newData = [...data];
+    newData.forEach( item => {delete item['id']});
+    return newData;
+  };
+
+  // get series table after user comfirmed
+  const handleSetSeries = (data) => {
+    const newData = tidySeries(data);
+    setSeries(newData);
+    console.log("App set series table", newData);
+  };
+
   return (
     <div className="App">
       <Row>
@@ -51,7 +66,11 @@ function App() {
       </Row>
       <Row>
         <Col span={18} offset={3}>
-          <TabFrame setting={ setting } onUpdateSetting={ updateSetting }/>
+          <TabFrame 
+            setting={ setting }
+            onUpdateSetting={ updateSetting } 
+            onSaveSeries={ handleSetSeries }
+          />
         </Col>
       </Row>
       <Row>
