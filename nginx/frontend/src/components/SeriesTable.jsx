@@ -7,7 +7,7 @@ export default function SeriesTable({ setting }) {
 
   const [state, setState] = useState([]);
   const [data, setData] = useState([])
-  // const [copiedData, setCopiedData] = useState();
+  const [copiedData, setCopiedData] = useState();
   const [nextIndex, setNextIndex] = useState(1);
 
   const blankLine = {
@@ -69,6 +69,11 @@ export default function SeriesTable({ setting }) {
     console.log('SeriesTable after deltele a line, new state:', newState);
   };
 
+  const handleCopyLine = index => {
+    console.log('SeriesTable copy line:', index);
+    setCopiedData(state[index]);
+  }
+
   return (
     <>
       <Row>
@@ -91,6 +96,7 @@ export default function SeriesTable({ setting }) {
               data={ item }
               onUpdate={ onUpdate }
               onDeleteLine={ handleDeleteLine }
+              onCopyLine={ handleCopyLine }
             /> )
         }
       <Row>

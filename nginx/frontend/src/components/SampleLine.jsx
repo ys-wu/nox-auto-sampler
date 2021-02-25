@@ -3,7 +3,14 @@ import { Row, Col, Select, Input, Button } from 'antd';
 
 const { Option } = Select;
 
-export default function SampleLine({ index, setting, data, onUpdate=f=>f, onDeleteLine=f=>f }) {
+export default function SampleLine({
+  index,
+  setting,
+  data,
+  onUpdate=f=>f,
+  onDeleteLine=f=>f,
+  onCopyLine=f=>f
+}) {
 
   const [state, setState] = useState();
 
@@ -30,6 +37,11 @@ export default function SampleLine({ index, setting, data, onUpdate=f=>f, onDele
   const handleDelete = () => {
     // console.log('SampleLine handleDelte:', index);
     onDeleteLine(index);
+  };
+
+  const handleCopy = () => {
+    console.log('SampleLine handleDelte:', index);
+    onCopyLine(index);
   };
 
   const onSelectType = value => {
@@ -64,7 +76,9 @@ export default function SampleLine({ index, setting, data, onUpdate=f=>f, onDele
         </Col>
         <Col span={4}>
           <Row>
-            <Col span={12}>copy</Col>
+            <Col span={12}>
+              <Button block onClick={ handleCopy }>复制</Button>
+            </Col>
             <Col span={12}>
               <Button block onClick={ handleDelete }>删除</Button>
             </Col>
