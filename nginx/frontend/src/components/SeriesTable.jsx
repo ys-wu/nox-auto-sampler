@@ -1,7 +1,8 @@
 import React , { useState } from 'react';
-import { Row, Col, Button } from 'antd';
+import { Row, Col, Button, Select } from 'antd';
 import SampleLine from './SampleLine'
 
+const { Option } = Select;
 
 export default function SeriesTable({ setting }) {
 
@@ -9,6 +10,7 @@ export default function SeriesTable({ setting }) {
   const [data, setData] = useState([])
   const [copiedData, setCopiedData] = useState();
   const [nextIndex, setNextIndex] = useState(1);
+  const [pasteIndex, setPasteIndex] = useState();
 
   const blankLine = {
     type: null,
@@ -72,7 +74,15 @@ export default function SeriesTable({ setting }) {
   const handleCopyLine = index => {
     console.log('SeriesTable copy line:', index);
     setCopiedData(state[index]);
-  }
+  };
+
+  const handlePasteNewLine = () => {
+    console.log();
+  };
+
+  const handlePasteIndex = value => {
+    console.log('SeriesTable selete paste index:', value);
+  };
 
   return (
     <>
@@ -99,10 +109,26 @@ export default function SeriesTable({ setting }) {
               onCopyLine={ handleCopyLine }
             /> )
         }
-      <Row>
-        <Col span={18} offset={1}>
-          <Button block onClick={ handleAddNewLine }> + 添加一行</Button>
+      <Row style={{ marginTop: 10 }}>
+        <Col span={10} offset={1}>
+          <Button block onClick={ handleAddNewLine }> + 添加新空白行 </Button>
         </Col>
+        { 
+          copiedData ?
+            <Col span={10} offset={1}>
+              <Row>
+                <Col span={10} offset={1}>
+                  <Button style={{ width: 100, float: "right" }} onClick={handlePasteNewLine}> + 粘贴至 </Button>
+                </Col>
+                <Col span={10} offset={0}>
+                  <Select style={{ width: 100, float: "left" }} placeholder='行号' defaultValue="末行" onSelect={handlePasteIndex}>
+                    {[...Array(state.length).keys(), "末行"].map(item => <Option key={item} value={item}>{item}</Option>)}
+                  </Select>
+                </Col>
+              </Row>
+            </Col>
+            : null
+        }
       </Row>
     </>
   );

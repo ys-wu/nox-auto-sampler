@@ -61,7 +61,7 @@ export default function SampleLine({
   
   return (
     <>
-      <Row>
+      <Row style={{ marginTop: 1 }}>
         <Col span={20}>
           <Row>
             <Col span={12}>
