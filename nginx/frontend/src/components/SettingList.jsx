@@ -34,13 +34,20 @@ export default function SettingList({ onUpdateSetting = f => f }) {
     return data;
   };
 
+  // if fetch fail, use default setting
+  const handleGetError = err => {
+    setTemp(defaultSetting);
+    setCurrent(defaultSetting); 
+    console.error(err);
+  };
+
   // get setting JSON from backend
   const getSetting = () => {
     fetch(url)
       .then(res => res.json())
       .then(updateTemp)
       .then((res) => console.log('Get Setting:', res))
-      .catch(console.error);
+      .catch(handleGetError);
   };
 
   // post current setting to backend
