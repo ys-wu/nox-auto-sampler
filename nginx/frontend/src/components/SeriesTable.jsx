@@ -1,9 +1,15 @@
-import React from 'react';
+import React , { useState } from 'react';
 import { Row, Col } from 'antd';
-import SerieLine from './SerieLine'
+import SampleLine from './SampleLine'
 
 
-export default function SeriesTable() {
+export default function SeriesTable({ setting }) {
+
+  const [state, setState] = useState();
+
+  const fakeSetting = {
+    type: ['校准', '质控',]
+  };
 
   const data = [
     {
@@ -16,17 +22,23 @@ export default function SeriesTable() {
     },
   ];
 
+  const onUpdate = (index, value) => {
+    console.log('SeriesTable', index);
+    console.log('SeriesTable', value);
+    const newState = null;
+  };
+
   return (
     <>
       <Row>
         <Col span={20}>
           <Row>
-            <Col span={12}>col-12</Col>
-            <Col span={12}>col-12</Col>
+            <Col span={12}>类型</Col>
+            <Col span={12}>样品名称</Col>
           </Row>
         </Col>
       </Row>
-      { data.map( (item, index) => <SerieLine key={ index } data={ item }/> )}
+      { data.map((item, index) => <SampleLine key={ index } index={ index } setting={ fakeSetting } data={ item } onUpdate={ onUpdate } /> )}
     </>
   );
 };

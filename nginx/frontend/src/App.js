@@ -51,7 +51,7 @@ function App() {
       </Row>
       <Row>
         <Col span={18} offset={3}>
-          <Tabframe onUpdateSetting={ updateSetting }/>
+          <Tabframe setting={ setting } onUpdateSetting={ updateSetting }/>
         </Col>
       </Row>
       <Row>

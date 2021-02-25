@@ -97,8 +97,8 @@ export default function SettingList({ onUpdateSetting = f => f }) {
 
   return (
     <>
-      <Button onClick={ cancelTemp }>撤销</Button>  （点击“撤销”返回至上次保存状态）
-      <Button onClick={ saveCurrent }>保存</Button> （点击“保存”使当前显示设置生效！）
+      <Button onClick={ cancelTemp }>撤销</Button>
+      <Button onClick={ saveCurrent }>保存</Button>
       <Button style={{ float: 'right' }} onClick={ getDefault }>获取出厂设置</Button>
       <List
         itemLayout="horizontal"
