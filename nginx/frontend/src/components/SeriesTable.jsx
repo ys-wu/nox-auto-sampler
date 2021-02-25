@@ -86,32 +86,39 @@ export default function SeriesTable({ setting }) {
 
   return (
     <>
-      <Row>
-        <Col span={20}>
-          {
-            !data ? null :
-              <Row>
-                <Col span={12}>类型</Col>
-                <Col span={12}>样品名称</Col>
-              </Row>
-          }
-        </Col>
-      </Row>
-        {
-          !data ? null : 
-            data.map((item, index) => <SampleLine 
-              key={ item['id'] }
-              index={ index }
-              setting={ fakeSetting }
-              data={ item }
-              onUpdate={ onUpdate }
-              onDeleteLine={ handleDeleteLine }
-              onCopyLine={ handleCopyLine }
-            /> )
-        }
+      { state.length === 0 ? null :
+        <Row>
+          <Col span={20}>
+            {
+              !data ? null :
+                <Row>
+                  <Col span={12}>类型</Col>
+                  <Col span={12}>样品名称</Col>
+                </Row>
+            }
+          </Col>
+        </Row>
+      }
+
+      {
+        !data ? null : 
+          data.map((item, index) => <SampleLine 
+            key={ item['id'] }
+            index={ index }
+            setting={ fakeSetting }
+            data={ item }
+            onUpdate={ onUpdate }
+            onDeleteLine={ handleDeleteLine }
+            onCopyLine={ handleCopyLine }
+          /> )
+      }
+
       <Row style={{ marginTop: 10 }}>
         <Col span={10} offset={1}>
-          <Button block onClick={ handleAddNewLine }> + 添加新空白行 </Button>
+          <Button
+            block style={state.length === 0 ? { height: 40, fontSize: "1.2em", backgroundColor: "ghostwhite"} : null}
+            onClick={handleAddNewLine}> {state.length === 0 ? "+ 添加新序列列表" : "+ 添加新空白行"} 
+           </Button>
         </Col>
         { 
           copiedData ?
