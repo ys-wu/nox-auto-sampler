@@ -16,21 +16,30 @@ export default function SampleLine({
   onCopyLine=f=>f
 }) {
 
+  const {
+    type,
+    name,
+    position,
+    sampleID,
+    noInputConc,
+    noxInputConc,
+    bias,
+    bottleType,
+    bottlePres,
+    operator,
+    remark
+  } = data;
+
   const [state, setState] = useState();
 
   const typeSetting = setting['type'];
   const biasSetting = setting['bias'];
-
-  const { id, type, name, position,    bias } = data;
+  const bottleTypeSetting = setting['bottleType'];
+  const bottlePresSetting = setting['bottlePres'];
+  const operatorSetting = setting['operator'];
 
   useEffect(() => {
-    const newState = {
-      id: id,
-      type: type,
-      name: name,
-      position: position,
-      bias: bias
-    };
+    const newState = {...data};
     setState(newState);
     // console.log('SampleLine state:', newState);
   }, []);
@@ -73,9 +82,26 @@ export default function SampleLine({
     setState(newState);
   }; 
   
+  const onChangeSampleID = e => {
+    const value = e.target.value;
+    const newState = { ...state };
+    newState['sampleID'] = value;
+    setState(newState);
+  }; 
 
+  const onChangeNoInput = e => {
+    const value = e.target.value;
+    const newState = { ...state };
+    newState['noInputConc'] = value;
+    setState(newState);
+  }; 
 
-
+  const onChangeNoxInput = e => {
+    const value = e.target.value;
+    const newState = { ...state };
+    newState['noxInputConc'] = value;
+    setState(newState);
+  }; 
 
   const onSelectBias = value => {
     const newState = { ...state };
@@ -83,11 +109,39 @@ export default function SampleLine({
     setState(newState);
   };
 
+  const onSelectBottleType = value => {
+    const newState = { ...state };
+    newState['bottleType'] = value;
+    setState(newState);
+  };
+
+  const onSelectBottlePres = value => {
+    const newState = { ...state };
+    newState['bottlePres'] = value;
+    setState(newState);
+  };
+
+  const onSelectOperator = value => {
+    const newState = { ...state };
+    newState['operator'] = value;
+    setState(newState);
+  };
+
+  const onChangeRemark = e => {
+    const value = e.target.value;
+    const newState = { ...state };
+    newState['remark'] = value;
+    setState(newState);
+  }; 
+
   return (
     <>
       <Row style={{ marginTop: 1 }}>
         <Col span={20}>
           <Row>
+            <Col span={1} offset={1}>
+              <p>{ index + 1 }</p>
+            </Col>
             <Col span={2}>
               <Select placeholder='类型' defaultValue={ type } onSelect={ onSelectType }>
                 { typeSetting.map( (item, index) => <Option key={ index } value={ item }>{ item }</Option> ) }
@@ -102,17 +156,48 @@ export default function SampleLine({
               <Input placeholder="样品位置" defaultValue={ position } onChange={ onChangePosition } />
             </Col>
             
+            <Col span={2}>
+              <Input placeholder="样品编号" defaultValue={sampleID} onChange={onChangeSampleID} />
+            </Col>
 
+            <Col span={2}>
+              <Input placeholder="NO 浓度" defaultValue={noInputConc} onChange={onChangeNoInput} />
+            </Col>
 
+            <Col span={2}>
+              <Input placeholder="NOx 浓度" defaultValue={noxInputConc} onChange={onChangeNoxInput} />
+            </Col>
 
             <Col span={2}>
               <Select placeholder='偏差' defaultValue={bias} onSelect={onSelectBias}>
                 {biasSetting.map((item, index) => <Option key={index} value={item}>{item}</Option>)}
               </Select>
             </Col>
+
+            <Col span={2}>
+              <Select placeholder='气瓶类型' defaultValue={bottleType} onSelect={onSelectBottleType}>
+                {bottleTypeSetting.map((item, index) => <Option key={index} value={item}>{item}</Option>)}
+              </Select>
+            </Col>
+
+            <Col span={2}>
+              <Select placeholder='气瓶压力' defaultValue={bottlePres} onSelect={onSelectBottlePres}>
+                {bottlePresSetting.map((item, index) => <Option key={index} value={item}>{item}</Option>)}
+              </Select>
+            </Col>
+
+            <Col span={2}>
+              <Select placeholder='检测人员' defaultValue={operator} onSelect={onSelectOperator}>
+                {operatorSetting.map((item, index) => <Option key={index} value={item}>{item}</Option>)}
+              </Select>
+            </Col>
+
+            <Col span={2}>
+              <Input placeholder="备注" defaultValue={remark} onChange={onChangeRemark} />
+            </Col>
           </Row>
         </Col>
-        
+
         <Col span={4}>
           <Row>
             <Col span={12}>

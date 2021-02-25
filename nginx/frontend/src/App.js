@@ -19,8 +19,8 @@ function App() {
     const nameMapping = {
       "类型": "type",
       "偏差": "bias",
-      "气瓶压力": "bottlePres",
       "气瓶类型": "bottleType",
+      "气瓶压力": "bottlePres",
       "检测人员": "operator"
     };
     const obj ={};
