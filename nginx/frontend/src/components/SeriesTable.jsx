@@ -115,8 +115,11 @@ export default function SeriesTable({ setting }) {
             {
               !data ? null :
                 <Row>
-                  <Col span={12}>类型</Col>
-                  <Col span={12}>样品名称</Col>
+                  <Col span={2}>类型</Col>
+                  <Col span={2}>样品名称</Col>
+                  <Col span={2}>样品位置</Col>
+
+                  <Col span={2}>偏差</Col>
                 </Row>
             }
           </Col>
@@ -128,7 +131,7 @@ export default function SeriesTable({ setting }) {
           data.map((item, index) => <SampleLine 
             key={ item['id'] }
             index={ index }
-            setting={ fakeSetting }
+            setting={ setting }
             data={ {...item} }
             onUpdate={ onUpdate }
             onDeleteLine={ handleDeleteLine }

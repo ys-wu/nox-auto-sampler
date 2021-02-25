@@ -5,9 +5,9 @@ import SeriesTable from './SeriesTable'
 
 const { TabPane } = Tabs;
 
-export default function Tabframe({ setting, onUpdateSetting = f => f }) {
+export default function TabFrame({ setting, onUpdateSetting = f => f }) {
   return(
-    <Tabs defaultActiveKey="1">
+    <Tabs defaultActiveKey="6">
       <TabPane tab="序列列表" key="1">
         <SeriesTable setting={ setting } />
       </TabPane>

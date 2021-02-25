@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import 'antd/dist/antd.css';
 import './index.css';
 import js_logo from './img/js_logo.png'
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Divider from 'antd/lib/divider';
-import Tabframe from './components/TabFrame'
+import TabFrame from './components/TabFrame'
 import Status from './components/Status'
 
 
@@ -51,7 +51,7 @@ function App() {
       </Row>
       <Row>
         <Col span={18} offset={3}>
-          <Tabframe setting={ setting } onUpdateSetting={ updateSetting }/>
+          <TabFrame setting={ setting } onUpdateSetting={ updateSetting }/>
         </Col>
       </Row>
       <Row>
