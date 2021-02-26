@@ -5,11 +5,18 @@ import js_logo from './img/js_logo.png'
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Divider from 'antd/lib/divider';
-import TabFrame from './components/TabFrame'
+import MockPanel from './components/MockPanel'
 import Status from './components/Status'
+import TabFrame from './components/TabFrame'
 
 
 function App() {
+
+  const [mock, setMock] = useState('off');
+
+  const triggerMock = () => {
+    setMock('on');
+  };
 
   const [setting, setSetting] = useState();
   const [series, setSeries] = useState();
@@ -60,8 +67,15 @@ function App() {
         </Col>
       </Row>
       <Row>
+        { mock === 'off' ? null :
+          <Col span={18} offset={3}>
+            <MockPanel quitMock={ () => setMock('off') }/>
+          </Col>
+        }
+      </Row>
+      <Row>
         <Col span={18} offset={3}>
-          <Status/>
+          <Status triggerMock={triggerMock}/ >
         </Col>
       </Row>
       <Row>

@@ -1,12 +1,39 @@
-import React from 'react';
-import Row from 'antd/lib/row'
-import Col from 'antd/lib/col'
-import Tag from 'antd/lib/tag'
+import React, { useState, useRef } from 'react';
+import Row from 'antd/lib/row';
+import Col from 'antd/lib/col';
+import Tag from 'antd/lib/tag';
 import Divider from 'antd/lib/divider';
 import Switch from 'antd/lib/switch';
+import Form from 'antd/lib/form';
+import Input from 'antd/lib/input';
+import Button from 'antd/lib/button';
 
 
-export default function Status() {
+export default function Status( {triggerMock=f=>f} ) {
+
+  const [form] = Form.useForm();
+
+  const [state, setState] = useState();
+  const txtLog = useRef();
+
+  const password = 'a';
+
+  const onChange = e => {
+    const value = e.target.value;
+    setState(value);
+    console.log(value)
+  }; 
+
+  const onFinish = value => {
+    if (state === password) {
+      triggerMock();
+      console.log("Status trig");
+    } else {
+      console.log("Status submit a log:", value);
+    };
+    form.resetFields();
+  };
+
   return (
     <>
       <Divider orientation="left">系统状态</Divider>
@@ -30,22 +57,21 @@ export default function Status() {
           <Switch checkedChildren="开始" unCheckedChildren="停止" defaultChecked />
         </Col>
       </Row>
+      <Row style={{ paddingTop:20 }}>
+        <Col span={20} offset={2} style={{ textAlign: "center" }}>
+          <Form form={form} layout="inline" onFinish={onFinish}>
+            <Form.Item name="log" label="日志">
+              <Input allowClear placeholder="手动输入一行日志" ref={txtLog} value={state} onChange={onChange} />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                提交
+            </Button>
+            </Form.Item>
+          </Form>
+        </Col>
+      </Row>
       <Divider orientation="left"></Divider>
-      {/* <Tag color="magenta">magenta</Tag>
-      <Tag color="red">red</Tag>
-      <Tag color="volcano">volcano</Tag>
-      <Tag color="orange">orange</Tag>
-      <Tag color="gold">gold</Tag>
-      <Tag color="lime">lime</Tag>
-      <Tag color="green">green</Tag>
-      <Tag color="cyan">cyan</Tag>
-      <Tag color="blue">blue</Tag>
-      <Tag color="geekblue">geekblue</Tag>
-      <Tag color="purple">purple</Tag>
-      <Tag color="#f50">#f50</Tag>
-      <Tag color="#87d068">#87d068</Tag>
-      <Tag color="#108ee9">#108ee9</Tag>
-      <Divider orientation="left"></Divider> */}
     </>
   )
 }
