@@ -12,24 +12,40 @@ export default function MockPanel({ quitMock=f=>f }) {
   const [mfcSet, setMfcSet] = useState(0);
   const [mfcRead, setMfcRead] = useState(0);
 
+  const hostname = window.location.hostname;
+  const url = `http://${hostname}/mock/`
+
   var interval;
 
   useEffect( () => {
     interval = setInterval(() => {
-      postState();
-    }, 2000)
+      const d = new Date();
+      const data = {
+        power: power,
+        no: no,
+        nox: nox,
+        mfcSet: mfcSet,
+        mfcRead: mfcRead,
+      };
+      postMock(data);
+      console.log(d.toISOString(), 'MockPanle post data:', data);
+    }, 1000)
   }, []);
 
-  const postState = () => {
-    const d = new Date();
-    const data = {
-      power: power,
-      no: no,
-      nox: nox,
-      mfcSet: mfcSet,
-      mfcRead: mfcRead,
-    };
-    console.log(d.toISOString(), 'MockPanle post data:', Date.now(), data);
+  // post mock data to backend
+  const postMock = (data) => {
+    fetch(url, {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json, text/plain',
+        'Content-Type': 'application/json; charset=UTF-8',
+        // 'X-CSRFToken': csrftoken
+      },
+      body: JSON.stringify(data)
+    })
+      .then(res => res.json())
+      .then((res) => console.log('Post Setting:', res))
+      .catch(console.error);
   };
 
   const closeMock = () => {
