@@ -9,21 +9,30 @@ import Input from 'antd/lib/input';
 import Button from 'antd/lib/button';
 
 
-export default function Status( {triggerMock=f=>f} ) {
+export default function Status({ switchSampling=f=>f, triggerMock=f=>f} ) {
 
   const [form] = Form.useForm();
 
   const [state, setState] = useState();
   const txtLog = useRef();
 
+  // command in log input to trigger mock UI
   const password = 'a';
 
+  // handle start button
+  const handleStart = checked => {
+    console.log("Status start buttom has been checked");
+    switchSampling(checked);
+  };
+
+  // handle change on log input
   const onChange = e => {
     const value = e.target.value;
     setState(value);
     console.log(value)
   }; 
 
+  // handle submit log text
   const onFinish = value => {
     if (state === password) {
       triggerMock();
@@ -54,7 +63,7 @@ export default function Status( {triggerMock=f=>f} ) {
           <Tag>阀门</Tag>
         </Col>
         <Col span={4} style={{ textAlign: "center" }}>
-          <Switch checkedChildren="开始" unCheckedChildren="停止" defaultChecked />
+          <Switch checkedChildren="开始" unCheckedChildren="停止" onClick={handleStart} />
         </Col>
       </Row>
       <Row style={{ paddingTop:20 }}>

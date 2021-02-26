@@ -18,9 +18,9 @@ class Mock(View):
   def post(self, request):
     try:
       data = json.loads(request.body)
-      print('Receive post data:', data)
-      if data['status'] == 'idel':
-        r.set('status', 'idel')
+      print('Receive post mock data:', data)
+      if data['status'] == 'idle':
+        r.set('status', 'idle')
       elif data['status'] == 'mock':
         r.set('status', 'mock')
         r.lpush('mock_data', json.dumps(data))
@@ -30,4 +30,4 @@ class Mock(View):
       return JsonResponse(data, safe=False)
     except:
       print('Error in handle mock post')
-      return JsonResponse({'message': 'failure'}, safe=False)
+      return JsonResponse({'Message': 'Post mock data fail'})

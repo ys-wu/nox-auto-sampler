@@ -12,5 +12,6 @@ router.register(r'series', views.SeriesViewSet)
 # Additionally, we include the login URLs for the browsable API.
 urlpatterns = [
     url(r'^', include(router.urls)),
+    path('data/', views.Data.as_view()),
     path('setting/', views.Setting.as_view()),
 ]

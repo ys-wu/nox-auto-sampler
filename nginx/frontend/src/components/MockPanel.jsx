@@ -34,7 +34,7 @@ export default function MockPanel({ quitMock=f=>f }) {
   // post mock data to backend
   const postMock = (data) => {
     const d = new Date();
-    console.log(d.toISOString(), 'MockPanle post data:', data);
+    console.log(d.toISOString(), 'MockPanel post data:', data);
     fetch(url, {
       method: "POST",
       headers: {
@@ -50,8 +50,8 @@ export default function MockPanel({ quitMock=f=>f }) {
   };
 
   const closeMock = () => {
-    clearInterval(interval);    // setMock(false);
-    postMock({status: 'idel'});
+    clearInterval(interval);
+    postMock({status: 'idle'});
     quitMock();
   };
 

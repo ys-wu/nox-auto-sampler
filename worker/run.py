@@ -34,7 +34,7 @@ if __name__ == '__main__':
 
   host = 'redis'
   r = redis.Redis(host=host, port=6379, db=0)
-  r.set('status', 'idel')
+  r.set('status', 'idle')
 
   data = None
 
@@ -47,7 +47,10 @@ if __name__ == '__main__':
       data = process_mock_data(data)
       print('Worker produce mock data', data)
 
-    if r.get('status') == b'run':
+    elif r.get('status') == b'run':
       pass
+    
+    if data:
+      r.lpush('data', json.dumps(data))
 
     sleep(1)
