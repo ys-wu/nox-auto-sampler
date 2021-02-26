@@ -19,8 +19,8 @@ export default function MockPanel({ quitMock=f=>f }) {
 
   useEffect( () => {
     interval = setInterval(() => {
-      const d = new Date();
       const data = {
+        status: 'mock',
         power: power,
         no: no,
         nox: nox,
@@ -28,12 +28,13 @@ export default function MockPanel({ quitMock=f=>f }) {
         mfcRead: mfcRead,
       };
       postMock(data);
-      console.log(d.toISOString(), 'MockPanle post data:', data);
     }, 1000)
   }, []);
 
   // post mock data to backend
   const postMock = (data) => {
+    const d = new Date();
+    console.log(d.toISOString(), 'MockPanle post data:', data);
     fetch(url, {
       method: "POST",
       headers: {
@@ -44,12 +45,13 @@ export default function MockPanel({ quitMock=f=>f }) {
       body: JSON.stringify(data)
     })
       .then(res => res.json())
-      .then((res) => console.log('Post Setting:', res))
+      .then((res) => console.log(d.toISOString(), 'MockPanle post response:', res))
       .catch(console.error);
   };
 
   const closeMock = () => {
     clearInterval(interval);    // setMock(false);
+    postMock({status: 'idel'});
     quitMock();
   };
 
