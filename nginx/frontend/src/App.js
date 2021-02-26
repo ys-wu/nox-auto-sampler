@@ -1,14 +1,18 @@
-import React, { useState, useEffect,useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+
 import 'antd/dist/antd.css';
 import './index.css';
 import js_logo from './img/js_logo.png'
+
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Divider from 'antd/lib/divider';
+
 import MockPanel from './components/MockPanel'
 import Status from './components/Status'
 import TabFrame from './components/TabFrame'
 
+import useInterval from './hooks/useInterval'
 
 function App() {
 
@@ -59,25 +63,6 @@ function App() {
   useEffect( () => {
     postData({'status': 'idle'});
   }, []);
-
-  // custom Hook
-  const useInterval = (callback, delay) => {
-    const savedCallback = useRef();
-    // Remember the latest callback.
-    useEffect(() => {
-      savedCallback.current = callback;
-    });
-    // Set up the interval.
-    useEffect(() => {
-      function tick() {
-        savedCallback.current();
-      }
-      if (delay !== null) {
-        let id = setInterval(tick, delay);
-        return () => clearInterval(id);
-      }
-    }, [delay]);
-  };
 
   useInterval( () => {
     getData();

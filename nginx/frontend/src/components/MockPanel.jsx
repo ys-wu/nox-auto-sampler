@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
+
 import Button from 'antd/lib/button';
 import Form from 'antd/lib/form'
 import Input from  'antd/lib/input'
 
+import useInterval from '../hooks/useInterval'
+
 
 export default function MockPanel({ quitMock=f=>f }) {
+
+  const [mock, setMock] = useState(true);
 
   const [power, setPower] = useState(1);
   const [no, setNo] = useState(0);
@@ -12,24 +17,11 @@ export default function MockPanel({ quitMock=f=>f }) {
   const [mfcSet, setMfcSet] = useState(0);
   const [mfcRead, setMfcRead] = useState(0);
 
+  // mock data interval in (ms)
+  const delay = 1000;
+
   const hostname = window.location.hostname;
   const url = `http://${hostname}/mock/`
-
-  var interval;
-
-  useEffect( () => {
-    interval = setInterval(() => {
-      const data = {
-        status: 'mock',
-        power: power,
-        no: no,
-        nox: nox,
-        mfcSet: mfcSet,
-        mfcRead: mfcRead,
-      };
-      postMock(data);
-    }, 1000)
-  }, []);
 
   // post mock data to backend
   const postMock = (data) => {
@@ -49,8 +41,21 @@ export default function MockPanel({ quitMock=f=>f }) {
       .catch(console.error);
   };
 
+  useInterval( ()=> {
+    const data = {
+      status: 'mock',
+      power: power,
+      no: no,
+      nox: nox,
+      mfcSet: mfcSet,
+      mfcRead: mfcRead,
+    };
+    postMock(data)
+  }, mock ? delay : null)
+
   const closeMock = () => {
-    clearInterval(interval);
+    // clearInterval(interval);
+    setMock(false);
     postMock({status: 'idle'});
     quitMock();
   };

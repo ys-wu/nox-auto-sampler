@@ -21,7 +21,7 @@ export default function Status({ switchSampling=f=>f, triggerMock=f=>f} ) {
 
   // handle start button
   const handleStart = checked => {
-    console.log("Status start buttom has been checked");
+    console.log("Status start buttom has been clicked");
     switchSampling(checked);
   };
 
