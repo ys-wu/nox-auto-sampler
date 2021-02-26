@@ -9,10 +9,11 @@ import Input from 'antd/lib/input';
 import Button from 'antd/lib/button';
 
 
-export default function Status({ switchSampling=f=>f, triggerMock=f=>f} ) {
+export default function Status({ data, switchSampling=f=>f, triggerMock=f=>f} ) {
 
   const [form] = Form.useForm();
 
+  const [start, setStart] = useState(false);
   const [state, setState] = useState();
   const txtLog = useRef();
 
@@ -21,7 +22,8 @@ export default function Status({ switchSampling=f=>f, triggerMock=f=>f} ) {
 
   // handle start button
   const handleStart = checked => {
-    console.log("Status start buttom has been clicked");
+    setStart(checked);
+    console.log("Status start buttom has been clicked, checked:", checked);
     switchSampling(checked);
   };
 
@@ -46,25 +48,36 @@ export default function Status({ switchSampling=f=>f, triggerMock=f=>f} ) {
   return (
     <>
       <Divider orientation="left">系统状态</Divider>
-      <Row>   
-        <Col span={4} style={{ textAlign: "center" }}>
-          <Tag color="#2db7f5">空闲</Tag>
-        </Col>
-        <Col span={4} style={{ textAlign: "center" }}>
-          <Tag>NO</Tag>
-        </Col>
-        <Col span={4} style={{ textAlign: "center" }}>
-          <Tag>NOx</Tag>
-        </Col>
-        <Col span={4} style={{ textAlign: "center" }}>
-          <Tag>流量</Tag>
-        </Col>
-        <Col span={4} style={{ textAlign: "center" }}>
-          <Tag>阀门</Tag>
-        </Col>
-        <Col span={4} style={{ textAlign: "center" }}>
+      <Row>
+        <Col span={3} style={{ textAlign: "center" }}>
           <Switch checkedChildren="开始" unCheckedChildren="停止" onClick={handleStart} />
         </Col>
+        {
+          data === null
+            ? 
+          ( start ? <p>无法获取数据</p> : null )
+            : 
+          <>
+            <Col span={2} style={{ textAlign: "center" }}>
+              <Tag color="#2db7f5">运行中</Tag>
+            </Col>
+            <Col span={3} style={{ textAlign: "center" }}>
+              <Tag>设定流量</Tag>
+            </Col> 
+            <Col span={3} style={{ textAlign: "center" }}>
+              <Tag>流量: {data['mfc']['read']} L/min</Tag>
+            </Col>
+            <Col span={3} style={{ textAlign: "center" }}>
+              <Tag>阀门: {data['valve'] < 0 ? '关闭' : data['valve'] + "号"}</Tag>
+            </Col>
+            <Col span={3} style={{ textAlign: "center" }}>
+              <Tag>NO: {data['nox']['no']} ppm</Tag>
+            </Col>
+            <Col span={3} style={{ textAlign: "center" }}>
+              <Tag>NOx: {data['nox']['nox']} ppm</Tag>
+            </Col>
+          </>
+        }
       </Row>
       <Row style={{ paddingTop:20 }}>
         <Col span={20} offset={2} style={{ textAlign: "center" }}>

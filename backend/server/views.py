@@ -28,7 +28,7 @@ class Setting(View):
         data = json.load(data_file)
         return JsonResponse(data, safe=False)
       except:
-        return JsonResponse({'status': 'failure'}, safe=False)
+        return JsonResponse({'Message': 'Setting get failure'}, safe=False)
 
   def post(self, request):
     with open(setting_url, 'w') as data_file:
@@ -37,7 +37,7 @@ class Setting(View):
         json.dump(data, data_file)
         return JsonResponse(data, safe=False)
       except:
-        return JsonResponse({'status': 'failure'}, safe=False)
+        return JsonResponse({'Message': 'Setting post failure'}, safe=False)
 
 
 class Data(View):

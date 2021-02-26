@@ -4,7 +4,7 @@ from time import sleep
 
 
 def get_valve():
-  return 0
+  return -1
 
 
 def process_mock_data (data):

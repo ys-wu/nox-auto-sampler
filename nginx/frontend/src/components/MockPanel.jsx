@@ -71,9 +71,9 @@ export default function MockPanel({ quitMock=f=>f }) {
       <Form.Item name="nox" label="NOx">
         <Input defaultValue={0} onPressEnter={(e => setNox(e.target.value))} />
       </Form.Item>
-      <Form.Item name="mfcSet" label="MFC Set">
+      {/* <Form.Item name="mfcSet" label="MFC Set">
         <Input defaultValue={0} onPressEnter={(e => setMfcSet(e.target.value))} />
-      </Form.Item>
+      </Form.Item> */}
       <Form.Item name="mfcRead" label="MFC Read">
         <Input defaultValue={0} onPressEnter={(e => setMfcRead(e.target.value))} />
       </Form.Item>

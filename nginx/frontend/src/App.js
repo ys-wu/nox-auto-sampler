@@ -20,7 +20,7 @@ function App() {
   const [start, setStart] = useState(false);
   const [setting, setSetting] = useState();
   const [series, setSeries] = useState();
-  const [data, setData] = useState();
+  const [data, setData] = useState(null);
 
   // interval of fetching data in (ms)
   const delay = 2000;
@@ -50,13 +50,15 @@ function App() {
     fetch(dataUrl)
       .then(res => res.json())
       .then(saveData)
-      .then((res) => console.log('App get data:', res))
+      .then((res) => console.log(d, 'App get data:', res))
       .catch(console.error);
   };
 
   // save data to state
   const saveData = data => {
-    return data
+    const newData = 'Message' in data ? null : {...data};
+    setData(newData);
+    return newData;
   };
 
   // defaul status idle
@@ -64,6 +66,14 @@ function App() {
     postData({'status': 'idle'});
   }, []);
 
+  // set data to null when stop sampling
+  useEffect(() => {
+    if (!start) {
+      setData(null);
+    };
+  }, [start]);
+
+  // fetch data with given interval
   useInterval( () => {
     getData();
   }, start ? delay : null);
@@ -130,7 +140,7 @@ function App() {
       </Row>
       <Row>
         <Col span={18} offset={3}>
-          <Status switchSampling={switchSampling} triggerMock={triggerMock}/ >
+          <Status data={data} switchSampling={switchSampling} triggerMock={triggerMock}/ >
         </Col>
       </Row>
       <Row>
