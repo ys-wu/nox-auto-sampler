@@ -27,7 +27,7 @@ export default function Status( {triggerMock=f=>f} ) {
   const onFinish = value => {
     if (state === password) {
       triggerMock();
-      console.log("Status trig");
+      console.log("Status trigger mock");
     } else {
       console.log("Status submit a log:", value);
     };
