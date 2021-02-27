@@ -1,6 +1,6 @@
 export default function post(data, url) {
   const d = new Date();
-  console.log(d.toISOString(), 'Post data:', data);
+  console.log(d.toISOString(), 'Post data to API:', data);
   fetch(url, {
     method: "POST",
     headers: {
@@ -11,6 +11,6 @@ export default function post(data, url) {
     body: JSON.stringify(data)
   })
     .then(res => res.json())
-    .then((res) => console.log(d.toISOString(), 'Post response data:', res))
+    .then((res) => console.log(d.toISOString(), 'Post response from API:', res))
     .catch(console.error);
 };

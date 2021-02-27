@@ -9,6 +9,7 @@ import EditableTagGroup from './EditableTagGroup'
 // import Cookies from 'universal-cookie';
 
 import post from "../helpers/apiPost";
+import get from '../helpers/apiGet';
 
 
 export default function SettingList({ onUpdateSetting = f => f }) {
@@ -52,16 +53,6 @@ export default function SettingList({ onUpdateSetting = f => f }) {
     console.error(err);
   };
 
-  // get setting JSON from backend
-  const getSetting = () => {
-    const d = new Date();
-    fetch(url)
-      .then(res => res.json())
-      .then(updateTemp)
-      .then((res) => console.log(d.toISOString(), 'SettingList get setting:', res))
-      .catch(handleGetError);
-  };
-
   // update view
   const onUpdate = function(name, tags) {
     tempSetting = tempSetting.map(
@@ -93,7 +84,7 @@ export default function SettingList({ onUpdateSetting = f => f }) {
 
   // get setting from backend
   useEffect(() => {
-    getSetting();
+    get(url, updateTemp);
   }, []);
 
   // update setting to state of App component, post current setting to backend

@@ -16,6 +16,7 @@ import TabFrame from './components/TabFrame';
 import useInterval from './hooks/useInterval';
 
 import post from './helpers/apiPost';
+import get from './helpers/apiGet';
 
 
 function App() {
@@ -69,15 +70,6 @@ function App() {
     };
   }, [start]);
 
-  const getData = () => {
-    const d = new Date();
-    fetch(url)
-      .then(res => res.json())
-      .then(saveData)
-      .then((res) => console.log(d.toISOString(), 'App get data:', res))
-      .catch(console.error);
-  };
-
   // save data to state
   const saveData = data => {
     const newData = 'Message' in data ? null : {...data};
@@ -87,7 +79,7 @@ function App() {
 
   // fetch data with given interval
   useInterval( () => {
-    getData();
+    get(url, saveData);
   }, start ? delay : null);
 
   const switchSampling = (value) => {
