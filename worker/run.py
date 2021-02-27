@@ -13,6 +13,7 @@ def process_mock_data (data):
   new_data['nox'] = {
     'no': data['no'],
     'nox': data['nox'],
+    'range': 200,
     'ave_time': 60,
     'no_bkg': 0.2,
     'nox_bkg': 0.25,

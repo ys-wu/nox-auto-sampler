@@ -10,7 +10,7 @@ import Divider from 'antd/lib/divider';
 import Alert from 'antd/lib/alert';
 
 import MockPanel from './components/MockPanel'
-import Status from './components/Status'
+import StatusPanel from './components/StatusPanel'
 import TabFrame from './components/TabFrame'
 
 import useInterval from './hooks/useInterval'
@@ -177,7 +177,7 @@ function App() {
       </Row>
       <Row>
         <Col span={18} offset={3}>
-          <Status data={data} switchSampling={switchSampling} triggerMock={triggerMock}/ >
+          <StatusPanel data={data} switchSampling={switchSampling} triggerMock={triggerMock}/ >
         </Col>
       </Row>
       <Row>

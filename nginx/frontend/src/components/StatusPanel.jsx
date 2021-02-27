@@ -9,7 +9,7 @@ import Input from 'antd/lib/input';
 import Button from 'antd/lib/button';
 
 
-export default function Status({ data, switchSampling=f=>f, triggerMock=f=>f} ) {
+export default function StatusPanel({ data, switchSampling=f=>f, triggerMock=f=>f} ) {
 
   const [form] = Form.useForm();
 

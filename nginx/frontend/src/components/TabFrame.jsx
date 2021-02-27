@@ -2,6 +2,7 @@ import React from 'react';
 import Tabs from 'antd/lib/tabs';
 import SettingList from './SettingList'
 import SeriesTable from './SeriesTable'
+import RawRecordForm from './RawRecordForm';
 
 const { TabPane } = Tabs;
 
@@ -12,7 +13,7 @@ export default function TabFrame({ setting, onUpdateSetting=f=>f, onSaveSeries=f
         <SeriesTable setting={setting} onSaveSeries={onSaveSeries}/>
       </TabPane>
       <TabPane tab="原始记录" key="2">
-        Content of Tab Pane
+        <RawRecordForm setting={setting} />
       </TabPane>
       <TabPane tab="分析检测" key="3">
         Content of Tab Pane
