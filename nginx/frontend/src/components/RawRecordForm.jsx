@@ -1,5 +1,9 @@
 import React from 'react';
-import { Form, Input, Button, Select } from 'antd';
+import Form from 'antd/lib/form';
+import Input from 'antd/lib/form';
+import Button from 'antd/lib/form';
+import Select from 'antd/lib/form';
+
 const { Option } = Select;
 
 export default function RawRecordForm({ setting }) {
@@ -83,6 +87,9 @@ export default function RawRecordForm({ setting }) {
       <Form.Item {...tailLayout}>
         <Button type="primary" htmlType="submit">
           开始分析
+        </Button>
+        <Button htmlType="button" onClick={onReset}>
+          全部重置
         </Button>
         <Button htmlType="button" onClick={onReset}>
           全部重置
