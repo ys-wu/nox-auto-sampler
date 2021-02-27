@@ -13,13 +13,13 @@ def process_mock_data (data):
   new_data['nox'] = {
     'no': data['no'],
     'nox': data['nox'],
-    'range': 200,
-    'ave_time': 60,
-    'no_bkg': 0.2,
-    'nox_bkg': 0.25,
-    'no_coef': 1.02,
-    'no2_coef': 0.98,
-    'nox_coef': 1.05
+    'noxRange': 200,
+    'aveTime': 60,
+    'noBkg': 0.2,
+    'noxBkg': 0.25,
+    'noCoef': 1.02,
+    'no2Coef': 0.98,
+    'noxCoef': 1.05
   }
   new_data['mfc'] = {
     'set': data['mfcSet'],

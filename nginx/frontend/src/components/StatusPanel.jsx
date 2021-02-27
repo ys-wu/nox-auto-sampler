@@ -18,7 +18,7 @@ export default function StatusPanel({ data, switchSampling=f=>f, triggerMock=f=>
   const txtLog = useRef();
 
   const hostname = window.location.hostname;
-  const url = `http://${hostname}/log/`
+  const url = `http://${hostname}/api/log/`
 
   // command in log input to trigger mock UI
   const password = 'a';

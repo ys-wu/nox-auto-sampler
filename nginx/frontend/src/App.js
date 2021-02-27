@@ -28,7 +28,7 @@ function App() {
   const delay = 2000;
 
   const hostname = window.location.hostname;
-  const url = `http://${hostname}/data/`
+  const url = `http://${hostname}/api/data/`
 
   // clean up before unload page
   window.onbeforeunload = e => {
@@ -41,7 +41,8 @@ function App() {
 
   // default status is idle
   useEffect(() =>{
-    postData({status: 'idle'});
+    postData({mock: 'off'}, `http://${hostname}/mock/`);
+    postData({status: 'idle'}, url);
   }, []);
 
   // show warning for power failure
@@ -59,11 +60,11 @@ function App() {
   useEffect(() => {
     if (!start) {
       setData(null);
-      postData({status: 'idle'});
+      postData({status: 'idle'}, url);
     };
   }, [start]);
 
-  const postData = (data) => {
+  const postData = (data, url) => {
     const d = new Date();
     console.log(d.toISOString(), 'App post data:', data);
     fetch(url, {
@@ -119,6 +120,7 @@ function App() {
       "气瓶压力": "bottlePres",
       "检测人员": "operator",
       "项目名称": "projectName",
+      "分析方法": "method",
       "仪器名称及型号": "instrumentName",
       "固定资产登记号": "assetNumber",
     };

@@ -39,8 +39,29 @@ export default function RawRecordForm({ setting }) {
         </Select>
       </Form.Item>
 
+      <Form.Item name="method" label="分析方法">
+        <Select placeholder={"分析方法"} defaultValue={setting['method'][0]}>
+          {setting['method'].map((item, index) => <Option key={index} value={item}>{item}</Option>)}
+        </Select>
+      </Form.Item>
+
+      <Form.Item name="instrumentName" label="仪器名称及型号">
+        <Select placeholder={"仪器名称及型号"} defaultValue={setting['instrumentName'][0]}>
+          {setting['instrumentName'].map((item, index) => <Option key={index} value={item}>{item}</Option>)}
+        </Select>
+      </Form.Item>
+      
+      <Form.Item name="assetNumber" label="固定资产登记号">
+        <Select 
+          placeholder={"固定资产登记号"} 
+          defaultValue={setting['assetNumber'][0]}
+        >
+          {setting['assetNumber'].map((item, index) => <Option key={index} value={item}>{item}</Option>)}
+        </Select>
+      </Form.Item>
+
       <Form.Item name="balanceFlow" label="平衡气流">
-        <Input placeholder="平衡气流 (ml/min)"/>
+        <Input placeholder="平衡气流 (ml/min)" />
       </Form.Item>
 
       <Form.Item name="ambTemp" label="室温">
@@ -57,21 +78,6 @@ export default function RawRecordForm({ setting }) {
 
       <Form.Item name="stv" label="STV">
         <Input placeholder="数据稳定判断值" />
-      </Form.Item>
-
-      <Form.Item name="instrumentName" label="仪器名称及型号">
-        <Select placeholder={"仪器名称及型号"} defaultValue={setting['instrumentName'][0]}>
-          {setting['instrumentName'].map((item, index) => <Option key={index} value={item}>{item}</Option>)}
-        </Select>
-      </Form.Item>
-      
-      <Form.Item name="assetNumber" label="固定资产登记号">
-        <Select 
-          placeholder={"固定资产登记号"} 
-          defaultValue={setting['assetNumber'][0]}
-        >
-          {setting['assetNumber'].map((item, index) => <Option key={index} value={item}>{item}</Option>)}
-        </Select>
       </Form.Item>
 
       <Form.Item {...tailLayout}>

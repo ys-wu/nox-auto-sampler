@@ -18,6 +18,7 @@ export default function SettingList({ onUpdateSetting = f => f }) {
     { 'name': '气瓶压力', 'tags': ['11.0 MPa', '10.9 MPa', '10.8 MPa', '10.7 MPa'] },
     { 'name': '检测人员', 'tags': ['倪才倩', '范洁'] },
     { 'name': '项目名称', 'tags': ['NO/N2 定值', 'NO/N2 基准对比', 'NO/N2 中间气比对', 'NO/N2 实验室间比对', 'NO/N2 期间核查']},
+    { 'name': '分析方法', 'tags': ['化学发光法']},
     { 'name': '仪器名称及型号', 'tags': ['42i-HL NO-NO2-NOx 分析仪']},
     { 'name': '固定资产登记号', 'tags': ['z140913', 'TY2015000086']},
   ];
@@ -28,7 +29,7 @@ export default function SettingList({ onUpdateSetting = f => f }) {
   const [temp, setTemp] = useState(); 
 
   const hostname = window.location.hostname;
-  const url = `http://${hostname}/setting/`;
+  const url = `http://${hostname}/api/setting/`;
   // const csrftoken = new Cookies();
 
   // update to temp
