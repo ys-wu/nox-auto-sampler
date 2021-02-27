@@ -17,6 +17,9 @@ export default function Status({ data, switchSampling=f=>f, triggerMock=f=>f} ) 
   const [state, setState] = useState();
   const txtLog = useRef();
 
+  const hostname = window.location.hostname;
+  const url = `http://${hostname}/log/`
+
   // command in log input to trigger mock UI
   const password = 'a';
 
@@ -35,6 +38,24 @@ export default function Status({ data, switchSampling=f=>f, triggerMock=f=>f} ) 
     console.log(value)
   }; 
 
+  // post log to backend
+  const postLog = (data) => {
+    const d = new Date();
+    console.log(d.toISOString(), 'Status post log:', data);
+    fetch(url, {
+      method: "POST",
+      headers: {
+        'Accept': 'application/json, text/plain',
+        'Content-Type': 'application/json; charset=UTF-8',
+        // 'X-CSRFToken': csrftoken
+      },
+      body: JSON.stringify(data)
+    })
+      .then(res => res.json())
+      .then((res) => console.log(d.toISOString(), 'Status post response:', res))
+      .catch(console.error);
+  };
+
   // handle submit log text
   const onFinish = value => {
     const d = new Date();
@@ -42,7 +63,8 @@ export default function Status({ data, switchSampling=f=>f, triggerMock=f=>f} ) 
       triggerMock();
       console.log(d.toISOString(), "Status trigger mock");
     } else {
-      console.log(d.toISOString(), "Status submit a log:", value);
+      postLog({ log: state });
+      console.log(d.toISOString(), "Status submit a log:", state);
     };
     form.resetFields();
   };

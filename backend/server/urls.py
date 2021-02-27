@@ -14,4 +14,5 @@ urlpatterns = [
     url(r'^', include(router.urls)),
     path('data/', views.Data.as_view()),
     path('setting/', views.Setting.as_view()),
+    path('log/', views.Log.as_view()),
 ]

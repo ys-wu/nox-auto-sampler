@@ -2,6 +2,7 @@ from django.http import JsonResponse
 from django.views import View
 from rest_framework import viewsets
 
+from datetime import datetime
 import json
 import redis
 
@@ -10,6 +11,7 @@ from server.serializers import SeriesSerializer
 
 
 setting_url = '/app/setting/setting.json'
+log_url = '/app/dbdata/log.txt'
 
 host = 'redis'
 r = redis.Redis(host=host, port=6379, db=0)
@@ -35,7 +37,7 @@ class Setting(View):
         return JsonResponse({'Message': 'Setting get failure'}, safe=False)
 
   def post(self, request):
-    with open(setting_url, 'w') as data_file:
+    with open(setting_url, 'w+') as data_file:
       try:
         data = json.loads(request.body)
         json.dump(data, data_file)
@@ -63,15 +65,24 @@ class Data(View):
     try:
       data = json.loads(request.body)
       print('Receive post data:', data)
-
-      # handle status turn to idle
       if data['status'] == 'idle':
         r.set('status', 'idle')
       return JsonResponse(data)
-
-      # handle receiving a new line of log
-      
-
     except:
       print('Error in handle post data')
       return JsonResponse({'Message': 'Post data fail'})
+
+
+class Log(View):
+   def post(self, request):
+    try:
+      data = json.loads(request.body)
+      print('Receive log:', data)
+      if data['log'] != '':
+        with open(log_url, 'a+') as f:
+          now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+          f.write(now + ' ' + data['log'] + '\n')
+      return JsonResponse(data)
+    except:
+      print('Error in handle post data')
+      return JsonResponse({'Message': 'Log fail'})
