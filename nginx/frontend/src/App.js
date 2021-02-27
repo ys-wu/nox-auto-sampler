@@ -9,11 +9,14 @@ import Col from 'antd/lib/col';
 import Divider from 'antd/lib/divider';
 import Alert from 'antd/lib/alert';
 
-import MockPanel from './components/MockPanel'
-import StatusPanel from './components/StatusPanel'
-import TabFrame from './components/TabFrame'
+import MockPanel from './components/MockPanel';
+import StatusPanel from './components/StatusPanel';
+import TabFrame from './components/TabFrame';
 
-import useInterval from './hooks/useInterval'
+import useInterval from './hooks/useInterval';
+
+import post from './helpers/apiPost';
+
 
 function App() {
 
@@ -27,8 +30,10 @@ function App() {
   // interval of fetching data in (ms)
   const delay = 2000;
 
+  // API config
   const hostname = window.location.hostname;
   const url = `http://${hostname}/api/data/`
+  const urlMock = `http://${hostname}/mock/`
 
   // clean up before unload page
   window.onbeforeunload = e => {
@@ -41,8 +46,8 @@ function App() {
 
   // default status is idle
   useEffect(() =>{
-    postData({mock: 'off'}, `http://${hostname}/mock/`);
-    postData({status: 'idle'}, url);
+    post({mock: 'off'}, urlMock);
+    post({status: 'idle'}, url);
   }, []);
 
   // show warning for power failure
@@ -60,26 +65,9 @@ function App() {
   useEffect(() => {
     if (!start) {
       setData(null);
-      postData({status: 'idle'}, url);
+      post({status: 'idle'}, url);
     };
   }, [start]);
-
-  const postData = (data, url) => {
-    const d = new Date();
-    console.log(d.toISOString(), 'App post data:', data);
-    fetch(url, {
-        method: "POST",
-        headers: {
-          'Accept': 'application/json, text/plain',
-          'Content-Type': 'application/json; charset=UTF-8',
-          // 'X-CSRFToken': csrftoken
-        },
-        body: JSON.stringify(data)
-      })
-      .then(res => res.json())
-      .then((res) => console.log(d.toISOString(), 'App post response data:', res))
-      .catch(console.error);
-    };
 
   const getData = () => {
     const d = new Date();

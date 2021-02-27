@@ -1,9 +1,15 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
+
 import './SettingList.css'
+
 import Button from 'antd/lib/button';
 import List from 'antd/lib/list';
 import EditableTagGroup from './EditableTagGroup'
+
 // import Cookies from 'universal-cookie';
+
+import post from "../helpers/apiPost";
+
 
 export default function SettingList({ onUpdateSetting = f => f }) {
 
@@ -56,23 +62,6 @@ export default function SettingList({ onUpdateSetting = f => f }) {
       .catch(handleGetError);
   };
 
-  // post current setting to backend
-  const postSetting = () => {
-    const d = new Date();
-    fetch(url, {
-      method: "POST",
-      headers: {
-        'Accept': 'application/json, text/plain',
-        'Content-Type': 'application/json; charset=UTF-8',
-        // 'X-CSRFToken': csrftoken
-      },
-      body: JSON.stringify(current)
-    })
-      .then(res => res.json())
-      .then((res) => console.log(d.toISOString(), 'SettingList post setting:', res))
-      .catch(console.error);
-  };
-
   // update view
   const onUpdate = function(name, tags) {
     tempSetting = tempSetting.map(
@@ -111,7 +100,7 @@ export default function SettingList({ onUpdateSetting = f => f }) {
   useLayoutEffect(() => {
     if (current) {
       onUpdateSetting(current);
-      postSetting();
+      post(current, url);
     };
   }, [current]);
 

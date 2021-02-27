@@ -6,6 +6,8 @@ import Input from  'antd/lib/input'
 
 import useInterval from '../hooks/useInterval'
 
+import post from '../helpers/apiPost';
+
 
 export default function MockPanel({ quitMock=f=>f }) {
 
@@ -28,24 +30,6 @@ export default function MockPanel({ quitMock=f=>f }) {
     navigator.sendBeacon(url, JSON.stringify({ mock: 'off' }));
   };
 
-  // post mock data to backend
-  const postMock = (data) => {
-    const d = new Date();
-    console.log(d.toISOString(), 'MockPanel post data:', data);
-    fetch(url, {
-      method: "POST",
-      headers: {
-        'Accept': 'application/json, text/plain',
-        'Content-Type': 'application/json; charset=UTF-8',
-        // 'X-CSRFToken': csrftoken
-      },
-      body: JSON.stringify(data)
-    })
-      .then(res => res.json())
-      .then((res) => console.log(d.toISOString(), 'MockPanel post response:', res))
-      .catch(console.error);
-  };
-
   useInterval( ()=> {
     const data = {
       mock: 'on',
@@ -55,12 +39,12 @@ export default function MockPanel({ quitMock=f=>f }) {
       mfcSet: parseInt(mfcSet),
       mfcRead: parseInt(mfcRead),
     };
-    postMock(data)
+    post(data, url)
   }, mock ? delay : null)
 
   const closeMock = () => {
     setMock(false);
-    postMock({mock: 'off'});
+    post({mock: 'off'}, url);
     quitMock();
   };
 
