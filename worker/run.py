@@ -35,22 +35,35 @@ if __name__ == '__main__':
   host = 'redis'
   r = redis.Redis(host=host, port=6379, db=0)
   r.set('status', 'idle')
+  r.set('mock', 'off')
 
   data = None
+  keep_list_length = 10
 
   while True:
     
-    if r.get('status') == b'mock' and r.llen('mock_data') > 0:
+    if r.get('mock') == b'on' and r.llen('mock_data') > 0:
       while r.llen('mock_data') > 0:
         data = r.rpop('mock_data')
       data = json.loads(data)
       data = process_mock_data(data)
       print('Worker produce mock data', data)
+    elif r.get('mock') == b'off':
+      while r.llen('mock_data') > 0:
+        r.rpop('mock_data')
+      data = None
 
-    elif r.get('status') == b'run':
+    if r.get('status') == b'run':
       pass
     
     if data:
+      print(data)
       r.lpush('data', json.dumps(data))
+    
+    # pop old data in queue
+    while r.llen('mock_data') > keep_list_length:
+      r.rpop('mock_data')
+    while r.llen('data') > keep_list_length:
+      r.rpop('data')
 
     sleep(1)

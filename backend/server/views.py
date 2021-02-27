@@ -13,7 +13,7 @@ setting_url = '/app/setting/setting.json'
 
 host = 'redis'
 r = redis.Redis(host=host, port=6379, db=0)
-r.set('status', 'mock')
+r.set('status', 'idel')
 
 
 class SeriesViewSet(viewsets.ModelViewSet):
@@ -44,7 +44,8 @@ class Data(View):
 
   def get(self, request):
     try:
-      if r.get('status') != b'idle' and r.llen('data') > 0:
+      r.set('status', 'run')
+      if r.llen('data') > 0:
         while r.llen('data') > 0:
           data = r.rpop('data')
         data = json.loads(data)
@@ -61,6 +62,7 @@ class Data(View):
       print('Receive post data:', data)
       if data['status'] == 'idle':
         r.set('status', 'idle')
+      return JsonResponse(data)
     except:
       print('Error in handle post data')
       return JsonResponse({'Message': 'Post data fail'})

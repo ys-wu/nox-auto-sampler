@@ -22,8 +22,9 @@ export default function Status({ data, switchSampling=f=>f, triggerMock=f=>f} ) 
 
   // handle start button
   const handleStart = checked => {
+    const d = new Date();
     setStart(checked);
-    console.log("Status start buttom has been clicked, checked:", checked);
+    console.log(d.toISOString(), "Status start buttom has been clicked, checked:", checked);
     switchSampling(checked);
   };
 
@@ -36,11 +37,12 @@ export default function Status({ data, switchSampling=f=>f, triggerMock=f=>f} ) 
 
   // handle submit log text
   const onFinish = value => {
+    const d = new Date();
     if (state === password) {
       triggerMock();
-      console.log("Status trigger mock");
+      console.log(d.toISOString(), "Status trigger mock");
     } else {
-      console.log("Status submit a log:", value);
+      console.log(d.toISOString(), "Status submit a log:", value);
     };
     form.resetFields();
   };

@@ -37,13 +37,13 @@ export default function MockPanel({ quitMock=f=>f }) {
       body: JSON.stringify(data)
     })
       .then(res => res.json())
-      .then((res) => console.log(d.toISOString(), 'MockPanle post response:', res))
+      .then((res) => console.log(d.toISOString(), 'MockPanel post response:', res))
       .catch(console.error);
   };
 
   useInterval( ()=> {
     const data = {
-      status: 'mock',
+      mock: 'on',
       power: power,
       no: no,
       nox: nox,
@@ -56,7 +56,7 @@ export default function MockPanel({ quitMock=f=>f }) {
   const closeMock = () => {
     // clearInterval(interval);
     setMock(false);
-    postMock({status: 'idle'});
+    postMock({mock: 'off'});
     quitMock();
   };
 
@@ -71,9 +71,6 @@ export default function MockPanel({ quitMock=f=>f }) {
       <Form.Item name="nox" label="NOx">
         <Input defaultValue={0} onPressEnter={(e => setNox(e.target.value))} />
       </Form.Item>
-      {/* <Form.Item name="mfcSet" label="MFC Set">
-        <Input defaultValue={0} onPressEnter={(e => setMfcSet(e.target.value))} />
-      </Form.Item> */}
       <Form.Item name="mfcRead" label="MFC Read">
         <Input defaultValue={0} onPressEnter={(e => setMfcRead(e.target.value))} />
       </Form.Item>

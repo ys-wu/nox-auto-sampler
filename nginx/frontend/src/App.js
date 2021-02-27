@@ -41,7 +41,7 @@ function App() {
         body: JSON.stringify(data)
       })
       .then(res => res.json())
-      .then((res) => console.log(d.toISOString(), 'App post data response:', res))
+      .then((res) => console.log(d.toISOString(), 'App post response data:', res))
       .catch(console.error);
     };
 
@@ -50,7 +50,7 @@ function App() {
     fetch(dataUrl)
       .then(res => res.json())
       .then(saveData)
-      .then((res) => console.log(d, 'App get data:', res))
+      .then((res) => console.log(d.toISOString(), 'App get data:', res))
       .catch(console.error);
   };
 
@@ -61,15 +61,11 @@ function App() {
     return newData;
   };
 
-  // defaul status idle
-  useEffect( () => {
-    postData({'status': 'idle'});
-  }, []);
-
   // set data to null when stop sampling
   useEffect(() => {
     if (!start) {
       setData(null);
+      postData({status: 'idle'});
     };
   }, [start]);
 
@@ -104,9 +100,10 @@ function App() {
 
   // update setting state, data from SettingList component
   const updateSetting = data => {
+    const d = new Date();
     const obj = tidySetting(data);
     setSetting(obj);
-    console.log('App update setting:', obj);
+    console.log(d.toISOString(), 'App update setting:', obj);
   };
 
   // tidy up series data before setSeries

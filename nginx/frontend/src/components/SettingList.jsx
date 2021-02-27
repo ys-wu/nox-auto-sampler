@@ -43,15 +43,17 @@ export default function SettingList({ onUpdateSetting = f => f }) {
 
   // get setting JSON from backend
   const getSetting = () => {
+    const d = new Date();
     fetch(url)
       .then(res => res.json())
       .then(updateTemp)
-      .then((res) => console.log('Get Setting:', res))
+      .then((res) => console.log(d.toISOString(), 'SettingList get setting:', res))
       .catch(handleGetError);
   };
 
   // post current setting to backend
   const postSetting = () => {
+    const d = new Date();
     fetch(url, {
       method: "POST",
       headers: {
@@ -62,7 +64,7 @@ export default function SettingList({ onUpdateSetting = f => f }) {
       body: JSON.stringify(current)
     })
       .then(res => res.json())
-      .then((res) => console.log('Post Setting:', res))
+      .then((res) => console.log(d.toISOString(), 'SettingList post setting:', res))
       .catch(console.error);
   };
 
