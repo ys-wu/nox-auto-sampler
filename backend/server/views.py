@@ -14,6 +14,10 @@ setting_url = '/app/setting/setting.json'
 host = 'redis'
 r = redis.Redis(host=host, port=6379, db=0)
 r.set('status', 'idel')
+while r.llen('mock_data') > 0:
+  r.rpop('mock_data')
+while r.llen('data') > 0:
+  r.rpop('data')
 
 
 class SeriesViewSet(viewsets.ModelViewSet):
@@ -41,7 +45,6 @@ class Setting(View):
 
 
 class Data(View):
-
   def get(self, request):
     try:
       r.set('status', 'run')

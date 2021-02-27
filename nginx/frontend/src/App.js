@@ -16,11 +16,31 @@ import useInterval from './hooks/useInterval'
 
 function App() {
 
-  const [mock, setMock] = useState('off');
+  const [mock, setMock] = useState(false);
   const [start, setStart] = useState(false);
   const [setting, setSetting] = useState();
   const [series, setSeries] = useState();
   const [data, setData] = useState(null);
+
+  // clean up before exit App
+  window.addEventListener("beforeunload", e => {
+    e.preventDefault();
+    // setMock(false);
+    postData({status: 'idle'}); 
+    // return e.returnValue = '确认退出程序吗？';
+  });
+
+  useEffect(() =>{
+    postData({status: 'idle'});
+  }, []);
+
+  // set data to null when stop sampling
+  useEffect(() => {
+    if (!start) {
+      setData(null);
+      postData({status: 'idle'});
+    };
+  }, [start]);
 
   // interval of fetching data in (ms)
   const delay = 2000;
@@ -61,14 +81,6 @@ function App() {
     return newData;
   };
 
-  // set data to null when stop sampling
-  useEffect(() => {
-    if (!start) {
-      setData(null);
-      postData({status: 'idle'});
-    };
-  }, [start]);
-
   // fetch data with given interval
   useInterval( () => {
     getData();
@@ -79,7 +91,7 @@ function App() {
   };
 
   const triggerMock = () => {
-    setMock('on');
+    setMock(true);
   };
 
   // tidy up setting data from array to obj
@@ -129,9 +141,9 @@ function App() {
         </Col>
       </Row>
       <Row>
-        { mock === 'off' ? null :
+        { mock === false ? null :
           <Col span={18} offset={3}>
-            <MockPanel quitMock={ () => setMock('off') }/>
+            <MockPanel quitMock={ () => setMock(false) }/>
           </Col>
         }
       </Row>

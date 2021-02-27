@@ -41,6 +41,13 @@ export default function MockPanel({ quitMock=f=>f }) {
       .catch(console.error);
   };
 
+  window.addEventListener("beforeunload", e => {
+    e.preventDefault();
+    setMock(false)
+    postMock({ mock: 'off' });
+    // return e.returnValue = '确认退出程序吗？';
+  });
+
   useInterval( ()=> {
     const data = {
       mock: 'on',
@@ -54,7 +61,6 @@ export default function MockPanel({ quitMock=f=>f }) {
   }, mock ? delay : null)
 
   const closeMock = () => {
-    // clearInterval(interval);
     setMock(false);
     postMock({mock: 'off'});
     quitMock();
@@ -75,6 +81,7 @@ export default function MockPanel({ quitMock=f=>f }) {
         <Input defaultValue={0} onPressEnter={(e => setMfcRead(e.target.value))} />
       </Form.Item>
       <Button onClick={closeMock}>Close</Button>
+      <p>Press 'Enter' to update</p>
     </Form>
   </>
 };

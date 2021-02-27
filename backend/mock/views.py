@@ -4,9 +4,14 @@ from django.views import View
 import json
 import redis
 
+
 host = 'redis'
 r = redis.Redis(host=host, port=6379, db=0)
 r.set('mock', 'off')
+while r.llen('mock_data') > 0:
+  r.rpop('mock_data')
+while r.llen('data') > 0:
+  r.rpop('data')
 
 
 class Mock(View):

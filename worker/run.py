@@ -36,6 +36,10 @@ if __name__ == '__main__':
   r = redis.Redis(host=host, port=6379, db=0)
   r.set('status', 'idle')
   r.set('mock', 'off')
+  while r.llen('mock_data') > 0:
+    r.rpop('mock_data')
+  while r.llen('data') > 0:
+    r.rpop('data')
 
   data = None
   keep_list_length = 10
