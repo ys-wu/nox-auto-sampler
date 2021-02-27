@@ -1,4 +1,4 @@
-export default function get(url, processor, errorHandler=console.error) {
+export default function get(url, processor=f=>f, errorHandler=console.error) {
   const d = new Date();
   fetch(url)
     .then(res => res.json())

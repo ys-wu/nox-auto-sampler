@@ -23,7 +23,7 @@ export default function MockPanel({ quitMock=f=>f }) {
   const delay = 1000;
 
   const hostname = window.location.hostname;
-  const url = `http://${hostname}/mock/`
+  const url = `http://${hostname}/mock/`;
 
   // clean up before unload page
   window.onunload = () => {

@@ -4,7 +4,13 @@ import Input from 'antd/lib/input';
 import Button from 'antd/lib/button';
 import Select from 'antd/lib/select';
 
+import get from '../helpers/apiGet';
+
+
 const { Option } = Select;
+
+const hostname = window.location.hostname;
+const url = `http://${hostname}/api/series/`;
 
 export default function RawRecordForm({ setting }) {
   const layout = {
@@ -22,17 +28,18 @@ export default function RawRecordForm({ setting }) {
     },
   };
   const [form] = Form.useForm();
-
-  const onChangeProjectName = (value) => {
-    return;
-  };
-
-  const onFinish = (values) => {
-    console.log(values);
+  
+  const handleFetch = () => {
+    // get(url);
+    // post({name: "haha"}, url);
   };
 
   const onReset = () => {
     form.resetFields();
+  };
+
+  const onFinish = (values) => {
+    // return;
   };
 
   return (
@@ -85,14 +92,14 @@ export default function RawRecordForm({ setting }) {
       </Form.Item>
 
       <Form.Item {...tailLayout}>
+        <Button htmlType="button" onClick={handleFetch}>
+          获取状态
+        </Button>
+        <Button htmlType="button" onClick={onReset}>
+          重置全部
+        </Button>
         <Button type="primary" htmlType="submit">
-          开始分析
-        </Button>
-        <Button htmlType="button" onClick={onReset}>
-          全部重置
-        </Button>
-        <Button htmlType="button" onClick={onReset}>
-          全部重置
+          保存记录
         </Button>
       </Form.Item>
     </Form>

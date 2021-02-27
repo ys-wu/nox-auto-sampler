@@ -33,8 +33,8 @@ function App() {
 
   // API config
   const hostname = window.location.hostname;
-  const url = `http://${hostname}/api/data/`
-  const urlMock = `http://${hostname}/mock/`
+  const url = `http://${hostname}/api/data/`;
+  const urlMock = `http://${hostname}/mock/`;
 
   // clean up before unload page
   window.onbeforeunload = e => {
