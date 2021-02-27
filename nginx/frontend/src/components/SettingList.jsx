@@ -8,6 +8,7 @@ import EditableTagGroup from './EditableTagGroup'
 export default function SettingList({ onUpdateSetting = f => f }) {
 
   const defaultSetting = [
+    { 'name': '样品流量', 'tags': ['1.0']},
     { 'name': '类型', 'tags': ['校准', '质控', '样品'] },
     { 'name': '偏差', 'tags': ['0.1 %', '0.5 %', '1 %'] },
     {
@@ -16,6 +17,9 @@ export default function SettingList({ onUpdateSetting = f => f }) {
     },
     { 'name': '气瓶压力', 'tags': ['11.0 MPa', '10.9 MPa', '10.8 MPa', '10.7 MPa'] },
     { 'name': '检测人员', 'tags': ['倪才倩', '范洁'] },
+    { 'name': '项目名称', 'tags': ['NO/N2 定值', 'NO/N2 基准对比', 'NO/N2 中间气比对', 'NO/N2 实验室间比对', 'NO/N2 期间核查']},
+    { 'name': '仪器名称及型号', 'tags': ['42i-HL NO-NO2-NOx 分析仪']},
+    { 'name': '固定资产登记号', 'tags': ['z140913', 'TY2015000086']},
   ];
 
   let tempSetting = [...defaultSetting];
@@ -82,8 +86,14 @@ export default function SettingList({ onUpdateSetting = f => f }) {
 
   // save temp setting to current
   const saveCurrent = () => {
-    setTemp([...tempSetting]);
-    setCurrent([...tempSetting]);
+    if (tempSetting[0]['tags'].length !== 1) {
+      alert("样品流量只能是一项！")
+    } else if (isNaN(tempSetting[0]['tags'][0]) ) {
+      alert("样品流量必须是个数！");
+    } else {
+      setTemp([...tempSetting]);
+      setCurrent([...tempSetting]);
+    };
   };
 
   // save default setting to current

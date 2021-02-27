@@ -112,11 +112,15 @@ function App() {
   // tidy up setting data from array to obj
   const tidySetting = data => {
     const nameMapping = {
+      "样品流量": "flowSet",
       "类型": "type",
       "偏差": "bias",
       "气瓶类型": "bottleType",
       "气瓶压力": "bottlePres",
-      "检测人员": "operator"
+      "检测人员": "operator",
+      "项目名称": "projectName",
+      "仪器名称及型号": "instrumentName",
+      "固定资产登记号": "assetNumber",
     };
     const obj ={};
     data.forEach(element => {
