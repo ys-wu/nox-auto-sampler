@@ -7,6 +7,7 @@ import js_logo from './img/js_logo.png'
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Divider from 'antd/lib/divider';
+import Alert from 'antd/lib/alert';
 
 import MockPanel from './components/MockPanel'
 import Status from './components/Status'
@@ -21,6 +22,13 @@ function App() {
   const [setting, setSetting] = useState();
   const [series, setSeries] = useState();
   const [data, setData] = useState(null);
+  const [power, setPower] = useState(1);
+
+  // interval of fetching data in (ms)
+  const delay = 2000;
+
+  const hostname = window.location.hostname;
+  const url = `http://${hostname}/data/`
 
   // clean up before unload page
   window.onbeforeunload = e => {
@@ -28,12 +36,24 @@ function App() {
     return e.returnValue = '确认退出程序吗？';
   };
   window.onunload = () => {
-    navigator.sendBeacon(dataUrl, JSON.stringify({status: 'idle'}));
+    navigator.sendBeacon(url, JSON.stringify({status: 'idle'}));
   };
 
+  // default status is idle
   useEffect(() =>{
     postData({status: 'idle'});
   }, []);
+
+  // show warning for power failure
+  useEffect(() => {
+    if (data !== null) {
+      if (data['power'] === 0) {
+        setPower(0);
+      } else {
+        setPower(1);
+      };
+    };
+  }, [data]);
 
   // set data to null when stop sampling
   useEffect(() => {
@@ -43,16 +63,10 @@ function App() {
     };
   }, [start]);
 
-  // interval of fetching data in (ms)
-  const delay = 2000;
-
-  const hostname = window.location.hostname;
-  const dataUrl = `http://${hostname}/data/`
-
   const postData = (data) => {
     const d = new Date();
     console.log(d.toISOString(), 'App post data:', data);
-    fetch(dataUrl, {
+    fetch(url, {
         method: "POST",
         headers: {
           'Accept': 'application/json, text/plain',
@@ -68,7 +82,7 @@ function App() {
 
   const getData = () => {
     const d = new Date();
-    fetch(dataUrl)
+    fetch(url)
       .then(res => res.json())
       .then(saveData)
       .then((res) => console.log(d.toISOString(), 'App get data:', res))
@@ -135,6 +149,15 @@ function App() {
 
   return (
     <div className="App">
+      { power !== 0 ? null :
+        <Alert
+          message="警告"
+          description="外部供电故障，已分析停止，将在 UPS 耗尽前自动关机！"
+          type="warning"
+          showIcon
+          // closable
+        />
+      }
       <Row>
         <Col span={18} offset={3} >
           <h1 style={{ float: 'left' }}>氮氧化物自动进样系统</h1>

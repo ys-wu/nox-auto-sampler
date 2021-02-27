@@ -9,7 +9,7 @@ def get_valve():
 
 def process_mock_data (data):
   new_data = {};
-  new_data['power'] = 1
+  new_data['power'] = data['power']
   new_data['nox'] = {
     'no': data['no'],
     'nox': data['nox'],

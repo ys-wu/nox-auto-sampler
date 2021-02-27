@@ -49,11 +49,11 @@ export default function MockPanel({ quitMock=f=>f }) {
   useInterval( ()=> {
     const data = {
       mock: 'on',
-      power: power,
-      no: no,
-      nox: nox,
-      mfcSet: mfcSet,
-      mfcRead: mfcRead,
+      power: parseInt(power),
+      no: parseInt(no),
+      nox: parseInt(nox),
+      mfcSet: parseInt(mfcSet),
+      mfcRead: parseInt(mfcRead),
     };
     postMock(data)
   }, mock ? delay : null)

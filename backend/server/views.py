@@ -63,9 +63,15 @@ class Data(View):
     try:
       data = json.loads(request.body)
       print('Receive post data:', data)
+
+      # handle status turn to idle
       if data['status'] == 'idle':
         r.set('status', 'idle')
       return JsonResponse(data)
+
+      # handle receiving a new line of log
+      
+
     except:
       print('Error in handle post data')
       return JsonResponse({'Message': 'Post data fail'})
