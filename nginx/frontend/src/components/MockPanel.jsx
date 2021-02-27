@@ -23,6 +23,11 @@ export default function MockPanel({ quitMock=f=>f }) {
   const hostname = window.location.hostname;
   const url = `http://${hostname}/mock/`
 
+  // clean up before unload page
+  window.onunload = () => {
+    navigator.sendBeacon(url, JSON.stringify({ mock: 'off' }));
+  };
+
   // post mock data to backend
   const postMock = (data) => {
     const d = new Date();
@@ -40,13 +45,6 @@ export default function MockPanel({ quitMock=f=>f }) {
       .then((res) => console.log(d.toISOString(), 'MockPanel post response:', res))
       .catch(console.error);
   };
-
-  window.addEventListener("beforeunload", e => {
-    e.preventDefault();
-    setMock(false)
-    postMock({ mock: 'off' });
-    // return e.returnValue = '确认退出程序吗？';
-  });
 
   useInterval( ()=> {
     const data = {

@@ -22,13 +22,14 @@ function App() {
   const [series, setSeries] = useState();
   const [data, setData] = useState(null);
 
-  // clean up before exit App
-  window.addEventListener("beforeunload", e => {
+  // clean up before unload page
+  window.onbeforeunload = e => {
     e.preventDefault();
-    // setMock(false);
-    postData({status: 'idle'}); 
-    // return e.returnValue = '确认退出程序吗？';
-  });
+    return e.returnValue = '确认退出程序吗？';
+  };
+  window.onunload = () => {
+    navigator.sendBeacon(dataUrl, JSON.stringify({status: 'idle'}));
+  };
 
   useEffect(() =>{
     postData({status: 'idle'});
