@@ -18,4 +18,5 @@ class Series(models.Model):
   noBkg = models.FloatField(null=True)
   noxBkg = models.FloatField(null=True)
   noCoef = models.FloatField(null=True)
+  no2Coef = models.FloatField(null=True)
   noxCoef = models.FloatField(null=True)

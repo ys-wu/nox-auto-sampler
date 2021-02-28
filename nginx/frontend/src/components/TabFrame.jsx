@@ -6,14 +6,20 @@ import RawRecordForm from './RawRecordForm';
 
 const { TabPane } = Tabs;
 
-export default function TabFrame({ setting, onUpdateSetting=f=>f, onSaveSeries=f=>f }) {
+export default function TabFrame({
+  start,
+  setting,
+  data,
+  onUpdateSetting=f=>f,
+  onSaveSeries=f=>f
+}) {
   return(
     <Tabs defaultActiveKey="6">
       <TabPane tab="序列列表" key="1">
         <SeriesTable setting={setting} onSaveSeries={onSaveSeries}/>
       </TabPane>
       <TabPane tab="原始记录" key="2">
-        <RawRecordForm setting={setting} />
+        <RawRecordForm start={start} data={data} setting={setting} />
       </TabPane>
       <TabPane tab="分析检测" key="3">
         Content of Tab Pane

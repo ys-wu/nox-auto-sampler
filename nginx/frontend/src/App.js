@@ -165,7 +165,9 @@ function App() {
       <Row>
         <Col span={18} offset={3}>
           <TabFrame 
+            start={ start }
             setting={ setting }
+            data = { data }
             onUpdateSetting={ updateSetting } 
             onSaveSeries={ handleSetSeries }
           />
