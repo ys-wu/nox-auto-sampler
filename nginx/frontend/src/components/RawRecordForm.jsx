@@ -5,6 +5,7 @@ import Button from 'antd/lib/button';
 import Select from 'antd/lib/select';
 
 import get from '../helpers/apiGet';
+import post from '../helpers/apiPost';
 
 
 const { Option } = Select;
@@ -31,7 +32,6 @@ export default function RawRecordForm({ setting }) {
   
   const handleFetch = () => {
     // get(url);
-    // post({name: "haha"}, url);
   };
 
   const onReset = () => {
@@ -40,6 +40,7 @@ export default function RawRecordForm({ setting }) {
 
   const onFinish = (values) => {
     // return;
+    // post({ name: "haha" }, url);
   };
 
   return (
