@@ -4,6 +4,7 @@ import Form from 'antd/lib/form';
 import Input from 'antd/lib/input';
 import Button from 'antd/lib/button';
 import Select from 'antd/lib/select';
+import Popconfirm from 'antd/lib/popconfirm';
 
 import post from '../helpers/apiPost';
 
@@ -187,8 +188,9 @@ export default function RawRecordForm({ start, setting, data }) {
     };
   };
 
-  const onFinish = (value) => {
-    console.log(value);
+  const onConfirm = () => {
+    post(state, url);
+    console.log(state);
   };
 
   return (
@@ -196,7 +198,6 @@ export default function RawRecordForm({ start, setting, data }) {
       {...layout}
       form={form}
       name="control-hooks" 
-      onFinish={onFinish}
     >
       <Form.Item name="name" label="序列名称">
         <Input placeholder="请输入分析序列唯一标识" onChange={onChangeName} />
@@ -306,9 +307,9 @@ export default function RawRecordForm({ start, setting, data }) {
         <Button htmlType="button" onClick={handleFetch}>
           获取状态
         </Button>
-        <Button type="primary" htmlType="submit">
-          保存记录
-        </Button>
+        <Popconfirm title="确认提交?" onConfirm={onConfirm}>
+          <Button>确认提交</Button>
+        </Popconfirm>
       </Form.Item>
     </Form>
   );
