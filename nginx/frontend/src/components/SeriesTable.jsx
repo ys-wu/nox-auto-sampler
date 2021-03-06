@@ -265,18 +265,18 @@ export default function SeriesTable({ setting, onSaveSeries = f => f }) {
             {
               !data ? null :
                 <Row>
-                  <Col span={1} offset={1}>行</Col>
-                  <Col span={2}>类型</Col>
-                  <Col span={2}>样品名称</Col>
-                  <Col span={2}>样品位置</Col>
-                  <Col span={2}>样品标号</Col>
-                  <Col span={2}>NO 浓度</Col>
-                  <Col span={2}>NOx 浓度</Col>
-                  <Col span={2}>偏差</Col>
-                  <Col span={2}>气瓶类型</Col>
-                  <Col span={2}>气瓶压力</Col>
-                  <Col span={2}>检测人员</Col>
-                  <Col span={2}>备注</Col>
+                  <Col style={{ textAlign: "center" }} span={1} offset={1}>行</Col>
+                  <Col style={{ textAlign: "center" }} span={2}>类型</Col>
+                  <Col style={{ textAlign: "center" }} span={2}>样品名称</Col>
+                  <Col style={{ textAlign: "center" }} span={2}>样品位置</Col>
+                  <Col style={{ textAlign: "center" }} span={2}>样品标号</Col>
+                  <Col style={{ textAlign: "center" }} span={2}>NO 浓度</Col>
+                  <Col style={{ textAlign: "center" }} span={2}>NOx 浓度</Col>
+                  <Col style={{ textAlign: "center" }} span={2}>偏差</Col>
+                  <Col style={{ textAlign: "center" }} span={2}>气瓶类型</Col>
+                  <Col style={{ textAlign: "center" }} span={2}>气瓶压力</Col>
+                  <Col style={{ textAlign: "center" }} span={2}>检测人员</Col>
+                  <Col style={{ textAlign: "center" }} span={2}>备注</Col>
                 </Row>
             }
           </Col>

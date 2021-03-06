@@ -3,12 +3,15 @@ import Tabs from 'antd/lib/tabs';
 import SettingList from './SettingList'
 import SeriesTable from './SeriesTable'
 import RawRecordForm from './RawRecordForm';
+import AnalysisPanel from './AnalysisPanel';
 
 const { TabPane } = Tabs;
+
 
 export default function TabFrame({
   start,
   setting,
+  series,
   data,
   onUpdateSetting=f=>f,
   onSaveSeries=f=>f
@@ -22,7 +25,7 @@ export default function TabFrame({
         <RawRecordForm start={start} data={data} setting={setting} />
       </TabPane>
       <TabPane tab="分析检测" key="3">
-        Content of Tab Pane
+        <AnalysisPanel start={start} data={data} series={series}/>
       </TabPane>
       <TabPane tab="数据处理" key="4">
         Content of Tab Pane

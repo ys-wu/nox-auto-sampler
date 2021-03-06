@@ -167,6 +167,7 @@ function App() {
           <TabFrame 
             start={ start }
             setting={ setting }
+            series={series}
             data = { data }
             onUpdateSetting={ updateSetting } 
             onSaveSeries={ handleSetSeries }
