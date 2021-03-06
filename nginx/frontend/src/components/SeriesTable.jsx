@@ -25,6 +25,7 @@ export default function SeriesTable({ setting, onSaveSeries = f => f }) {
   const urlSample = `http://${hostname}/api/sampletemplate/`;
 
   const [name, setName] = useState('');
+  const [loadName, setLoadName] = useState('');
   const [nameList, setNameList] = useState([]);
   const [data, setData] = useState([]);
   const [state, setState] = useState([]);
@@ -218,16 +219,38 @@ export default function SeriesTable({ setting, onSaveSeries = f => f }) {
   const onCancel = () => {
     get(urlSeries, updateNameList);
   };
+  
+  const handleSelectToLoad = value => {
+    const d = new Date();
+    setLoadName(value);
+    console.log(d.toISOString(), "SereisTable select to load:", value);
+  };
 
-  const handleDeleteSeletedSeries = () => {
+  const filterSeries = data => {
+    const filterData = data['results'].filter(item => item['series'] === loadName);
+    const cleanedData = filterData.map(item => {
+      const newItem = {...item};
+      newItem['type'] = item['sampleType']
+      return newItem;
+    });
+    const orderedData = cleanedData.reverse();
+    setData(orderedData);
+    setState(orderedData);
+    return data;
+  };
 
+  const handleLoadSeletedSeries = () => {
+    setName('');
+    setData([]);
+    setState([]);
+    get(urlSample, filterSeries);
   };
 
   return (
     <>
       { state.length === 0 ? null :
         <Row style={{ paddingBottom: 10 }}>
-          <Col span={20} offset={1} style={{ textAlign: "center" }}>
+          <Col span={10} offset={1} style={{ textAlign: "center" }}>
             <Input
               placeholder={name? name: "序列列表名称"}
               onChange={onChangeName}
@@ -276,18 +299,18 @@ export default function SeriesTable({ setting, onSaveSeries = f => f }) {
       <Row style={{ marginTop: 10 }}>
         <Col span={9} offset={1}>
           {data.length !== 0 || nameList.length === 0 ? null :
-            <Form form={form} layout="inline" onFinish={handleDeleteSeletedSeries}>
-              <Form.Item name="log" label="选择删除旧列表">
+            <Form form={form} layout="inline" onFinish={handleLoadSeletedSeries}>
+              <Form.Item name="log" label="选择导入列表">
                 <Select 
                   style={{ width: 175, float: "left" }} 
                   placeholder='存档序列列表'
-                  onSelect={handleAddIndex}>
+                  onSelect={handleSelectToLoad}>
                   {nameList.map(item => <Option key={item} value={item}>{item}</Option>)}
                 </Select>
               </Form.Item>
               <Form.Item>
                 <Button type="primary" htmlType="submit">
-                  确定删除
+                  开始导入
             </Button>
               </Form.Item>
             </Form>
