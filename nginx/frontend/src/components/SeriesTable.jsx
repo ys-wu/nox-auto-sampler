@@ -5,23 +5,24 @@ import Select from 'antd/lib/select';
 import Button from 'antd/lib/button';
 import SampleLine from './SampleLine'
 
+import get from '../helpers/apiGet';
+import post from '../helpers/apiPost';
+
 const { Option } = Select;
 
 export default function SeriesTable({ setting, onSaveSeries = f => f }) {
 
+  const hostname = window.location.hostname;
+  const url = `http://${hostname}/api/seriestemplate/`
+
+  const [nameList, setNameList] = useState([]);
+  const [nameIndex, setNameIndex] = useState(-1);
   const [data, setData] = useState([]);
   const [state, setState] = useState([]);
   const [copiedData, setCopiedData] = useState();
   const [nextIndex, setNextIndex] = useState(1);
   const [addIndex, setAddIndex] = useState(-1);
   const [pasteIndex, setPasteIndex] = useState(-1);
-
-  // remove copy button if there is no data
-  useEffect(() => {
-    if (data.length === 0) {
-      setCopiedData(null);
-    }
-  }, [data])
 
   // define table columns
   const blankLine = {
@@ -38,22 +39,23 @@ export default function SeriesTable({ setting, onSaveSeries = f => f }) {
     Remar: null,
   };
 
-  // const fakeSetting = {
-  //   type: ['校准', '质控',]
-  // };
+  // get all templates
+  useEffect(() => {
+    get(url, initNameList)
+  }, []);
 
-  // const fakedData = [
-  //   {
-  //     id: 1,
-  //     type: '校准',
-  //     name: '基准1',
-  //   },
-  //   {
-  //     id: 2,
-  //     type: '质控',
-  //     name: '质控1',
-  //   },
-  // ];
+  // remove copy button if there is no data
+  useEffect(() => {
+    if (data.length === 0) {
+      setCopiedData(null);
+    }
+  }, [data]);
+
+  const initNameList = data => {
+    const list = data['results'].map(item => item["name"])
+    setNameList(list);
+    return list;
+  };
 
   const blankDataFatory = () => {
     const newBlankLine = {...blankLine};

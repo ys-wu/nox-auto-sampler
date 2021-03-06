@@ -1,13 +1,13 @@
 from rest_framework import serializers
 
-from server.models import Series
+from server.models import Series, SeriesTemplate
 
 
 class SeriesSerializer(serializers.HyperlinkedModelSerializer):
-
   class Meta:
     model = Series
-    fields = ('url', 
+    fields = (
+      'url', 
       'id', 
       'created', 
       'name',
@@ -27,4 +27,15 @@ class SeriesSerializer(serializers.HyperlinkedModelSerializer):
       'noCoef',
       'no2Coef',
       'noxCoef', 
+    )
+
+
+class SeriesTemplateSerializer(serializers.HyperlinkedModelSerializer):
+  class Meta:
+    model = SeriesTemplate
+    fields = (
+      'url', 
+      'id', 
+      'created', 
+      'name',
     )

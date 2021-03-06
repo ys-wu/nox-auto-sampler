@@ -20,3 +20,8 @@ class Series(models.Model):
   noCoef = models.FloatField(null=True)
   no2Coef = models.FloatField(null=True)
   noxCoef = models.FloatField(null=True)
+
+
+class SeriesTemplate(models.Model):
+  created = models.DateTimeField(auto_now_add=True)
+  name = models.CharField(null=True, max_length=100)
