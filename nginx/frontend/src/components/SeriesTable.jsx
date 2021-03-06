@@ -1,22 +1,28 @@
 import React , { useState, useEffect } from 'react';
+
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
+import Tag from 'antd/lib/tag';
+import Input from 'antd/lib/input';
 import Select from 'antd/lib/select';
 import Button from 'antd/lib/button';
-import SampleLine from './SampleLine'
+import Popconfirm from 'antd/lib/popconfirm';
+
+import SampleLine from './SampleLine';
 
 import get from '../helpers/apiGet';
 import post from '../helpers/apiPost';
 
 const { Option } = Select;
 
+
 export default function SeriesTable({ setting, onSaveSeries = f => f }) {
 
   const hostname = window.location.hostname;
-  const url = `http://${hostname}/api/seriestemplate/`
+  const url = `http://${hostname}/api/seriestemplate/`;
 
+  const [name, setName] = useState('');
   const [nameList, setNameList] = useState([]);
-  const [nameIndex, setNameIndex] = useState(-1);
   const [data, setData] = useState([]);
   const [state, setState] = useState([]);
   const [copiedData, setCopiedData] = useState();
@@ -41,7 +47,7 @@ export default function SeriesTable({ setting, onSaveSeries = f => f }) {
 
   // get all templates
   useEffect(() => {
-    get(url, initNameList)
+    get(url, updateNameList);
   }, []);
 
   // remove copy button if there is no data
@@ -51,10 +57,15 @@ export default function SeriesTable({ setting, onSaveSeries = f => f }) {
     }
   }, [data]);
 
-  const initNameList = data => {
+  const updateNameList = data => {
     const list = data['results'].map(item => item["name"])
     setNameList(list);
     return list;
+  };
+
+  const onChangeName = e => {
+    const value = e.target.value;
+    setName(value);
   };
 
   const blankDataFatory = () => {
@@ -139,10 +150,40 @@ export default function SeriesTable({ setting, onSaveSeries = f => f }) {
     onSaveSeries(state);
   };
 
+  const handleSaveTemplate = () => {
+    if (nameList.includes(name)) {
+      alert("同名模版也存在，继续确认将覆盖旧模版！");
+    };
+  };
+
+  const onConfirm = () => {
+    if (name !== '') {
+      post({name: name}, url);
+      get(url, updateNameList);
+    } else {
+      alert("名称不能为空");
+    };
+  };
+
+  const onCancel = () => {
+    get(url, updateNameList);
+  };
+
   return (
     <>
       { state.length === 0 ? null :
-        <Row>
+        <Row style={{ paddingBottom: 10 }}>
+          <Col span={20} offset={1} style={{ textAlign: "center" }}>
+            <Input
+              placeholder={name? name: "序列列表名称"}
+              onChange={onChangeName}
+            />
+          </Col>
+        </Row>
+      }
+
+      { state.length === 0 ? null :
+        <Row style={{ paddingBottom: 2 }}>
           <Col span={20}>
             {
               !data ? null :
@@ -220,10 +261,18 @@ export default function SeriesTable({ setting, onSaveSeries = f => f }) {
 
       {
         data.length === 0 ? null :
-          <Button
-            style={{ height: 40, fontSize: "1.2em", color: "DarkBlue", width: 100, float: "right" }}
-            onClick={ handleSaveTable }> 保存
-          </Button>
+          <>
+            <Button
+              style={{ height: 40, fontSize: "1.2em", color: "DarkBlue", width: 150, float: "right" }}
+              onClick={handleSaveTable}> 确认序列列表
+            </Button>
+            <Popconfirm title="确认提交?" onConfirm={onConfirm} onCancel={onCancel}>
+              <Button
+                style={{ height: 40, fontSize: "1.2em", color: "DarkBlue", width: 150, float: "right" }}
+                onClick={handleSaveTemplate}> 保存为模版
+            </Button>
+            </Popconfirm>
+          </>
       }
     </>
   );
