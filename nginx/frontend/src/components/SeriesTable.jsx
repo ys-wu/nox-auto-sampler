@@ -32,7 +32,7 @@ export default function SeriesTable({ setting, onSaveSeries = f => f }) {
 
   // define table columns
   const blankLine = {
-    sampleType: null,
+    type: null,
     name: null,
     position: null,
     sampleId: null,
@@ -162,6 +162,7 @@ export default function SeriesTable({ setting, onSaveSeries = f => f }) {
       let newSampleList = {...item};
       newSampleList['series'] = name;
       newSampleList['index'] = index;
+      newSampleList['sampleType'] = item['type'];
       post(newSampleList, urlSample);
     });
   };
@@ -176,10 +177,13 @@ export default function SeriesTable({ setting, onSaveSeries = f => f }) {
 
   const onConfirm = () => {
     if (name !== '') {
+      const d = new Date();
       if (nameList.includes(name)) {
         updateTemplate();
+        console.log(d.toISOString(), "SereisTable update post:", state);
       } else {
         createTemplate();
+        console.log(d.toISOString(), "SereisTable create post:", state);
       };
     } else {
       alert("名称不能为空");
