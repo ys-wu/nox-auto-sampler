@@ -6,6 +6,7 @@ import Input from 'antd/lib/input';
 import Select from 'antd/lib/select';
 import Button from 'antd/lib/button';
 import Popconfirm from 'antd/lib/popconfirm';
+import Form from 'antd/lib/form'
 
 import SampleLine from './SampleLine';
 
@@ -16,6 +17,8 @@ const { Option } = Select;
 
 
 export default function SeriesTable({ setting, onSaveSeries = f => f }) {
+
+  const [form] = Form.useForm()
 
   const hostname = window.location.hostname;
   const urlSeries = `http://${hostname}/api/seriestemplate/`;
@@ -216,6 +219,10 @@ export default function SeriesTable({ setting, onSaveSeries = f => f }) {
     get(urlSeries, updateNameList);
   };
 
+  const handleDeleteSeletedSeries = () => {
+
+  };
+
   return (
     <>
       { state.length === 0 ? null :
@@ -265,6 +272,28 @@ export default function SeriesTable({ setting, onSaveSeries = f => f }) {
             onCopyLine={ handleCopyLine }
           /> )
       }
+
+      <Row style={{ marginTop: 10 }}>
+        <Col span={9} offset={1}>
+          {data.length !== 0 || nameList.length === 0 ? null :
+            <Form form={form} layout="inline" onFinish={handleDeleteSeletedSeries}>
+              <Form.Item name="log" label="选择删除旧列表">
+                <Select 
+                  style={{ width: 175, float: "left" }} 
+                  placeholder='存档序列列表'
+                  onSelect={handleAddIndex}>
+                  {nameList.map(item => <Option key={item} value={item}>{item}</Option>)}
+                </Select>
+              </Form.Item>
+              <Form.Item>
+                <Button type="primary" htmlType="submit">
+                  确定删除
+            </Button>
+              </Form.Item>
+            </Form>
+          }
+        </Col>
+      </Row>
 
       <Row style={{ marginTop: 10 }}>
         <Col span={9} offset={1}>
