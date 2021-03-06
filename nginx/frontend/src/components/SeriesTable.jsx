@@ -2,7 +2,6 @@ import React , { useState, useEffect } from 'react';
 
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
-import Tag from 'antd/lib/tag';
 import Input from 'antd/lib/input';
 import Select from 'antd/lib/select';
 import Button from 'antd/lib/button';
@@ -19,7 +18,8 @@ const { Option } = Select;
 export default function SeriesTable({ setting, onSaveSeries = f => f }) {
 
   const hostname = window.location.hostname;
-  const url = `http://${hostname}/api/seriestemplate/`;
+  const urlSeries = `http://${hostname}/api/seriestemplate/`;
+  const urlSample = `http://${hostname}/api/sampletemplate/`;
 
   const [name, setName] = useState('');
   const [nameList, setNameList] = useState([]);
@@ -47,7 +47,7 @@ export default function SeriesTable({ setting, onSaveSeries = f => f }) {
 
   // get all templates
   useEffect(() => {
-    get(url, updateNameList);
+    get(urlSeries, updateNameList);
   }, []);
 
   // remove copy button if there is no data
@@ -156,17 +156,39 @@ export default function SeriesTable({ setting, onSaveSeries = f => f }) {
     };
   };
 
+  const createTemplate = () => {
+    post({ name: name }, urlSeries);
+    state.forEach((item, index) => {
+      let newSampleList = {...item};
+      newSampleList['series'] = name;
+      newSampleList['index'] = index;
+      post(newSampleList, urlSample);
+    });
+  };
+
+  const updateTemplate = () => {
+
+  };
+
+  const deleteTemplate = () => {
+
+  };
+
   const onConfirm = () => {
     if (name !== '') {
-      post({name: name}, url);
+      if (nameList.includes(name)) {
+        updateTemplate();
+      } else {
+        createTemplate();
+      };
     } else {
       alert("名称不能为空");
     };
-    get(url, updateNameList);
+    get(urlSeries, updateNameList);
   };
 
   const onCancel = () => {
-    get(url, updateNameList);
+    get(urlSeries, updateNameList);
   };
 
   return (

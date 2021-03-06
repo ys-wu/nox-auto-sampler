@@ -41,4 +41,4 @@ class SampleTemplate(models.Model):
   bottlePres = models.CharField(null=True, max_length=100)
   operator = models.CharField(null=True, max_length=100)
   remark = models.CharField(null=True, max_length=100)
-  seriesName = models.ForeignKey(SeriesTemplate, on_delete=models.CASCADE)
+  series = models.CharField(null=True, max_length=100)

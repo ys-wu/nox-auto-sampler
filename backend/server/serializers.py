@@ -60,5 +60,5 @@ class SampleTemplateSerializer(serializers.HyperlinkedModelSerializer):
       'bottlePres',
       'operator',
       'remark',
-      'seriesName',
+      'series',
     )

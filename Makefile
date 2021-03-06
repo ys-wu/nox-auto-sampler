@@ -1,12 +1,12 @@
-dangling-images = $(shell sudo docker images -f "dangling=true" -q) 
+dangling-images = $(shell docker images -f "dangling=true" -q) 
 
 clear-images:
-	sudo docker rmi $(dangling-images)
+	docker rmi $(dangling-images)
 
-exited-containers = $(shell sudo docker ps -a -f status=exited -q)
+exited-containers = $(shell docker ps -a -f status=exited -q)
 
 clear-containers:
-	sudo docker rm $(exited-containers)
+	docker rm $(exited-containers)
 
 build:
-	sudo docker-compose up --build
+	docker-compose up --build
