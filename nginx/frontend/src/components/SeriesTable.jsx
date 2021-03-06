@@ -169,6 +169,13 @@ export default function SeriesTable({ setting, onSaveSeries = f => f }) {
 
   const updateTemplate = () => {
     deleteTemplate();
+    state.forEach((item, index) => {
+      let newSampleList = { ...item };
+      newSampleList['series'] = name;
+      newSampleList['index'] = index;
+      newSampleList['sampleType'] = item['type'];
+      post(newSampleList, urlSample);
+    });
   };
 
   const apiDelete = url => {
