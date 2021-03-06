@@ -32,17 +32,17 @@ export default function SeriesTable({ setting, onSaveSeries = f => f }) {
 
   // define table columns
   const blankLine = {
-    type: null,
+    sampleType: null,
     name: null,
     position: null,
-    sampleID: null,
+    sampleId: null,
     noInputConc: null,
     noxInputConc: null,
     bias: null,
     bottleType: null,
     bottlePres: null,
-    Operator: null,
-    Remar: null,
+    operator: null,
+    remark: null,
   };
 
   // get all templates
@@ -159,10 +159,10 @@ export default function SeriesTable({ setting, onSaveSeries = f => f }) {
   const onConfirm = () => {
     if (name !== '') {
       post({name: name}, url);
-      get(url, updateNameList);
     } else {
       alert("名称不能为空");
     };
+    get(url, updateNameList);
   };
 
   const onCancel = () => {

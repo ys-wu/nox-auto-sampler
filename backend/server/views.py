@@ -6,8 +6,8 @@ from datetime import datetime
 import json
 import redis
 
-from server.models import Series, SeriesTemplate
-from server.serializers import SeriesSerializer, SeriesTemplateSerializer
+from server.models import Series, SeriesTemplate, SampleTemplate
+from server.serializers import SeriesSerializer, SeriesTemplateSerializer, SampleTemplateSerializer
 
 
 setting_url = '/app/setting/setting.json'
@@ -30,6 +30,11 @@ class SeriesViewSet(viewsets.ModelViewSet):
 class SeriesTemplateViewSet(viewsets.ModelViewSet):
   queryset = SeriesTemplate.objects.all().order_by('-created')
   serializer_class = SeriesTemplateSerializer
+
+
+class SampleTemplateViewSet(viewsets.ModelViewSet):
+  queryset = SampleTemplate.objects.all().order_by('-created')
+  serializer_class = SampleTemplateSerializer
 
 
 class Setting(View):
