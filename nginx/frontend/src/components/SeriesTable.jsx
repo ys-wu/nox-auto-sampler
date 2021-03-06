@@ -168,11 +168,25 @@ export default function SeriesTable({ setting, onSaveSeries = f => f }) {
   };
 
   const updateTemplate = () => {
+    deleteTemplate();
+  };
 
+  const apiDelete = url => {
+    const d = new Date();
+    fetch(url, {method: 'DELETE'})
+      .then(() => console.log(d.toISOString(), 'Delete data API:', url))
+      .catch(console.error);
+  };
+
+  const handleDeleteSample = data => {
+    const filteredSamples = data['results'].filter(item => item['series'] === name);
+    const urls = filteredSamples.map(item => `${urlSample}${item['id']}/`)
+    urls.forEach(item => { apiDelete(item) });
+    return data;
   };
 
   const deleteTemplate = () => {
-
+    get(urlSample, handleDeleteSample);
   };
 
   const onConfirm = () => {
