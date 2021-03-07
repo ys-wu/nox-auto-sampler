@@ -1,33 +1,55 @@
 import React, { useState, useRef } from 'react';
 
 import Row from 'antd/lib/row';
-import Col from 'antd/lib/col';
 import Button from 'antd/lib/button';
 import Table from 'antd/lib/table';
+import Tag from 'antd/lib/tag';
+import {
+  CheckCircleOutlined,
+  SyncOutlined,
+  ClockCircleOutlined,
+  MinusCircleOutlined,
+} from '@ant-design/icons';
 
 
 export default function AnalysisPanel({start, data, series}) {
 
-  const blankData = {
-    type: null,
-    name: null,
-    position: null,
-    sampleId: null,
-    noInputConc: null,
-    no2InputConc: null,
-    noMeasConc: null,
-    no2MeasCoef: null,
-    noMeasCoef: null,
-    no2MeasCoef: null,
-    noRevised: null,
-    no2Revised: null,
-    bottlePres: null,
-    finishedDate: null,
-    operator: null,
-    series: null,
-  };
+  // const blankData = {
+  //   type: null,
+  //   name: null,
+  //   position: null,
+  //   sampleId: null,
+  //   noInputConc: null,
+  //   no2InputConc: null,
+  //   noMeasConc: null,
+  //   no2MeasCoef: null,
+  //   noMeasCoef: null,
+  //   no2MeasCoef: null,
+  //   noRevised: null,
+  //   no2Revised: null,
+  //   bottlePres: null,
+  //   finishedDate: null,
+  //   operator: null,
+  //   series: null,
+  // };
 
   const columns = [
+    {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: status => {
+        if (status == 'waiting') {
+          return <Tag icon={<ClockCircleOutlined />} color="default">待分析</Tag>
+        } else if (status == 'analyzing') {
+          return <Tag icon={<SyncOutlined spin />} color="processing">分析中</Tag>
+        } else if (status == 'finished') {
+          return <Tag icon={<CheckCircleOutlined />} color="success">已分析</Tag>
+        } else if (status == 'stopped') {
+          return <Tag icon={<MinusCircleOutlined />} color="default">已停止</Tag>
+        };
+      }
+    },
     {
       title: '类型',
       dataIndex: 'type',
@@ -112,7 +134,26 @@ export default function AnalysisPanel({start, data, series}) {
 
   const tableData = [
     {
+      key: 3,
+      status: "finished",
+      type: "a",
+      name: "b",
+    },
+    {
+      key: 2,
+      status: "analyzing",
+      type: "a",
+      name: "b",
+    },
+    {
       key: 1,
+      status: "waiting",
+      type: "a",
+      name: "b",
+    },
+    {
+      key: 4,
+      status: "stopped",
       type: "a",
       name: "b",
     },
