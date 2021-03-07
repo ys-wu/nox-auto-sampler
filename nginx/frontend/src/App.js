@@ -119,18 +119,10 @@ function App() {
     console.log(d.toISOString(), 'App update setting:', obj);
   };
 
-  // tidy up series data before setSeries
-  const tidySeries = data => {
-    const newData = [...data];
-    newData.forEach( item => {delete item['id']});
-    return newData;
-  };
-
   // get series table after user comfirmed
   const handleSetSeries = (data) => {
-    const newData = tidySeries(data);
-    setSeries(newData);
-    console.log("App get series table", newData);
+    setSeries(data);
+    console.log("App get series table", data);
   };
 
   return (

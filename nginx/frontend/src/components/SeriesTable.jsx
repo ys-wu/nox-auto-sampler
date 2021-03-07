@@ -84,9 +84,9 @@ export default function SeriesTable({
   };
 
   const onUpdate = (value) => {
-    // console.log('SeriesTable onUpdate', value);
+    console.log('SeriesTable onUpdate', value);
     const oldState = [...state];
-    // console.log('SeriesTable old state:', oldState);
+    console.log('SeriesTable old state:', oldState);
     const newState = oldState.map(item => item['id'] === value['id'] ? value : item);
     setState(newState);
     console.log('SeriesTable updated new state:', newState);
