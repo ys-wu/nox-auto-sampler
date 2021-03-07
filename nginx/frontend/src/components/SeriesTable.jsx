@@ -16,7 +16,11 @@ import post from '../helpers/apiPost';
 const { Option } = Select;
 
 
-export default function SeriesTable({ setting, onSaveSeries = f => f }) {
+export default function SeriesTable({
+  setting,
+  onSaveSeries = f => f,
+  passSeriesName = f => f,
+}) {
 
   const [form] = Form.useForm()
 
@@ -151,6 +155,7 @@ export default function SeriesTable({ setting, onSaveSeries = f => f }) {
   };
 
   const handleSaveTable = () => {
+    passSeriesName(name);
     onSaveSeries(state);
   };
 

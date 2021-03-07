@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Row from 'antd/lib/row';
 import Button from 'antd/lib/button';
@@ -12,7 +12,84 @@ import {
 } from '@ant-design/icons';
 
 
-export default function AnalysisPanel({start, data, series}) {
+export default function AnalysisPanel({
+  start,
+  data,
+  seriesName,
+  series
+}) {
+
+  const [tableData, setTableData] = useState();
+  const [analysisIndex, setAnalysisIndex] = useState(-1);
+  const [stopped, setStopped] = useState(false);
+
+  // init table
+  useEffect(() => {
+    if (series) {
+      const newData = series.map((item, index) => {
+        const newItem = { ...item };
+        newItem['key'] = index;
+        newItem['status'] = 'waiting';
+        newItem['series'] = seriesName;
+        return newItem;
+      });
+      setTableData(newData);
+    };
+  }, [series])
+
+  // updata table
+  useEffect(() =>{
+    if (tableData) {
+      const newData = {tableData};
+      
+
+      // const newData = series.map((item, index) => {
+      //   const newItem = { ...item };
+      //   newItem['key'] = index;
+
+      //   let status = "waiting";
+      //   if (index === analysisIndex){
+      //     status = "analyzing";
+      //   } else if (index < analysisIndex) {
+      //     status = "finished";
+      //   };
+      //   if (stopped && index >= analysisIndex) {
+      //     status = "stopped";
+      //   };
+      //   newItem['status'] = status;
+
+      //   return newItem;
+      // });
+      // setTableData(newData);
+    };
+  }, [analysisIndex]);
+
+  // const tableData = [
+  //   {
+  //     key: 3,
+  //     status: "finished",
+  //     type: "a",
+  //     name: "b",
+  //   },
+  //   {
+  //     key: 2,
+  //     status: "analyzing",
+  //     type: "a",
+  //     name: "b",
+  //   },
+  //   {
+  //     key: 1,
+  //     status: "waiting",
+  //     type: "a",
+  //     name: "b",
+  //   },
+  //   {
+  //     key: 4,
+  //     status: "stopped",
+  //     type: "a",
+  //     name: "b",
+  //   },
+  // ];
 
   // const blankData = {
   //   type: null,
@@ -129,33 +206,6 @@ export default function AnalysisPanel({start, data, series}) {
       title: '序列名称',
       dataIndex: 'series',
       key: 'series'
-    },
-  ];
-
-  const tableData = [
-    {
-      key: 3,
-      status: "finished",
-      type: "a",
-      name: "b",
-    },
-    {
-      key: 2,
-      status: "analyzing",
-      type: "a",
-      name: "b",
-    },
-    {
-      key: 1,
-      status: "waiting",
-      type: "a",
-      name: "b",
-    },
-    {
-      key: 4,
-      status: "stopped",
-      type: "a",
-      name: "b",
     },
   ];
 
