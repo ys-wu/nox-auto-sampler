@@ -46,7 +46,7 @@ export default function SampleLine({
 
   useLayoutEffect(() => {
     if ( state !== undefined ) {
-      onUpdate(state);
+      onUpdate({...state});
     };
   }, [state]);
 

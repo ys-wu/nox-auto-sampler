@@ -114,7 +114,7 @@ export default function SeriesTable({
 
   const handleCopyLine = index => {
     console.log('SeriesTable copy line:', index);
-    setCopiedData(state[index]);
+    setCopiedData({...state[index]});
   };
 
   const handlePasteIndex = value => {
