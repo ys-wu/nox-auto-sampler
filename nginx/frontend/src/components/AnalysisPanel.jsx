@@ -81,8 +81,17 @@ export default function AnalysisPanel({
     const c3 = newNoxData['no'];
     setNoxCache([c1, c2, c3]);
     const s = getSD([c1, c2, c3]);
-    const RSD = s / getMean([c1, c2, c3]);
+    const mean = getMean([c1, c2, c3]);
+    if (mean === 0) {
+      alert("NOx 测量错误！已停止分析！");
+      cleanUp();
+    };
+    const RSD = s / mean;
     const bias = getBias();
+    if (Number.isNaN(bias)) {
+      alert("偏差设置错误！已停止分析！");
+      cleanUp();
+    }
     console.log(`AnalysisPanel checkStable: c1 ${c1}, c2 ${c2}, c3 ${c3}, RSD ${RSD}, bias limit ${bias}`);
     return (RSD < bias) || (noxCounter >= noxCountLimit);
   };
