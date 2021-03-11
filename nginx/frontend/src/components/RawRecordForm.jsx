@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Form from 'antd/lib/form';
 import Input from 'antd/lib/input';
@@ -44,6 +44,12 @@ export default function RawRecordForm({ start, setting, data, seriesName }) {
     no2Coef: null,
     noxCoef: null,
   });
+
+  useEffect(() => {
+    const newState = {...state};
+    newState["name"] = seriesName;
+    setState(newState);
+  }, [seriesName]);
 
   const noxItems = [
     'noxRange', 

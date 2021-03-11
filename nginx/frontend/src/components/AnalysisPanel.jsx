@@ -13,6 +13,9 @@ import {
 
 import useInterval from '../hooks/useInterval';
 
+import get from '../helpers/apiGet';
+import post from '../helpers/apiPost';
+
 
 export default function AnalysisPanel({
   start,
@@ -25,6 +28,9 @@ export default function AnalysisPanel({
   const purgeTime = 10;   // purge interval in (sec)
   const noxInterval = 4;      // interval in (sec)
   const noxCountLimit = 5;   // up limit number of data
+
+  const hostname = window.location.hostname;
+  const urlSeries = `http://${hostname}/api/series/`;
 
   const [timeCounter, setTimeCounter] = useState(0);    // analyzing time in (sec)
   const [noxCounter, setNoxCounter] = useState(0);      // NOx data checking point number
@@ -312,7 +318,18 @@ export default function AnalysisPanel({
   ];
 
   const startAnalysis = () => {
-    setAnalyzing(true);
+    get(
+      urlSeries,
+      data => {
+        const nameList = data["results"].map(item => item["name"]);
+        const index = nameList.indexOf(seriesName);
+        if (index >= 0) {
+          setAnalyzing(true);
+        } else {
+          alert(`不存在序列文件 ${seriesName}`)
+        };
+      },
+    );
   };
 
   const stopAnalysis = () => {
