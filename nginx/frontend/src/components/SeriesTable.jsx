@@ -18,6 +18,7 @@ const { Option } = Select;
 
 export default function SeriesTable({
   setting,
+  analyzing,
   onSaveSeries = f => f,
   passSeriesName = f => f,
 }) {
@@ -155,7 +156,9 @@ export default function SeriesTable({
   };
 
   const handleSaveTable = () => {
-    if (name !== '') {
+    if (analyzing) {
+      alert("正在分析，无法确认列表");
+    } else if (name !== '') {
       passSeriesName(name);
       onSaveSeries(state);
     } else {

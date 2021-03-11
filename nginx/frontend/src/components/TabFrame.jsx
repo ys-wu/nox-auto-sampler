@@ -18,9 +18,14 @@ export default function TabFrame({
  }) {
 
   const [seriesName, setSeriesName] = useState();
+  const [analyzing, setAnalyzing] = useState(false);
 
   const passSeriesName = name => {
     setSeriesName(name);
+  };
+
+  const passAnalyzing = analyzing => {
+    setAnalyzing(analyzing);
   };
 
   return(
@@ -28,6 +33,7 @@ export default function TabFrame({
       <TabPane tab="序列列表" key="1">
         <SeriesTable
           setting={setting}
+          analyzing={analyzing}
           onSaveSeries={onSaveSeries}
           passSeriesName={passSeriesName}
         />
@@ -46,6 +52,7 @@ export default function TabFrame({
           data={data}
           seriesName={seriesName}
           series={series}
+          passAnalyzing={passAnalyzing}
         />
       </TabPane>
       <TabPane tab="数据处理" key="4">

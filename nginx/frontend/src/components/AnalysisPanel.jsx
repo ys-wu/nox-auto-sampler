@@ -18,7 +18,8 @@ export default function AnalysisPanel({
   start,
   data,
   seriesName,
-  series
+  series,
+  passAnalyzing = f => f,
 }) {
 
   const purgeTime = 10;   // purge interval in (sec)
@@ -55,6 +56,10 @@ export default function AnalysisPanel({
   useEffect(() => {
     init();
   }, [seriesName]);
+
+  useEffect(() => {
+    passAnalyzing(analyzing);
+  }, [analyzing]);
 
   const setStatus = (index, status) => {
     const newData = [...tableData];
