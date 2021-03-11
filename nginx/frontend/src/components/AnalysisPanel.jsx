@@ -21,25 +21,17 @@ export default function AnalysisPanel({
   series
 }) {
 
-  // const purgeTime = 3 * 60;   // purge interval in (sec)
-  // const noxInterval = 8;      // interval in (sec)
-  // const noxCountLimit = 18;   // up limit number of data
-
-  // for testing
   const purgeTime = 10;   // purge interval in (sec)
-  const noxInterval = 2;      // interval in (sec)
-  const noxCountLimit = 18;   // up limit number of data
+  const noxInterval = 4;      // interval in (sec)
+  const noxCountLimit = 5;   // up limit number of data
 
+  const [timeCounter, setTimeCounter] = useState(0);    // analyzing time in (sec)
+  const [noxCounter, setNoxCounter] = useState(0);      // NOx data checking point number
+  const [noxCache, setNoxCache] = useState([0, 0, 0]);
+  const [analysisIndex, setAnalysisIndex] = useState(0);
   const [tableData, setTableData] = useState();
   const [analyzing, setAnalyzing] = useState(false);
   const [purging, setPurging] = useState(false);
-
-  let n = 0;      // analyzing time in (sec)
-  let count = 0;  // NOx data checking point number
-  let c1 = 0;
-  let c2 = 0;
-  let c3 = 0;
-  let analysisIndex = -1;
 
   // init table
   useEffect(() => {
@@ -56,8 +48,8 @@ export default function AnalysisPanel({
   }, [series])
 
   const initAnalysis = () => {
-    analysisIndex = 0;
-    c1 = 0; c2 = 0; c3 = 0;
+    setTimeCounter(1);
+    setNoxCache([0, 0, 0]);
   };
 
   // arithmetic mean
@@ -75,62 +67,72 @@ export default function AnalysisPanel({
     }, 0) / (data.length - 1));
   };
 
-  const checkPurge = n => n >= purgeTime;
+  const checkPurge = () => timeCounter < purgeTime;
 
-  const checkNewPoint = () => (n - purgeTime) % noxInterval === 0;
+  const checkNewPoint = () => (timeCounter - purgeTime) % noxInterval === 0;
 
   const getBias = () => parseFloat(series[analysisIndex]['bias']) / 100.0;
 
   const checkStatble = () => {
     // get NOx data, calculate derived parameters based on NOx
     const newNoxData = data['nox'];
-    c1 = c2;
-    c2 = c3;
-    c3 = newNoxData['no'];
+    const c1 = noxCache[1];
+    const c2 = noxCache[2];
+    const c3 = newNoxData['no'];
+    setNoxCache([c1, c2, c3]);
     const s = getSD([c1, c2, c3]);
     const RSD = s / getMean([c1, c2, c3]);
     const bias = getBias();
     console.log(`AnalysisPanel checkStable: c1 ${c1}, c2 ${c2}, c3 ${c3}, RSD ${RSD}, bias limit ${bias}`);
-    return (RSD < bias) || (count >= noxCountLimit);
+    return (RSD < bias) || (noxCounter >= noxCountLimit);
   };
 
-  const recordAndPostNox = () => {
-    count = 0;
-    analysisIndex += 1;
-    console.log(`AnalysisPanel recordAndPostNox`)
+  const handleStableData = () => {
+    setTimeCounter(0);
+    setNoxCounter(0);
+    setAnalysisIndex(analysisIndex + 1);
+    console.log(`AnalysisPanel handleStableData`)
   };
 
   const cleanUp = () => {
-    n = 0; 
-    analysisIndex = -1;
     setAnalyzing(false);
-    alert("已停止或完成分析");
+    setTimeCounter(0);
+    setNoxCounter(0);
+    setAnalysisIndex(0);
   };
 
   // analyzing
   useInterval(() => {
-    console.log(`AnalysisPanel analyzing: n ${n}, count ${count}`);
+    const d = new Date();
+    console.log(`${d.toISOString()} AnalysisPanel analyzing: timeCounter ${timeCounter}, noxCounter ${noxCounter}, analysisIndex ${analysisIndex}`);
 
-    if (n === 0) {
+    if (timeCounter === 0) {
       initAnalysis();
-    };
-
-    if (checkPurge()) {
-      setPurging(true);
     } else {
-      setPurging(false);
-      if (checkNewPoint()) {
-        count += 1;
-        if (checkStatble()) {
-          recordAndPostNox();
+      if (checkPurge()) {
+        console.log(`${d.toISOString()} AnalysisPanel analyzing: purging`);
+        setPurging(true);
+        setTimeCounter(timeCounter + 1);
+      } else {
+        setPurging(false);
+        if (checkNewPoint()) {
+          if (checkStatble()) {
+            console.log(`${d.toISOString()} AnalysisPanel analyzing: get stable data`);
+            handleStableData();
+          } else {
+            console.log(`${d.toISOString()} AnalysisPanel analyzing: stablizing`);
+            setTimeCounter(timeCounter + 1);
+            setNoxCounter(noxCounter + 1);
+          };
+        } else {
+          setTimeCounter(timeCounter + 1);
         };
       };
     };
 
-    n += 1;
-
     if (analysisIndex >= series.length) {
       cleanUp();
+      alert("已完成分析");
     };
     
   }, analyzing ? 1000 : null);
@@ -258,8 +260,8 @@ export default function AnalysisPanel({
   };
 
   const stopAnalysis = () => {
-    setAnalyzing(false);
     cleanUp();
+    alert("已停止分析");
   };
 
   return (

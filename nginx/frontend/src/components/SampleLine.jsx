@@ -20,7 +20,7 @@ export default function SampleLine({
     type,
     name,
     position,
-    sampleID,
+    sampleId,
     noInputConc,
     noxInputConc,
     bias,
@@ -82,10 +82,10 @@ export default function SampleLine({
     setState(newState);
   }; 
   
-  const onChangeSampleID = e => {
+  const onChangeSampleId = e => {
     const value = e.target.value;
     const newState = { ...state };
-    newState['sampleID'] = value;
+    newState['sampleId'] = value;
     setState(newState);
   }; 
 
@@ -157,7 +157,7 @@ export default function SampleLine({
             </Col>
             
             <Col span={2}>
-              <Input placeholder="样品编号" defaultValue={sampleID} onChange={onChangeSampleID} />
+              <Input placeholder="样品编号" defaultValue={sampleId} onChange={onChangeSampleId} />
             </Col>
 
             <Col span={2}>
