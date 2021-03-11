@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import Button from 'antd/lib/button';
 import Form from 'antd/lib/form'
@@ -34,10 +34,10 @@ export default function MockPanel({ quitMock=f=>f }) {
     const data = {
       mock: 'on',
       power: parseInt(power),
-      no: parseInt(no),
-      nox: parseInt(nox),
-      mfcSet: parseInt(mfcSet),
-      mfcRead: parseInt(mfcRead),
+      no: parseFloat(no),
+      nox: parseFloat(nox),
+      mfcSet: parseFloat(mfcSet),
+      mfcRead: parseFloat(mfcRead),
     };
     post(data, url)
   }, mock ? delay : null)

@@ -31,6 +31,7 @@ export default function AnalysisPanel({
 
   const hostname = window.location.hostname;
   const urlSeries = `http://${hostname}/api/series/`;
+  const urlSample = `http://${hostname}/api/sample/`;
 
   const [timeCounter, setTimeCounter] = useState(0);    // analyzing time in (sec)
   const [noxCounter, setNoxCounter] = useState(0);      // NOx data checking point number
@@ -39,6 +40,7 @@ export default function AnalysisPanel({
   const [tableData, setTableData] = useState();
   const [analyzing, setAnalyzing] = useState(false);
   const [purging, setPurging] = useState(false);
+  const [noxCoef, setNoxCoef] = useState([1, 1, 1]);
 
   const init = () => {
     if (series) {
@@ -154,7 +156,49 @@ export default function AnalysisPanel({
     return (RSD < bias) || (noxCounter >= noxCountLimit);
   };
 
+  const calculateNoxCoef = () => {
+    const no = parseFloat(data["nox"]["no"]);
+    const nox = parseFloat(data["nox"]["nox"]);
+    const stdNo = parseFloat(series[analysisIndex]["noInputConc"]);
+    const stdNox = parseFloat(series[analysisIndex]["noxInputConc"]);
+    const noCoef = stdNo / no;
+    const no2Coef = (stdNox - stdNo) / (nox - no);
+    const noxCoef = stdNox / nox;
+    setNoxCoef([noCoef, no2Coef, noxCoef]);
+    return [noCoef, no2Coef, noxCoef];
+  };
+
+  const deriveData = coefs => {
+    const newData = {...series[analysisIndex]};
+    const noxAnalyzer = {...data["nox"]};
+    const no = parseFloat(noxAnalyzer["no"]);
+    const nox = parseFloat(noxAnalyzer["nox"]);
+    newData["index"] = analysisIndex;
+    newData["series"] = seriesName;
+    newData["noMeasConc"] = no;
+    newData["no2MeasConc"] = nox - no;
+    newData["noxMeasConc"] = nox;
+    newData["noMeasCoef"] = coefs[0];
+    newData["no2MeasCoef"] = coefs[1];
+    newData["noxMeasCoef"] = coefs[2];
+    newData["noRevised"] = no * coefs[0];
+    newData["no2Revised"] = nox * coefs[2] - no * coefs[0];
+    newData["noxRevised"] = nox * coefs[2];
+    newData["stable"] = noxCounter >= noxCountLimit ? true : false
+    return newData;
+  };
+
   const handleStableData = () => {
+    let coefs;
+    if (series[analysisIndex]["type"] === "校准") {
+      coefs = calculateNoxCoef();
+    } else {
+      if (noxCoef) {
+        coefs = [...noxCoef];
+      };
+    };
+    const data = deriveData(coefs);
+    post(data, urlSample);
     setTimeCounter(0);
     setNoxCounter(0);
     setAnalysisIndex(analysisIndex + 1);
@@ -197,40 +241,21 @@ export default function AnalysisPanel({
     };
   }, analyzing ? 1000 : null);
 
-  // const blankData = {
-  //   type: null,
-  //   name: null,
-  //   position: null,
-  //   sampleId: null,
-  //   noInputConc: null,
-  //   no2InputConc: null,
-  //   noMeasConc: null,
-  //   no2MeasCoef: null,
-  //   noMeasCoef: null,
-  //   no2MeasCoef: null,
-  //   noRevised: null,
-  //   no2Revised: null,
-  //   bottlePres: null,
-  //   finishedDate: null,
-  //   operator: null,
-  //   series: null,
-  // };
-
   const columns = [
     {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
       render: status => {
-        if (status == 'waiting') {
+        if (status === 'waiting') {
           return <Tag icon={<ClockCircleOutlined />} color="default">待分析</Tag>
-        } else if (status == 'purging') {
+        } else if (status === 'purging') {
           return <Tag icon={<SyncOutlined spin />} color="processing">吹扫中</Tag>
-        } else if (status == 'analyzing') {
+        } else if (status === 'analyzing') {
           return <Tag icon={<SyncOutlined spin />} color="processing">分析中</Tag>
-        } else if (status == 'finished') {
+        } else if (status === 'finished') {
           return <Tag icon={<CheckCircleOutlined />} color="success">已分析</Tag>
-        } else if (status == 'stopped') {
+        } else if (status === 'stopped') {
           return <Tag icon={<MinusCircleOutlined />} color="default">已停止</Tag>
         };
       }

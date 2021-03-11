@@ -26,7 +26,6 @@ class Sample(models.Model):
   created = models.DateTimeField(auto_now_add=True)
   index = models.IntegerField(null=True)
   sampleType = models.CharField(null=True, max_length=100)
-  name = models.CharField(null=True, max_length=100)
   position = models.IntegerField(null=True)
   sampleId = models.CharField(null=True, max_length=100)
   noInputConc = models.FloatField(null=True)
@@ -47,8 +46,8 @@ class Sample(models.Model):
   operator = models.CharField(null=True, max_length=100)
   remark = models.CharField(null=True, max_length=100)
   series = models.CharField(null=True, max_length=100)
-  flag = models.CharField(null=True, max_length=100)
-  finishedDate = models.DateTimeField(null=True)
+  stable = models.CharField(null=True, max_length=100)
+  updateDate = models.DateTimeField(null=True)
 
 
 class SeriesTemplate(models.Model):

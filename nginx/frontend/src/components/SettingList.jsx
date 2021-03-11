@@ -54,14 +54,14 @@ export default function SettingList({ onUpdateSetting = f => f }) {
   };
 
   // get setting JSON from backend
-  const getSetting = () => {
-    const d = new Date();
-    fetch(url)
-      .then(res => res.json())
-      .then(updateTemp)
-      .then((res) => console.log(d.toISOString(), 'SettingList get setting:', res))
-      .catch(handleGetError);
-  };
+  // const getSetting = () => {
+  //   const d = new Date();
+  //   fetch(url)
+  //     .then(res => res.json())
+  //     .then(updateTemp)
+  //     .then((res) => console.log(d.toISOString(), 'SettingList get setting:', res))
+  //     .catch(handleGetError);
+  // };
 
   // update view
   const onUpdate = function(name, tags) {
