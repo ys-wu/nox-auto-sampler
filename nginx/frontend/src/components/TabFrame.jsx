@@ -33,7 +33,12 @@ export default function TabFrame({
         />
       </TabPane>
       <TabPane tab="原始记录" key="2">
-        <RawRecordForm start={start} data={data} setting={setting} />
+        <RawRecordForm
+          start={start}
+          data={data}
+          seriesName={seriesName}
+          setting={setting} 
+        />
       </TabPane>
       <TabPane tab="分析检测" key="3">
         <AnalysisPanel

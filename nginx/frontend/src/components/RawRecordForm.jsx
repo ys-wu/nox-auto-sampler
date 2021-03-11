@@ -11,7 +11,7 @@ import post from '../helpers/apiPost';
 const { Option } = Select;
 
 
-export default function RawRecordForm({ start, setting, data }) {
+export default function RawRecordForm({ start, setting, data, seriesName }) {
 
   const hostname = window.location.hostname;
   const url = `http://${hostname}/api/series/`;
@@ -26,7 +26,7 @@ export default function RawRecordForm({ start, setting, data }) {
   const [form] = Form.useForm();
 
   const [state, setState] = useState({
-    name: null,
+    name: seriesName,
     projectName: null,
     method: null,
     instrumentName: null,
@@ -54,13 +54,6 @@ export default function RawRecordForm({ start, setting, data }) {
     'no2Coef', 
     'noxCoef'
   ];
-
-  const onChangeName = e => {
-    const value = e.target.value;
-    const newState = { ...state };
-    newState['name'] = value;
-    setState(newState);
-  };
 
   const onSelectProjectName = value => {
     const newState = { ...state };
@@ -200,7 +193,7 @@ export default function RawRecordForm({ start, setting, data }) {
       name="control-hooks" 
     >
       <Form.Item name="name" label="序列名称">
-        <Input placeholder="请输入分析序列唯一标识" onChange={onChangeName} />
+        <Input placeholder={seriesName} defaultValue={seriesName} value={seriesName} disabled={true}/>
       </Form.Item>
 
       <Form.Item name="projectName" label="项目名称">
