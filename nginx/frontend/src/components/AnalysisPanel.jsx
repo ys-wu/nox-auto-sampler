@@ -45,7 +45,43 @@ export default function AnalysisPanel({
       });
       setTableData(newData);
     };
-  }, [series])
+  }, [series]);
+
+  const setStatus = (index, status) => {
+    const newData = [...tableData];
+    if (index > 0) {
+      const lastLine = { ...newData[index - 1] };
+      lastLine["status"] = "finished";
+      newData[index-1] = lastLine;
+    };
+    const newLine = { ...newData[index]};
+    newLine["status"] = status;
+    newData[index] = newLine;
+    setTableData(newData);
+  };
+
+  useEffect(() => {
+    if (series) {
+      if (analysisIndex < series.length) {
+        if (purging) {
+          setStatus(analysisIndex, "purging")
+        } else if (analyzing && timeCounter > 1) {
+          setStatus(analysisIndex, "analyzing")
+        };
+      } else {
+        setStatus(analysisIndex - 1, "finished")
+        cleanUp();
+      };
+    };
+  }, [timeCounter]);
+
+  // useEffect(() => {
+  //   if (tableData) {
+  //     if (tableData[tableData.length - 1]["status"] === "finished") {
+  //       alert("已完成分析");
+  //     };
+  //   };
+  // }, [tableData])
 
   const initAnalysis = () => {
     setTimeCounter(1);
@@ -138,12 +174,6 @@ export default function AnalysisPanel({
         };
       };
     };
-
-    if (analysisIndex >= series.length) {
-      cleanUp();
-      alert("已完成分析");
-    };
-    
   }, analyzing ? 1000 : null);
 
   // const blankData = {
@@ -173,6 +203,8 @@ export default function AnalysisPanel({
       render: status => {
         if (status == 'waiting') {
           return <Tag icon={<ClockCircleOutlined />} color="default">待分析</Tag>
+        } else if (status == 'purging') {
+          return <Tag icon={<SyncOutlined spin />} color="processing">吹扫中</Tag>
         } else if (status == 'analyzing') {
           return <Tag icon={<SyncOutlined spin />} color="processing">分析中</Tag>
         } else if (status == 'finished') {
@@ -279,30 +311,32 @@ export default function AnalysisPanel({
         !start ? <p>设备未连接</p> : 
         <>
           <Row style={{ paddingBottom: 10 }}>
-            <Button
-              style={{
-                height: 40,
-                fontSize: "1.2em",
-                color: "DarkBlue",
-                width: 150,
-                float: "left" }}
-              onClick={startAnalysis}
-            >
-              开始分析
-            </Button>
-
-            <Button
-              style={{
-                height: 40,
-                fontSize: "1.2em",
-                color: "DarkRed",
-                width: 150,
-                float: "left"
-              }}
-              onClick={stopAnalysis}
+            { !analyzing ? 
+              <Button
+                style={{
+                  height: 40,
+                  fontSize: "1.2em",
+                  color: "DarkBlue",
+                  width: 150,
+                  float: "left"
+                }}
+                onClick={startAnalysis}
               >
-              停止分析
-            </Button>
+                  开始分析
+              </Button> :
+              <Button
+                style={{
+                  height: 40,
+                  fontSize: "1.2em",
+                  color: "DarkRed",
+                  width: 150,
+                  float: "left"
+                }}
+                onClick={stopAnalysis}
+              >
+                停止分析
+              </Button>
+            }
           </Row>
           
           <Table pagination={false} columns={columns} dataSource={tableData} />
