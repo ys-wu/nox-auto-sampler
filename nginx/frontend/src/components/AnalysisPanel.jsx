@@ -33,8 +33,7 @@ export default function AnalysisPanel({
   const [analyzing, setAnalyzing] = useState(false);
   const [purging, setPurging] = useState(false);
 
-  // init table
-  useEffect(() => {
+  const init = () => {
     if (series) {
       const newData = series.map((item, index) => {
         const newItem = { ...item };
@@ -44,8 +43,18 @@ export default function AnalysisPanel({
         return newItem;
       });
       setTableData(newData);
+      cleanUp();
+      setAnalysisIndex(0);
     };
+  };
+
+  useEffect(() => {
+    init();
   }, [series]);
+
+  useEffect(() => {
+    init();
+  }, [seriesName]);
 
   const setStatus = (index, status) => {
     const newData = [...tableData];
@@ -120,12 +129,14 @@ export default function AnalysisPanel({
     const mean = getMean([c1, c2, c3]);
     if (mean === 0) {
       alert("NOx 测量错误！已停止分析！");
+      setStatus(analysisIndex, "stopped");
       cleanUp();
     };
     const RSD = s / mean;
     const bias = getBias();
     if (Number.isNaN(bias)) {
       alert("偏差设置错误！已停止分析！");
+      setStatus(analysisIndex, "stopped");
       cleanUp();
     }
     console.log(`AnalysisPanel checkStable: c1 ${c1}, c2 ${c2}, c3 ${c3}, RSD ${RSD}, bias limit ${bias}`);
@@ -143,7 +154,6 @@ export default function AnalysisPanel({
     setAnalyzing(false);
     setTimeCounter(0);
     setNoxCounter(0);
-    setAnalysisIndex(0);
   };
 
   // analyzing
@@ -301,8 +311,11 @@ export default function AnalysisPanel({
   };
 
   const stopAnalysis = () => {
-    cleanUp();
-    alert("已停止分析");
+    setAnalyzing(false);
+    setPurging(false);
+    setTimeCounter(0);
+    setNoxCounter(0);
+    setStatus(analysisIndex, "stopped");
   };
 
   return (
@@ -322,7 +335,7 @@ export default function AnalysisPanel({
                 }}
                 onClick={startAnalysis}
               >
-                  开始分析
+                {series && analysisIndex >= series.length ? "已完成分析" : "开始分析"}
               </Button> :
               <Button
                 style={{
