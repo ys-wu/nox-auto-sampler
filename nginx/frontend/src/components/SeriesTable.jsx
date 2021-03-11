@@ -155,8 +155,12 @@ export default function SeriesTable({
   };
 
   const handleSaveTable = () => {
-    passSeriesName(name);
-    onSaveSeries(state);
+    if (name !== '') {
+      passSeriesName(name);
+      onSaveSeries(state);
+    } else {
+      alert("名称不能为空");
+    };
   };
 
   const handleSaveTemplate = () => {

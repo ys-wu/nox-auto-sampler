@@ -11,6 +11,8 @@ import {
   MinusCircleOutlined,
 } from '@ant-design/icons';
 
+import useInterval from '../hooks/useInterval';
+
 
 export default function AnalysisPanel({
   start,
@@ -19,9 +21,25 @@ export default function AnalysisPanel({
   series
 }) {
 
+  // const purgeTime = 3 * 60;   // purge interval in (sec)
+  // const noxInterval = 8;      // interval in (sec)
+  // const noxCountLimit = 18;   // up limit number of data
+
+  // for testing
+  const purgeTime = 10;   // purge interval in (sec)
+  const noxInterval = 2;      // interval in (sec)
+  const noxCountLimit = 18;   // up limit number of data
+
   const [tableData, setTableData] = useState();
-  const [analysisIndex, setAnalysisIndex] = useState(-1);
-  const [stopped, setStopped] = useState(false);
+  const [analyzing, setAnalyzing] = useState(false);
+  const [purging, setPurging] = useState(false);
+
+  let n = 0;      // analyzing time in (sec)
+  let count = 0;  // NOx data checking point number
+  let c1 = 0;
+  let c2 = 0;
+  let c3 = 0;
+  let analysisIndex = -1;
 
   // init table
   useEffect(() => {
@@ -37,59 +55,85 @@ export default function AnalysisPanel({
     };
   }, [series])
 
-  // updata table
-  useEffect(() =>{
-    if (tableData) {
-      const newData = {tableData};
-      
+  const initAnalysis = () => {
+    analysisIndex = 0;
+    c1 = 0; c2 = 0; c3 = 0;
+  };
 
-      // const newData = series.map((item, index) => {
-      //   const newItem = { ...item };
-      //   newItem['key'] = index;
+  // arithmetic mean
+  const getMean = data => {
+    return data.reduce(function (a, b) {
+      return Number(a) + Number(b);
+    }) / data.length;
+  };
 
-      //   let status = "waiting";
-      //   if (index === analysisIndex){
-      //     status = "analyzing";
-      //   } else if (index < analysisIndex) {
-      //     status = "finished";
-      //   };
-      //   if (stopped && index >= analysisIndex) {
-      //     status = "stopped";
-      //   };
-      //   newItem['status'] = status;
+  // standard deviation
+  const getSD = data => {
+    let m = getMean(data);
+    return Math.sqrt(data.reduce(function (sq, n) {
+      return sq + Math.pow(n - m, 2);
+    }, 0) / (data.length - 1));
+  };
 
-      //   return newItem;
-      // });
-      // setTableData(newData);
+  const checkPurge = n => n >= purgeTime;
+
+  const checkNewPoint = () => (n - purgeTime) % noxInterval === 0;
+
+  const getBias = () => parseFloat(series[analysisIndex]['bias']) / 100.0;
+
+  const checkStatble = () => {
+    // get NOx data, calculate derived parameters based on NOx
+    const newNoxData = data['nox'];
+    c1 = c2;
+    c2 = c3;
+    c3 = newNoxData['no'];
+    const s = getSD([c1, c2, c3]);
+    const RSD = s / getMean([c1, c2, c3]);
+    const bias = getBias();
+    console.log(`AnalysisPanel checkStable: c1 ${c1}, c2 ${c2}, c3 ${c3}, RSD ${RSD}, bias limit ${bias}`);
+    return (RSD < bias) || (count >= noxCountLimit);
+  };
+
+  const recordAndPostNox = () => {
+    count = 0;
+    analysisIndex += 1;
+    console.log(`AnalysisPanel recordAndPostNox`)
+  };
+
+  const cleanUp = () => {
+    n = 0; 
+    analysisIndex = -1;
+    setAnalyzing(false);
+    alert("已停止或完成分析");
+  };
+
+  // analyzing
+  useInterval(() => {
+    console.log(`AnalysisPanel analyzing: n ${n}, count ${count}`);
+
+    if (n === 0) {
+      initAnalysis();
     };
-  }, [analysisIndex]);
 
-  // const tableData = [
-  //   {
-  //     key: 3,
-  //     status: "finished",
-  //     type: "a",
-  //     name: "b",
-  //   },
-  //   {
-  //     key: 2,
-  //     status: "analyzing",
-  //     type: "a",
-  //     name: "b",
-  //   },
-  //   {
-  //     key: 1,
-  //     status: "waiting",
-  //     type: "a",
-  //     name: "b",
-  //   },
-  //   {
-  //     key: 4,
-  //     status: "stopped",
-  //     type: "a",
-  //     name: "b",
-  //   },
-  // ];
+    if (checkPurge()) {
+      setPurging(true);
+    } else {
+      setPurging(false);
+      if (checkNewPoint()) {
+        count += 1;
+        if (checkStatble()) {
+          recordAndPostNox();
+        };
+      };
+    };
+
+    n += 1;
+
+    if (analysisIndex >= series.length) {
+      cleanUp();
+    };
+    
+  }, analyzing ? 1000 : null);
 
   // const blankData = {
   //   type: null,
@@ -210,11 +254,12 @@ export default function AnalysisPanel({
   ];
 
   const startAnalysis = () => {
-
+    setAnalyzing(true);
   };
 
   const stopAnalysis = () => {
-
+    setAnalyzing(false);
+    cleanUp();
   };
 
   return (
