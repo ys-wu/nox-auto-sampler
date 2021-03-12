@@ -49,6 +49,7 @@ export default function AnalysisPanel({
         newItem['key'] = index;
         newItem['status'] = 'waiting';
         newItem['series'] = seriesName;
+        newItem['no2InputConc'] = newItem['noxInputConc'] - newItem['noInputConc'];
         return newItem;
       });
       setTableData(newData);
@@ -188,6 +189,23 @@ export default function AnalysisPanel({
     return newData;
   };
 
+  const updateTableData = data => {
+    const newData = [...tableData];
+    const newLine = {...newData[analysisIndex]};
+    newLine["noMeasConc"] = data["noMeasConc"];
+    newLine["no2MeasConc"] = data["no2MeasConc"];
+    newLine["noxMeasConc"] = data["noxMeasConc"];
+    newLine["noMeasCoef"] = data["noMeasCoef"];
+    newLine["no2MeasCoef"] = data["no2MeasCoef"];
+    newLine["noxMeasCoef"] = data["noxMeasCoef"];
+    newLine["noRevised"] = data["noRevised"];
+    newLine["no2Revised"] = data["no2Revised"];
+    newLine["noxRevised"] = data["noxRevised"];
+    newLine["stable"] = data["stable"];
+    newData[analysisIndex] = newLine;
+    setTableData(newData);
+  };
+
   const handleStableData = () => {
     let coefs;
     if (series[analysisIndex]["type"] === "校准") {
@@ -198,6 +216,7 @@ export default function AnalysisPanel({
       };
     };
     const data = deriveData(coefs);
+    updateTableData(data);
     post(data, urlSample);
     setTimeCounter(0);
     setNoxCounter(0);
