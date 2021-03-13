@@ -27,6 +27,7 @@ function App() {
   const [series, setSeries] = useState();
   const [data, setData] = useState(null);
   const [power, setPower] = useState(1);
+  const [analyzing, setAnalyzing] = useState(false);
 
   // interval of fetching data in (ms)
   const delay = 2000;
@@ -125,6 +126,10 @@ function App() {
     console.log("App get series table", data);
   };
 
+  const passAnalyzing = analyzing => {
+    setAnalyzing(analyzing);
+  };
+
   return (
     <div className="App">
       { power !== 0 ? null :
@@ -151,7 +156,12 @@ function App() {
       </Row>
       <Row>
         <Col span={18} offset={3}>
-          <StatusPanel data={data} switchSampling={switchSampling} triggerMock={triggerMock}/ >
+          <StatusPanel
+            data={data}
+            analyzing={analyzing}
+            switchSampling={switchSampling}
+            triggerMock={triggerMock}
+          />
         </Col>
       </Row>
       <Row>
@@ -163,6 +173,7 @@ function App() {
             data = { data }
             onUpdateSetting={ updateSetting } 
             onSaveSeries={ handleSetSeries }
+            passAnalyzing={ passAnalyzing }
           />
         </Col>
       </Row>

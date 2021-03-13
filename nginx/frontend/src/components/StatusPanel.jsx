@@ -7,9 +7,17 @@ import Switch from 'antd/lib/switch';
 import Form from 'antd/lib/form';
 import Input from 'antd/lib/input';
 import Button from 'antd/lib/button';
+import Select from 'antd/lib/select';
+
+const { Option } = Select;
 
 
-export default function StatusPanel({ data, switchSampling=f=>f, triggerMock=f=>f} ) {
+export default function StatusPanel({
+  data, 
+  analyzing,
+  switchSampling=f=>f,
+  triggerMock=f=>f
+}) {
 
   const [form] = Form.useForm();
 
@@ -57,7 +65,7 @@ export default function StatusPanel({ data, switchSampling=f=>f, triggerMock=f=>
   };
 
   // handle submit log text
-  const onFinish = value => {
+  const onFinish = () => {
     const d = new Date();
     if (state === password) {
       triggerMock();
@@ -67,6 +75,11 @@ export default function StatusPanel({ data, switchSampling=f=>f, triggerMock=f=>
       console.log(d.toISOString(), "Status submit a log:", state);
     };
     form.resetFields();
+  };
+
+  const onSetValve = value => {
+    const d = new Date();
+    console.log(d.toISOString(), "Status manually set a valve:", value);
   };
 
   return (
@@ -104,14 +117,40 @@ export default function StatusPanel({ data, switchSampling=f=>f, triggerMock=f=>
         }
       </Row>
       <Row style={{ paddingTop:20 }}>
-        <Col span={20} offset={2} style={{ textAlign: "center" }}>
+        <Col span={10} offset={2} style={{ textAlign: "center" }}>
           <Form form={form} layout="inline" onFinish={onFinish}>
             <Form.Item name="log" label="日志">
-              <Input allowClear placeholder="手动输入一行日志" ref={txtLog} value={state} onChange={onChange} />
+              <Input
+                style={{ width: 200 }}
+                allowClear
+                placeholder="手动输入一行日志"
+                ref={txtLog}
+                value={state}
+                onChange={onChange}
+              />
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
                 提交
+            </Button>
+            </Form.Item>
+          </Form>
+        </Col>
+        
+        <Col span={10} style={{ textAlign: "center" }}>
+          <Form form={form} layout="inline" onFinish={onSetValve}>
+            <Form.Item label="阀门位置">
+              <Select
+                placeholder="请选择电磁阀"
+                // onChange={onValveChange}
+                allowClear
+              >
+                { [...Array(22)].map((_, i) => <Option value={i}>{i}</Option>) }
+              </Select>
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                手动控制
             </Button>
             </Form.Item>
           </Form>
@@ -121,5 +160,3 @@ export default function StatusPanel({ data, switchSampling=f=>f, triggerMock=f=>
     </>
   )
 }
-
-

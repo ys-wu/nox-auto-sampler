@@ -16,6 +16,7 @@ export default function TabFrame({
   data,
   onUpdateSetting=f=>f,
   onSaveSeries=f=>f,
+  passAnalyzing=f=>f,
  }) {
 
   const [seriesName, setSeriesName] = useState();
@@ -25,8 +26,9 @@ export default function TabFrame({
     setSeriesName(name);
   };
 
-  const passAnalyzing = analyzing => {
+  const receiveAnalyzing = analyzing => {
     setAnalyzing(analyzing);
+    passAnalyzing(analyzing);
   };
 
   return(
@@ -53,7 +55,7 @@ export default function TabFrame({
           data={data}
           seriesName={seriesName}
           series={series}
-          passAnalyzing={passAnalyzing}
+          passAnalyzing={receiveAnalyzing}
         />
       </TabPane>
       <TabPane tab="数据处理" key="4">
