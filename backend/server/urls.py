@@ -7,6 +7,7 @@ from server import views
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
 router.register(r'series', views.SeriesViewSet)
+router.register(r'sample', views.SampleViewSet)
 router.register(r'seriestemplate', views.SeriesTemplateViewSet)
 router.register(r'sampletemplate', views.SampleTemplateViewSet)
 

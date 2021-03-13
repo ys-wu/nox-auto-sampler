@@ -185,7 +185,7 @@ export default function AnalysisPanel({
     newData["noRevised"] = no * coefs[0];
     newData["no2Revised"] = nox * coefs[2] - no * coefs[0];
     newData["noxRevised"] = nox * coefs[2];
-    newData["stable"] = noxCounter >= noxCountLimit ? true : false
+    newData["stable"] = noxCounter >= noxCountLimit ? "true" : "false";
     return newData;
   };
 
@@ -217,7 +217,10 @@ export default function AnalysisPanel({
     };
     const data = deriveData(coefs);
     updateTableData(data);
-    post(data, urlSample);
+    const postData = {...data};
+    delete postData.id;
+    delete postData.name;
+    post(postData, urlSample);
     setTimeCounter(0);
     setNoxCounter(0);
     setAnalysisIndex(analysisIndex + 1);

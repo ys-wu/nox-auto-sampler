@@ -6,8 +6,18 @@ from datetime import datetime
 import json
 import redis
 
-from server.models import Series, SeriesTemplate, SampleTemplate
-from server.serializers import SeriesSerializer, SeriesTemplateSerializer, SampleTemplateSerializer
+from server.models import (
+  Series,
+  Sample,
+  SeriesTemplate,
+  SampleTemplate,
+)
+from server.serializers import (
+  SeriesSerializer, 
+  SampleSerializer,
+  SeriesTemplateSerializer,
+  SampleTemplateSerializer,
+)
 
 
 setting_url = '/app/setting/setting.json'
@@ -25,6 +35,11 @@ while r.llen('data') > 0:
 class SeriesViewSet(viewsets.ModelViewSet):
   queryset = Series.objects.all().order_by('-created')
   serializer_class = SeriesSerializer
+
+
+class SampleViewSet(viewsets.ModelViewSet):
+  queryset = Sample.objects.all().order_by('-created')
+  serializer_class = SampleSerializer
 
 
 class SeriesTemplateViewSet(viewsets.ModelViewSet):

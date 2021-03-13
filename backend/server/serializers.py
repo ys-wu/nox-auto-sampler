@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from server.models import Series, SeriesTemplate, SampleTemplate
+from server.models import Series, Sample, SeriesTemplate, SampleTemplate
 
 
 class SeriesSerializer(serializers.HyperlinkedModelSerializer):
@@ -27,6 +27,40 @@ class SeriesSerializer(serializers.HyperlinkedModelSerializer):
       'noCoef',
       'no2Coef',
       'noxCoef', 
+    )
+
+
+class SampleSerializer(serializers.HyperlinkedModelSerializer):
+  class Meta:
+    model = Sample
+    fields = (
+      'url', 
+      'id', 
+      'created',
+      'index',
+      'sampleType',
+      'position',
+      'sampleId',
+      'noInputConc',
+      'no2InputConc',
+      'noxInputConc',
+      'noMeasConc',
+      'no2MeasConc',
+      'noxMeasConc',
+      'noMeasCoef',
+      'no2MeasCoef',
+      'noxMeasCoef',
+      'noRevised',
+      'no2Revised',
+      'noxRevised',
+      'bias',
+      'bottleType',
+      'bottlePres',
+      'operator',
+      'remark',
+      'series',
+      'stable',
+      'updateDate',
     )
 
 
