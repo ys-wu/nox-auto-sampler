@@ -61,6 +61,10 @@ export default function AnalysisPanel({
   };
 
   useEffect(() => {
+    passAnalyzing(analyzing);
+  }, [analyzing]);
+
+  useEffect(() => {
     init();
   }, [series]);
 
