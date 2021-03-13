@@ -193,6 +193,8 @@ export default function RawRecordForm({ start, setting, data, seriesName }) {
   };
 
   return (
+    <>
+    { !seriesName ? <p>未设定分析序列</p> :
     <Form
       {...layout}
       form={form}
@@ -311,5 +313,7 @@ export default function RawRecordForm({ start, setting, data, seriesName }) {
         </Popconfirm>
       </Form.Item>
     </Form>
+    }
+    </>
   );
 };

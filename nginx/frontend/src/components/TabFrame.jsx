@@ -5,6 +5,7 @@ import SeriesTable from './SeriesTable'
 import RawRecordForm from './RawRecordForm';
 import AnalysisPanel from './AnalysisPanel';
 import ResultTable from './ResultTable';
+import ReportPanel from './ReportPanel';
 
 const { TabPane } = Tabs;
 
@@ -32,7 +33,7 @@ export default function TabFrame({
   };
 
   return(
-    <Tabs defaultActiveKey="5">
+    <Tabs defaultActiveKey="6">
       <TabPane tab="序列列表" key="1">
         <SeriesTable
           setting={setting}
@@ -41,6 +42,7 @@ export default function TabFrame({
           passSeriesName={passSeriesName}
         />
       </TabPane>
+
       <TabPane tab="原始记录" key="2">
         <RawRecordForm
           start={start}
@@ -49,6 +51,7 @@ export default function TabFrame({
           setting={setting} 
         />
       </TabPane>
+
       <TabPane tab="分析检测" key="3">
         <AnalysisPanel
           start={start}
@@ -58,10 +61,16 @@ export default function TabFrame({
           passAnalyzing={receiveAnalyzing}
         />
       </TabPane>
+
       <TabPane tab="数据处理" key="4">
         <ResultTable seriesName={seriesName} />
       </TabPane>
-      <TabPane tab="设置" key="5" >
+
+      <TabPane tab="报告输出" key="5">
+        <ReportPanel />
+      </TabPane>
+
+      <TabPane tab="基本设置" key="6" >
         <SettingList onUpdateSetting={onUpdateSetting} />
       </TabPane>
     </Tabs>
