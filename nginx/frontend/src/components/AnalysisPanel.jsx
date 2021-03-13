@@ -32,6 +32,8 @@ export default function AnalysisPanel({
   const hostname = window.location.hostname;
   const urlSeries = `http://${hostname}/api/series/`;
   const urlSample = `http://${hostname}/api/sample/`;
+  const urlAnalyzing = `http://${hostname}/api/analyzing/`;
+  const urlPurging = `http://${hostname}/api/purging/`;
 
   const [timeCounter, setTimeCounter] = useState(0);    // analyzing time in (sec)
   const [noxCounter, setNoxCounter] = useState(0);      // NOx data checking point number
@@ -66,10 +68,6 @@ export default function AnalysisPanel({
     init();
   }, [seriesName]);
 
-  useEffect(() => {
-    passAnalyzing(analyzing);
-  }, [analyzing]);
-
   const setStatus = (index, status) => {
     const newData = [...tableData];
     if (index > 0) {
@@ -87,24 +85,28 @@ export default function AnalysisPanel({
     if (series) {
       if (analysisIndex < series.length) {
         if (purging) {
-          setStatus(analysisIndex, "purging")
+          post({ analyzing: "true" }, urlAnalyzing);
+          post({ purging: "true" }, urlPurging);
+          setStatus(analysisIndex, "purging");
         } else if (analyzing && timeCounter > 1) {
-          setStatus(analysisIndex, "analyzing")
+          post(
+            {
+              analyzing: "true",
+              valve: tableData[analysisIndex]['position'],
+            },
+            urlAnalyzing
+          );
+          post({ purging: "false" }, urlPurging);
+          setStatus(analysisIndex, "analyzing");
+        } else {
+          post({ analyzing: "false" }, urlAnalyzing);
         };
       } else {
-        setStatus(analysisIndex - 1, "finished")
+        setStatus(analysisIndex - 1, "finished");
         cleanUp();
       };
     };
   }, [timeCounter]);
-
-  // useEffect(() => {
-  //   if (tableData) {
-  //     if (tableData[tableData.length - 1]["status"] === "finished") {
-  //       alert("已完成分析");
-  //     };
-  //   };
-  // }, [tableData])
 
   const initAnalysis = () => {
     setTimeCounter(1);
@@ -422,33 +424,6 @@ export default function AnalysisPanel({
           </Row>
           
           <Table pagination={false} columns={columns} dataSource={tableData} />
-
-          {/* <Row style={{ paddingBottom: 2 }}>
-            <Col span={12}>
-              <Row>
-                <Col style={{ textAlign: "center" }} span={3}>类型</Col>
-                <Col style={{ textAlign: "center" }} span={3}>样品名称</Col>
-                <Col style={{ textAlign: "center" }} span={3}>样品位置</Col>
-                <Col style={{ textAlign: "center" }} span={3}>样品编号</Col>
-                <Col style={{ textAlign: "center" }} span={3}>NO 浓度</Col>
-                <Col style={{ textAlign: "center" }} span={3}>NO2 浓度</Col>
-                <Col style={{ textAlign: "center" }} span={3}>NO 原始值</Col>
-                <Col style={{ textAlign: "center" }} span={3}>NO2 原始值</Col>
-              </Row>
-            </Col>
-            <Col span={12}>
-              <Row>
-                <Col style={{ textAlign: "center" }} span={3}>NO 校正系数</Col>
-                <Col style={{ textAlign: "center" }} span={3}>NO2 校正系数</Col>
-                <Col style={{ textAlign: "center" }} span={3}>NO 修正值</Col>
-                <Col style={{ textAlign: "center" }} span={3}>NO2 修正值</Col>
-                <Col style={{ textAlign: "center" }} span={3}>压力</Col>
-                <Col style={{ textAlign: "center" }} span={3}>检测日期</Col>
-                <Col style={{ textAlign: "center" }} span={3}>检测人</Col>
-                <Col style={{ textAlign: "center" }} span={3}>序列名称</Col>
-              </Row>
-            </Col>
-          </Row> */}
         </>
       }
     </>

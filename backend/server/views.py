@@ -26,6 +26,9 @@ log_url = '/app/dbdata/log.txt'
 host = 'redis'
 r = redis.Redis(host=host, port=6379, db=0)
 r.set('status', 'idel')
+r.set('mock', 'off')
+r.set('analyzing', 'false')
+r.set('purging', 'false')
 while r.llen('mock_data') > 0:
   r.rpop('mock_data')
 while r.llen('data') > 0:
@@ -96,6 +99,37 @@ class Data(View):
     except:
       print('Error in handle post data')
       return JsonResponse({'Message': 'Post data fail'})
+
+
+class Analyzing(View):
+  def post(self, request):
+    try:
+      data = json.loads(request.body)
+      print('Receive post analyzing:', data)
+      if data['analyzing'] == 'true':
+        r.set('analyzing', 'true')
+        r.set('valve', data['valve'])
+      else:
+        r.set('analyzing', 'false')
+      return JsonResponse(data)
+    except:
+      print('Error in handle post data')
+      return JsonResponse({'Message': 'Post analyzing fail'})
+
+
+class Purging(View):
+  def post(self, request):
+    try:
+      data = json.loads(request.body)
+      print('Receive post purging:', data)
+      if data['purging'] == 'true':
+        r.set('purging', 'true')
+      else:
+        r.set('purging', 'false')
+      return JsonResponse(data)
+    except:
+      print('Error in handle post data')
+      return JsonResponse({'Message': 'Post purging fail'})
 
 
 class Log(View):
