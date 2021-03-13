@@ -10,14 +10,23 @@ import get from '../helpers/apiGet';
 import post from '../helpers/apiPost';
 
 
-export default function ResultTable() {
+export default function ResultTable({seriesName}) {
 
+  const { Option } = Select;
   const [form] = Form.useForm();
 
-  const [series, setSeries] = useState();
-  const [tableData, setTableData] = useState([
-    { operator: 'haha' }
-  ]);
+  const hostname = window.location.hostname;
+  const urlSeries = `http://${hostname}/api/series/`;
+  const urlSample = `http://${hostname}/api/sample/`;
+
+  const [series, setSeries] = useState(seriesName);
+  const [seriesList, setSeriesList] = useState([seriesName]);
+  const [currentSeries, setCurrentSeries] = useState();
+  const [tableData, setTableData] = useState([]);
+
+  useEffect(() => {
+    setSeries(seriesName);
+  }, [seriesName]);
 
   const columns = [
     {
@@ -27,13 +36,13 @@ export default function ResultTable() {
     },
     {
       title: '类型',
-      dataIndex: 'type',
-      key: 'type'
+      dataIndex: 'sampleType',
+      key: 'sampleType'
     },
     {
       title: '样品名称',
-      dataIndex: 'name',
-      key: 'name'
+      dataIndex: 'sampleId',
+      key: 'sampleId'
     },
     {
       title: '样品位置',
@@ -51,9 +60,9 @@ export default function ResultTable() {
       key: 'noInputConc'
     },
     {
-      title: 'NO2 浓度',
-      dataIndex: 'no2InputConc',
-      key: 'no2InputConc'
+      title: 'NOx 浓度',
+      dataIndex: 'noxInputConc',
+      key: 'noxInputConc'
     },
     {
       title: '偏差',
@@ -87,28 +96,49 @@ export default function ResultTable() {
     },
   ];
 
-  const onGetSeries = {
+  const updateSeriesList = data => {
+    const newList = data['results'].map(item => item['name']);
+    setSeriesList(newList);
+    return data;
+  };
+
+  const onGetSeries = () => {
+    get(urlSeries, updateSeriesList);
+  };
+
+  const onSelect = value => {
+    setSeries(value);
+  };
+
+  const updateTable = data => {
+    let newTableData = data['results'].filter(item => item['series'] === series);
+    newTableData.reverse();
+    newTableData = newTableData.map((item, index) => {
+      const newItem = {...item};
+      newItem['lineNum'] = index + 1;
+      newItem['finishedDate'] = item['created'];
+      console.log(item['created']);
+      return newItem;
+    });
+    setTableData(newTableData);
+    return data;
+  };
+
+  const onFinish = () => {
+    setCurrentSeries(series);
+    get(urlSample, updateTable);
+  };
+
+  const onReCal = () => {
+    
+  };
+
+
+  const onSave = () => {
 
   };
 
-  const onChange = {
-
-  };
-
-  const onFinish = {
-
-  };
-
-  const onReCal = {
-
-  };
-
-
-  const onSave = {
-
-  };
-
-  const onGetReports = {
+  const onGetReports = () => {
 
   };
 
@@ -120,7 +150,16 @@ export default function ResultTable() {
         </Button>
         <Form form={form} layout="inline" onFinish={onFinish}>
           <Form.Item name="log" label="选择序列">
-            <Select style={{ width: 200, }} />
+            <Select style={{ width: 200, }} defaultValue={series} onSelect={onSelect}>
+              {
+                seriesList.map((item, index) => <Option
+                  key={index}
+                  value={item}
+                >
+                  {item}    
+                </Option>) 
+              }
+            </Select>
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">
@@ -129,52 +168,56 @@ export default function ResultTable() {
           </Form.Item>
         </Form>
       </Row>
-      <>
-        <Row>
-          <Table pagination={false} columns={columns} dataSource={tableData} />
-        </Row>
+      { tableData.length > 0 ? 
+        <>
+          <p>当前查看序列：{currentSeries}</p>
 
-        <Row>
-          <Button
-            style={{
-              height: 35,
-              fontSize: "1em",
-              color: "DarkBlue",
-              width: 120,
-              margin: 10,
-            }}
-            onClick={onReCal}
-          >
-            重新计算
+          <Row>
+            <Table pagination={false} columns={columns} dataSource={tableData} />
+          </Row>
+
+          <Row>
+            <Button
+              style={{
+                height: 35,
+                fontSize: "1em",
+                color: "DarkBlue",
+                width: 120,
+                margin: 10,
+              }}
+              onClick={onReCal}
+            >
+              重新计算
           </Button>
 
-          <Button
-            style={{
-              height: 35,
-              fontSize: "1em",
-              color: "DarkBlue",
-              width: 120,
-              margin: 10,
-            }}
-            onClick={onSave}
-          >
-            保存结果
+            <Button
+              style={{
+                height: 35,
+                fontSize: "1em",
+                color: "DarkBlue",
+                width: 120,
+                margin: 10,
+              }}
+              onClick={onSave}
+            >
+              保存结果
           </Button>
 
-          <Button
-            style={{
-              height: 35,
-              fontSize: "1em",
-              color: "DarkBlue",
-              width: 120,
-              margin: 10,
-            }}
-            onClick={onGetReports}
-          >
-            生产报表
+            <Button
+              style={{
+                height: 35,
+                fontSize: "1em",
+                color: "DarkBlue",
+                width: 120,
+                margin: 10,
+              }}
+              onClick={onGetReports}
+            >
+              生产报表
           </Button>
-        </Row>
-      </>
+          </Row>
+        </> : null
+      }
     </>
   );
 };

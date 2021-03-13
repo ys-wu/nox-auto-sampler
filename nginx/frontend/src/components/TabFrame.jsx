@@ -57,7 +57,7 @@ export default function TabFrame({
         />
       </TabPane>
       <TabPane tab="数据处理" key="4">
-        <ResultTable />
+        <ResultTable seriesName={seriesName} />
       </TabPane>
       <TabPane tab="设置" key="5" >
         <SettingList onUpdateSetting={onUpdateSetting} />
