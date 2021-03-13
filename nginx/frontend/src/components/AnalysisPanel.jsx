@@ -182,6 +182,7 @@ export default function AnalysisPanel({
     const nox = parseFloat(noxAnalyzer["nox"]);
     newData["index"] = analysisIndex;
     newData["series"] = seriesName;
+    newData["no2InputConc"] = newData["noxInputConc"] - newData["noInputConc"]
     newData["noMeasConc"] = no;
     newData["no2MeasConc"] = nox - no;
     newData["noxMeasConc"] = nox;
@@ -192,6 +193,8 @@ export default function AnalysisPanel({
     newData["no2Revised"] = nox * coefs[2] - no * coefs[0];
     newData["noxRevised"] = nox * coefs[2];
     newData["stable"] = noxCounter >= noxCountLimit ? "true" : "false";
+    const bias = (newData['noRevised'] - newData['noInputConc']) / newData['noRevised'];
+    newData['bias'] = (bias * 100).toFixed(2) + " %";
     return newData;
   };
 
@@ -208,6 +211,10 @@ export default function AnalysisPanel({
     newLine["no2Revised"] = data["no2Revised"];
     newLine["noxRevised"] = data["noxRevised"];
     newLine["stable"] = data["stable"];
+    newLine["bias"] = data["bias"];
+    const t = new Date();
+    const strDate = `${t.getFullYear()}-${t.getMonth() + 1}-${t.getDate()}`;
+    newLine['finishedDate'] = strDate
     newData[analysisIndex] = newLine;
     setTableData(newData);
   };
@@ -311,42 +318,50 @@ export default function AnalysisPanel({
     {
       title: 'NO 浓度',
       dataIndex: 'noInputConc',
-      key: 'noInputConc'
+      key: 'noInputConc',
+      render: value => value ? value.toFixed(2) : null
     },
     {
       title: 'NO2 浓度',
       dataIndex: 'no2InputConc',
-      key: 'no2InputConc'
+      key: 'no2InputConc',
+      render: value => value ? value.toFixed(2) : null
     },
     {
       title: 'NO 原始值',
       dataIndex: 'noMeasConc',
-      key: 'noMeasConc'
+      key: 'noMeasConc',
+      render: value => value ? value.toFixed(2) : null
     },
     {
       title: 'NO2 原始值',
       dataIndex: 'no2MeasCoef',
-      key: 'no2MeasCoef'
+      key: 'no2MeasCoef',
+      render: value => value ? value.toFixed(2) : null
     },
     {
       title: 'NO 校正系数',
       dataIndex: 'noMeasCoef',
-      key: 'noMeasCoef'
+      key: 'noMeasCoef',
+      render: value => value ? value.toFixed(2) : null
     },
     {
       title: 'NO2 校正系数',
       dataIndex: 'no2MeasCoef',
-      key: 'no2MeasCoef'
+      key: 'no2MeasCoef',
+      render: value => value ? value.toFixed(2) : null
     },
     {
       title: 'NO 修正值',
       dataIndex: 'noRevised',
-      key: 'noRevised'
+      key: 'noRevised',
+      render: value => value ? value.toFixed(2) : null
     },
     {
       title: 'NO2 修正值',
       dataIndex: 'no2Revised',
-      key: 'no2Revised'
+      key: 'no2Revised',
+      render: value => value ? value.toFixed(2) : null
     },
     {
       title: '压力',

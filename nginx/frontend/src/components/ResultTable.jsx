@@ -58,12 +58,14 @@ export default function ResultTable({seriesName}) {
     {
       title: 'NO 浓度',
       dataIndex: 'noInputConc',
-      key: 'noInputConc'
+      key: 'noInputConc',
+      render: value => value ? value.toFixed(2) : null
     },
     {
       title: 'NOx 浓度',
       dataIndex: 'noxInputConc',
-      key: 'noxInputConc'
+      key: 'noxInputConc',
+      render: value => value ? value.toFixed(2) : null
     },
     {
       title: '偏差',
@@ -119,7 +121,7 @@ export default function ResultTable({seriesName}) {
       newItem['lineNum'] = index + 1;
       newItem['key'] = index;
       const t = new Date(Date.parse(item['created']));
-      const strDate = `${t.getFullYear()}-${t.getMonth()}-${t.getDate()}`;
+      const strDate = `${t.getFullYear()}-${t.getMonth() + 1}-${t.getDate()}`;
       newItem['finishedDate'] = strDate;
       return newItem;
     });
