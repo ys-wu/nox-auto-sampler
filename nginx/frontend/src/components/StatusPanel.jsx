@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
 import Tag from 'antd/lib/tag';
@@ -8,6 +8,8 @@ import Form from 'antd/lib/form';
 import Input from 'antd/lib/input';
 import Button from 'antd/lib/button';
 import Select from 'antd/lib/select';
+
+import post from '../helpers/apiPost';
 
 const { Option } = Select;
 
@@ -20,16 +22,26 @@ export default function StatusPanel({
 }) {
 
   const [form] = Form.useForm();
+  const [form2] = Form.useForm();
 
   const [start, setStart] = useState(false);
+  const [manValve, setManValve] = useState(false);
   const [state, setState] = useState();
+
   const txtLog = useRef();
 
   const hostname = window.location.hostname;
   const url = `http://${hostname}/api/log/`
+  const urlAnalyzing = `http://${hostname}/api/analyzing/`;
 
   // command in log input to trigger mock UI
   const password = 'a';
+
+  useEffect(() => {
+    if (analyzing) {
+      setManValve(false);
+    };
+  }, [analyzing])
 
   // handle start button
   const handleStart = checked => {
@@ -77,9 +89,29 @@ export default function StatusPanel({
     form.resetFields();
   };
 
+  useEffect(() => {
+    if (!manValve) {
+      post({ analyzing: "false" }, urlAnalyzing);
+    };
+  }, [manValve]);
+
+  const enableManValve = value => {
+    const d = new Date();
+    setManValve(value);
+    console.log(d.toISOString(), "Status manual valve enable:", value);
+  };
+
   const onSetValve = value => {
     const d = new Date();
-    console.log(d.toISOString(), "Status manually set a valve:", value);
+    const position = value['valve'];
+    post(
+      {
+        analyzing: "manual_valve",
+        valve: position,
+      },
+      urlAnalyzing
+    );
+    console.log(d.toISOString(), "Status manually set a valve:", position);
   };
 
   return (
@@ -138,21 +170,36 @@ export default function StatusPanel({
         </Col>
         
         <Col span={10} style={{ textAlign: "center" }}>
-          <Form form={form} layout="inline" onFinish={onSetValve}>
-            <Form.Item label="阀门位置">
-              <Select
-                placeholder="请选择电磁阀"
-                // onChange={onValveChange}
-                allowClear
-              >
-                { [...Array(22)].map((_, i) => <Option value={i}>{i}</Option>) }
-              </Select>
-            </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                手动控制
-            </Button>
-            </Form.Item>
+          <Form form={form2} layout="inline" onFinish={onSetValve}>
+            {
+              analyzing ? null :
+                <Form.Item name='valve' label="手动控制阀门">
+                  <Switch
+                    checkedChildren="开启"
+                    unCheckedChildren="关闭"
+                    onClick={enableManValve}
+                  />
+                </Form.Item>
+            }
+            {
+              !manValve ? null :
+              <>
+                <Form.Item name='valve' label="阀门位置">
+                  <Select
+                    style={{ width: 100 }}
+                    placeholder="请选择"
+                    allowClear
+                  >
+                    {[...Array(22)].map((_, i) => <Option key={i} value={i}>{i}</Option>)}
+                  </Select>
+                </Form.Item>
+                <Form.Item>
+                  <Button type="primary" htmlType="submit">
+                    确定
+                  </Button>
+                </Form.Item>
+              </>
+            }
           </Form>
         </Col>
       </Row>

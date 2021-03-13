@@ -109,6 +109,9 @@ class Analyzing(View):
       if data['analyzing'] == 'true':
         r.set('analyzing', 'true')
         r.set('valve', data['valve'])
+      elif data['analyzing'] == 'manual_valve':
+        r.set('analyzing', 'manual_valve')
+        r.set('valve', data['valve'])
       else:
         r.set('analyzing', 'false')
       return JsonResponse(data)

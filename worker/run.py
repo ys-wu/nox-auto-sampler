@@ -79,6 +79,9 @@ if __name__ == '__main__':
         else:
           position = int(r.get('valve'))
           set_valve(position)
+      elif r.get('analyzing') == b'manual_valve':
+        position = int(r.get('valve'))
+        set_valve(position)
       else:
         set_valve(-1)
         r.set('valve', -1)
