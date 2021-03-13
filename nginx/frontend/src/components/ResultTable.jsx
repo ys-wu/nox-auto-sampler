@@ -181,7 +181,26 @@ export default function ResultTable({seriesName}) {
   };
 
   const onSave = () => {
-
+    tableData.forEach(item => {
+      const newItem = { ...item };
+      const d = new Date();
+      const id = newItem['id'];
+      delete newItem['id'];
+      newItem['updateDate'] = d;
+      console.log(d.toISOString(), 'Update sample to API:', newItem);
+      fetch(`${urlSample}${id}/`, {
+        method: "PUT",
+        headers: {
+          'Accept': 'application/json, text/plain',
+          'Content-Type': 'application/json; charset=UTF-8',
+          // 'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify(newItem)
+      })
+        .then(res => res.json())
+        .then((res) => console.log(d.toISOString(), 'Update response from API:', res))
+        .catch(console.error);
+    });
   };
 
   const onGetReports = () => {

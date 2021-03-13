@@ -323,7 +323,7 @@ export default function SeriesTable({
               <Form.Item>
                 <Button type="primary" htmlType="submit">
                   开始导入
-            </Button>
+                </Button>
               </Form.Item>
             </Form>
           }
