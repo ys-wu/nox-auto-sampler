@@ -23,6 +23,7 @@ export default function ResultTable({seriesName}) {
   const [seriesList, setSeriesList] = useState([seriesName]);
   const [currentSeries, setCurrentSeries] = useState();
   const [tableData, setTableData] = useState([]);
+  const [selectedRows, setSelectedRows] = useState([]);
 
   useEffect(() => {
     setSeries(seriesName);
@@ -133,14 +134,51 @@ export default function ResultTable({seriesName}) {
 
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
-      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      setSelectedRows(selectedRowKeys);
     },
   };
 
-  const onReCal = () => {
-    
+  const calcCoefs = stdList => {
+    const NoStds = stdList.map(index => tableData[index]['noInputConc']);
+    const NoxStds = stdList.map(index => tableData[index]['noxInputConc']);
+    const NoReads = stdList.map(index => tableData[index]['noMeasConc']);
+    const NoxReads = stdList.map(index => tableData[index]['noxMeasConc']);
+    const NoCoefs = stdList.map((_, index) => NoStds[index] / NoReads[index]);
+    const NoxCoefs = stdList.map((_, index) => NoxStds[index] / NoxReads[index]);
+    const aveNoCoef = NoCoefs.reduce((a, b) => a + b, 0) / stdList.length;
+    const aveNoxCoef = NoxCoefs.reduce((a, b) => a + b, 0) / stdList.length;
+    return [aveNoCoef, aveNoxCoef];
   };
 
+  const reCalcTableData = (stdList, noCoef, noxCoef) => {
+    const newData = tableData.map((item, index) => {
+      if (stdList[0] <= index <= stdList[stdList.length-1]) {
+        const newItem = {...item};
+        newItem['noRevised'] = item['noMeasConc'] * noCoef;
+        newItem['noxRevised'] = item['noxMeasConc'] * noxCoef;
+        newItem['no2Revised'] = newItem['noxRevised'] - newItem['noRevised'];
+        newItem['noMeasCoef'] = noCoef;
+        newItem['noxMeasCoef'] = noxCoef;
+        newItem['no2MeasCoef'] = newItem['no2Revised'] / item['no2MeasConc'];
+        const bias = (newItem['noRevised'] - newItem['noInputConc']) / newItem['noRevised'];
+        newItem['bias'] = (bias * 100).toFixed(2) + " %";
+        return newItem
+      } else {
+        return item
+      };
+    });
+    setTableData(newData);
+  };
+
+  const onReCal = () => {
+    const stdList = selectedRows.filter(item => tableData[item]['sampleType'] === '校准');
+    if (selectedRows.length < 2) {
+      alert("请至少选择两行类型为‘校准’的数据");
+    } else {
+      const [noCoef, noxCoef] = calcCoefs(stdList);
+      reCalcTableData(stdList, noCoef, noxCoef);
+    };
+  };
 
   const onSave = () => {
 
