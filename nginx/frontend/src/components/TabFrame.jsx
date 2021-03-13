@@ -4,6 +4,7 @@ import SettingList from './SettingList'
 import SeriesTable from './SeriesTable'
 import RawRecordForm from './RawRecordForm';
 import AnalysisPanel from './AnalysisPanel';
+import ResultTable from './ResultTable';
 
 const { TabPane } = Tabs;
 
@@ -29,7 +30,7 @@ export default function TabFrame({
   };
 
   return(
-    <Tabs defaultActiveKey="6">
+    <Tabs defaultActiveKey="5">
       <TabPane tab="序列列表" key="1">
         <SeriesTable
           setting={setting}
@@ -56,12 +57,9 @@ export default function TabFrame({
         />
       </TabPane>
       <TabPane tab="数据处理" key="4">
-        Content of Tab Pane
+        <ResultTable />
       </TabPane>
-      <TabPane tab="报表" key="5">
-        Content of Tab Pane
-      </TabPane>
-      <TabPane tab="设置" key="6" >
+      <TabPane tab="设置" key="5" >
         <SettingList onUpdateSetting={onUpdateSetting} />
       </TabPane>
     </Tabs>
