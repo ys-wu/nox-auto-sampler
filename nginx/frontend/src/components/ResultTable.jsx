@@ -116,6 +116,7 @@ export default function ResultTable({seriesName}) {
     newTableData = newTableData.map((item, index) => {
       const newItem = {...item};
       newItem['lineNum'] = index + 1;
+      newItem['key'] = index;
       const t = new Date(Date.parse(item['created']));
       const strDate = `${t.getFullYear()}-${t.getMonth()}-${t.getDate()}`;
       newItem['finishedDate'] = strDate;
@@ -128,6 +129,12 @@ export default function ResultTable({seriesName}) {
   const onFinish = () => {
     setCurrentSeries(series);
     get(urlSample, updateTable);
+  };
+
+  const rowSelection = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    },
   };
 
   const onReCal = () => {
@@ -150,7 +157,7 @@ export default function ResultTable({seriesName}) {
           获取序列列表
         </Button>
         <Form form={form} layout="inline" onFinish={onFinish}>
-          <Form.Item name="log" label="选择序列">
+          <Form.Item label="选择序列">
             <Select style={{ width: 200, }} defaultValue={series} onSelect={onSelect}>
               {
                 seriesList.map((item, index) => <Option
@@ -174,7 +181,15 @@ export default function ResultTable({seriesName}) {
           <p>当前查看序列：{currentSeries}</p>
 
           <Row>
-            <Table pagination={false} columns={columns} dataSource={tableData} />
+            <Table
+              rowSelection={{
+                type: 'checkbox',
+                ...rowSelection,
+              }}
+              pagination={false}
+              columns={columns}
+              dataSource={tableData}
+            />
           </Row>
 
           <Row>
