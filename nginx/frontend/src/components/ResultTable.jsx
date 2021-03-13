@@ -116,8 +116,9 @@ export default function ResultTable({seriesName}) {
     newTableData = newTableData.map((item, index) => {
       const newItem = {...item};
       newItem['lineNum'] = index + 1;
-      newItem['finishedDate'] = item['created'];
-      console.log(item['created']);
+      const t = new Date(Date.parse(item['created']));
+      const strDate = `${t.getFullYear()}-${t.getMonth()}-${t.getDate()}`;
+      newItem['finishedDate'] = strDate;
       return newItem;
     });
     setTableData(newTableData);
