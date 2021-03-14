@@ -289,7 +289,7 @@ export default function ResultTable({seriesName}) {
               onClick={onGetReports}
             >
               生产报表
-          </Button>
+            </Button>
           </Row>
         </> : null
       }
