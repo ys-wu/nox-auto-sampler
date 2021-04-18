@@ -263,7 +263,7 @@ export default function ResultTable({seriesName}) {
               onClick={onReCal}
             >
               重新计算
-          </Button>
+            </Button>
 
             <Button
               style={{
@@ -276,7 +276,7 @@ export default function ResultTable({seriesName}) {
               onClick={onSave}
             >
               保存结果
-          </Button>
+            </Button>
 
             <Button
               style={{

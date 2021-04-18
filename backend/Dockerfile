@@ -1,4 +1,4 @@
-FROM python:3.9.1-alpine 
+FROM python:3.9.1
 
 ENV PYTHONUNBUFFERED 1
 ENV APP_HOME /app
