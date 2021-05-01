@@ -34,8 +34,10 @@ function App() {
 
   // API config
   const hostname = window.location.hostname;
-  const url = `http://${hostname}/api/data/`;
-  const urlMock = `http://${hostname}/mock/`;
+  const port = window.location.port;
+  const url = `http://${hostname}:${port}/`
+  const urlData = `${url}api/data/`;
+  const urlMock = `${url}mock/`;
 
   // clean up before unload page
   window.onbeforeunload = e => {
@@ -43,13 +45,13 @@ function App() {
     return e.returnValue = '确认退出程序吗？';
   };
   window.onunload = () => {
-    navigator.sendBeacon(url, JSON.stringify({status: 'idle'}));
+    navigator.sendBeacon(urlData, JSON.stringify({status: 'idle'}));
   };
 
   // default status is idle
   useEffect(() =>{
     post({mock: 'off'}, urlMock);
-    post({status: 'idle'}, url);
+    post({status: 'idle'}, urlData);
   }, []);
 
   // show warning for power failure
@@ -67,7 +69,7 @@ function App() {
   useEffect(() => {
     if (!start) {
       setData(null);
-      post({status: 'idle'}, url);
+      post({status: 'idle'}, urlData);
     };
   }, [start]);
 
@@ -80,7 +82,7 @@ function App() {
 
   // fetch data with given interval
   useInterval( () => {
-    get(url, saveData);
+    get(urlData, saveData);
   }, start ? delay : null);
 
   const switchSampling = (value) => {
