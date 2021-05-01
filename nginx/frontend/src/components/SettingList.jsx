@@ -36,7 +36,8 @@ export default function SettingList({ onUpdateSetting = f => f }) {
   const [temp, setTemp] = useState(); 
 
   const hostname = window.location.hostname;
-  const url = `http://${hostname}/api/setting/`;
+  const port = window.location.port;
+  const url = `http://${hostname}:${port}/api/setting/`
   // const csrftoken = new Cookies();
 
   // update to temp

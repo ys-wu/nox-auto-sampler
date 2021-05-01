@@ -26,8 +26,10 @@ export default function SeriesTable({
   const [form] = Form.useForm()
 
   const hostname = window.location.hostname;
-  const urlSeries = `http://${hostname}/api/seriestemplate/`;
-  const urlSample = `http://${hostname}/api/sampletemplate/`;
+  const port = window.location.port;
+  const url = `http://${hostname}:${port}/api/`
+  const urlSeries = `${url}seriestemplate/`;
+  const urlSample = `${url}sampletemplate/`;
 
   const [name, setName] = useState('');
   const [loadName, setLoadName] = useState('');

@@ -17,7 +17,9 @@ export default function ReporPanel() {
   const [tableData, setTabledata] = useState([]);
 
   const hostname = window.location.hostname;
-  const urlSample = `http://${hostname}/api/sample/`
+  const port = window.location.port;
+  const url = `http://${hostname}:${port}/api/`
+  const urlSample = `${url}sample/`
 
   const onFinish = value => {
     setSampleId(value['sampleId']);

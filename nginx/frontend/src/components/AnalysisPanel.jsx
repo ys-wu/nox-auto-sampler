@@ -30,10 +30,12 @@ export default function AnalysisPanel({
   const noxCountLimit = 5;   // up limit number of data
 
   const hostname = window.location.hostname;
-  const urlSeries = `http://${hostname}/api/series/`;
-  const urlSample = `http://${hostname}/api/sample/`;
-  const urlAnalyzing = `http://${hostname}/api/analyzing/`;
-  const urlPurging = `http://${hostname}/api/purging/`;
+  const port = window.location.port;
+  const url = `http://${hostname}:${port}/api/`;
+  const urlSeries = `${url}series/`;
+  const urlSample = `${url}sample/`;
+  const urlAnalyzing = `${url}analyzing/`;
+  const urlPurging = `${url}/purging/`;
 
   const [timeCounter, setTimeCounter] = useState(0);    // analyzing time in (sec)
   const [noxCounter, setNoxCounter] = useState(0);      // NOx data checking point number

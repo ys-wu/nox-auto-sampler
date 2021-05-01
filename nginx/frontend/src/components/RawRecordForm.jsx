@@ -14,7 +14,8 @@ const { Option } = Select;
 export default function RawRecordForm({ start, setting, data, seriesName }) {
 
   const hostname = window.location.hostname;
-  const url = `http://${hostname}/api/series/`;
+  const port = window.location.port;
+  const url = `http://${hostname}:${port}/api/series/`
 
   const layout = {
     labelCol: {span: 6,},

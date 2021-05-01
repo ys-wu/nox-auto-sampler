@@ -16,8 +16,10 @@ export default function ResultTable({seriesName}) {
   const [form] = Form.useForm();
 
   const hostname = window.location.hostname;
-  const urlSeries = `http://${hostname}/api/series/`;
-  const urlSample = `http://${hostname}/api/sample/`;
+  const port = window.location.port;
+  const url = `http://${hostname}:${port}/api/`
+  const urlSeries = `${url}series/`;
+  const urlSample = `${url}sample/`;
 
   const [series, setSeries] = useState(seriesName);
   const [seriesList, setSeriesList] = useState([seriesName]);

@@ -31,8 +31,10 @@ export default function StatusPanel({
   const txtLog = useRef();
 
   const hostname = window.location.hostname;
-  const url = `http://${hostname}/api/log/`
-  const urlAnalyzing = `http://${hostname}/api/analyzing/`;
+  const port = window.location.port;
+  const url = `http://${hostname}:${port}/api/`
+  const urlLog = `${url}log/`
+  const urlAnalyzing = `${url}analyzing/`;
 
   // command in log input to trigger mock UI
   const password = 'a';
@@ -62,7 +64,7 @@ export default function StatusPanel({
   const postLog = (data) => {
     const d = new Date();
     console.log(d.toISOString(), 'Status post log:', data);
-    fetch(url, {
+    fetch(urlLog, {
       method: "POST",
       headers: {
         'Accept': 'application/json, text/plain',
