@@ -18,8 +18,8 @@ export default function ResultTable({seriesName}) {
   const hostname = window.location.hostname;
   const port = window.location.port;
   const url = `http://${hostname}:${port}/api/`
-  const urlSeries = `${url}series/`;
-  const urlSample = `${url}sample/`;
+  const urlSeries = `http://${hostname}:${port}/api/series/`;
+  const urlSample = `http://${hostname}:${port}/api/sample/`;
 
   const [series, setSeries] = useState(seriesName);
   const [seriesList, setSeriesList] = useState([seriesName]);

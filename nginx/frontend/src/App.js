@@ -35,9 +35,8 @@ function App() {
   // API config
   const hostname = window.location.hostname;
   const port = window.location.port;
-  const url = `http://${hostname}:${port}/`
-  const urlData = `${url}api/data/`;
-  const urlMock = `${url}mock/`;
+  const urlData = `http://${hostname}:${port}/api/data/`;
+  const urlMock = `http://${hostname}:${port}/mock/`;
 
   // clean up before unload page
   window.onbeforeunload = e => {
@@ -50,7 +49,7 @@ function App() {
 
   // default status is idle
   useEffect(() =>{
-    post({mock: 'off'}, urlMock);
+    // post({mock: 'off'}, urlMock);
     post({status: 'idle'}, urlData);
   }, []);
 

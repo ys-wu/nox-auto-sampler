@@ -27,9 +27,8 @@ export default function SeriesTable({
 
   const hostname = window.location.hostname;
   const port = window.location.port;
-  const url = `http://${hostname}:${port}/api/`
-  const urlSeries = `${url}seriestemplate/`;
-  const urlSample = `${url}sampletemplate/`;
+  const urlSeries = `http://${hostname}:${port}/api/seriestemplate/`;
+  const urlSample = `http://${hostname}:${port}/api/sampletemplate/`;
 
   const [name, setName] = useState('');
   const [loadName, setLoadName] = useState('');

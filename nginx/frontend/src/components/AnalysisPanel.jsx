@@ -31,11 +31,10 @@ export default function AnalysisPanel({
 
   const hostname = window.location.hostname;
   const port = window.location.port;
-  const url = `http://${hostname}:${port}/api/`;
-  const urlSeries = `${url}series/`;
-  const urlSample = `${url}sample/`;
-  const urlAnalyzing = `${url}analyzing/`;
-  const urlPurging = `${url}/purging/`;
+  const urlSeries = `http://${hostname}:${port}/api/series/`;
+  const urlSample = `http://${hostname}:${port}/api/sample/`;
+  const urlAnalyzing = `http://${hostname}:${port}/api/analyzing/`;
+  const urlPurging = `http://${hostname}:${port}/api/purging/`;
 
   const [timeCounter, setTimeCounter] = useState(0);    // analyzing time in (sec)
   const [noxCounter, setNoxCounter] = useState(0);      // NOx data checking point number

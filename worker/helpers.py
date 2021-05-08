@@ -1,9 +1,12 @@
 from gpiozero import LED
 
+from datetime import datetime
 import socket
 
 import redis
 
+
+r = redis.Redis(host='localhost', port=6379, db=0)
 
 VALVES = [
   LED(4), LED(5), LED(6), LED(7), LED(8), 
@@ -48,16 +51,22 @@ def init_workder():
     r.rpop('data')
 
 def get_valve():
-  pass
+  return int(r.get('valve'))
 
 def set_valve(position):
-  for valve in range(VALVES):
+  for valve in VALVES:
     valve.off()
-  VALVES[position].on()  
-  print(f'Worker opened vavle {position}')
+  if position >= 0:
+    VALVES[position].on()
+    print(f'Worker opened vavle {position}')
+  else:
+    print('Worker turn off all valves.')
 
 def get_mfc():
-  pass
+  return {
+    'set': 1,
+    'read': 0.99,
+  }
 
 def set_mfc():
   pass
@@ -79,7 +88,7 @@ nox_parsers = [
 
 def get_nox():
   nox = []
-  for i in range(len(ANALYZER['commands'])):
+  for i in range(2):
     s.send(ANALYZER['commands'][i])
     s.settimeout(3)
     string = s.recv(2048).decode('utf-8')
@@ -87,19 +96,22 @@ def get_nox():
   data = {
     'no': nox[0], # ppm
     'nox': nox[1], # ppm
-    'noxRange': nox[2], # ppm
-    'aveTime': nox[3], # sec
-    'noBkg': nox[4],
-    'noxBkg': nox[5],
-    'noCoef': nox[6],
-    'no2Coef': nox[7],
-    'noxCoef': nox[8],
+    # 'noxRange': nox[2], # ppm
+    # 'aveTime': nox[3], # sec
+    # 'noBkg': nox[4], # ppm
+    # 'noxBkg': nox[5], # ppm
+    # 'noCoef': nox[6],
+    # 'no2Coef': nox[7],
+    # 'noxCoef': nox[8],
   }
   return data
 
 def process_data():
   data = {}
+  data['datetime'] = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
   data['nox'] = get_nox()
+  data['valve'] = get_valve()
+  data['mfc'] = get_mfc()
   return data
 
 
@@ -115,7 +127,7 @@ def process_mock_data(data):
     'noxBkg': 0.25,
     'noCoef': 1.02,
     'no2Coef': 0.98,
-    'noxCoef': 1.05
+    'noxCoef': 1.05,
   }
   new_data['mfc'] = {
     'set': data['mfcSet'],

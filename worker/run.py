@@ -39,10 +39,10 @@ if __name__ == '__main__':
         if r.get('purging') == b'true':
           set_valve(0)
         else:
-          position = int(r.get('valve'))
+          position = get_valve()
           set_valve(position)
       elif r.get('analyzing') == b'manual_valve':
-        position = int(r.get('valve'))
+        position = get_valve()
         set_valve(position)
       else:
         set_valve(-1)

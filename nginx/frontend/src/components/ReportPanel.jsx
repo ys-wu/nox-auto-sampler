@@ -18,8 +18,7 @@ export default function ReporPanel() {
 
   const hostname = window.location.hostname;
   const port = window.location.port;
-  const url = `http://${hostname}:${port}/api/`
-  const urlSample = `${url}sample/`
+  const urlSample = `http://${hostname}:${port}/api/sample/`
 
   const onFinish = value => {
     setSampleId(value['sampleId']);

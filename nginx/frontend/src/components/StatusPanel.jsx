@@ -32,9 +32,8 @@ export default function StatusPanel({
 
   const hostname = window.location.hostname;
   const port = window.location.port;
-  const url = `http://${hostname}:${port}/api/`
-  const urlLog = `${url}log/`
-  const urlAnalyzing = `${url}analyzing/`;
+  const urlLog = `http://${hostname}:${port}/api/log/`
+  const urlAnalyzing = `http://${hostname}:${port}/api/analyzing/`;
 
   // command in log input to trigger mock UI
   const password = 'a';
