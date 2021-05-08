@@ -1,5 +1,5 @@
 docs/
-playground/
+# playground/
 __pycache__/
 dbdata/
 .vscode/

@@ -4,8 +4,8 @@ from time import sleep
 
 from helpers import (
   init_workder,
+  get_valve,
   set_valve,
-  set_mfc,
   turn_off_valves_mfc,
   process_data,
   process_mock_data,
@@ -29,12 +29,10 @@ if __name__ == '__main__':
       data = json.loads(data)
       data = process_mock_data(data)
       print('Worker produce mock data', data)
-    elif r.get('mock') == b'off':
-      data = process_data()
-      print('Worker produce real data', data)
 
     if r.get('status') == b'run':
-      print('System is running...')
+      data = process_data()
+      print('System is running...', data)
       if r.get('analyzing') == b'true':
         if r.get('purging') == b'true':
           set_valve(0)

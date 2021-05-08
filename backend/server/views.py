@@ -148,3 +148,16 @@ class Log(View):
     except:
       print('Error in handle post data')
       return JsonResponse({'Message': 'Log fail'})
+
+
+class Mfc(View):
+   def post(self, request):
+    try:
+      data = json.loads(request.body)
+      print('Receive MFC set:', data)
+      if data['tags']:
+        r.set('mfc', float(data['tags'][0]))
+      return JsonResponse(data)
+    except:
+      print('Error in handle post data')
+      return JsonResponse({'Message': 'Mfc fail'})

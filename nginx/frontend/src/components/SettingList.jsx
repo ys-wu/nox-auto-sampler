@@ -38,6 +38,7 @@ export default function SettingList({ onUpdateSetting = f => f }) {
   const hostname = window.location.hostname;
   const port = window.location.port;
   const url = `http://${hostname}:${port}/api/setting/`
+  const urlMfc = `http://${hostname}:${port}/api/mfc/`
   // const csrftoken = new Cookies();
 
   // update to temp
@@ -103,6 +104,7 @@ export default function SettingList({ onUpdateSetting = f => f }) {
     if (current) {
       onUpdateSetting(current);
       post(current, url);
+      post(current[0], urlMfc);
     };
   }, [current]);
 

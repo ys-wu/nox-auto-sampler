@@ -36,7 +36,7 @@ export default function StatusPanel({
   const urlAnalyzing = `http://${hostname}:${port}/api/analyzing/`;
 
   // command in log input to trigger mock UI
-  const password = 'a';
+  const password = 'mockmockmock';
 
   useEffect(() => {
     if (analyzing) {
@@ -131,20 +131,20 @@ export default function StatusPanel({
             <Col span={2} style={{ textAlign: "center" }}>
               <Tag color="#2db7f5">运行中</Tag>
             </Col>
+            {/* <Col span={3} style={{ textAlign: "center" }}>
+              <Tag>设定流量：{data['mfc']['set']}</Tag>
+            </Col>  */}
             <Col span={3} style={{ textAlign: "center" }}>
-              <Tag>设定流量</Tag>
-            </Col> 
-            <Col span={3} style={{ textAlign: "center" }}>
-              <Tag>流量: {data['mfc']['read']} L/min</Tag>
+              <Tag>流量: {data['mfc']['read'].toFixed(2)} L/min</Tag>
             </Col>
             <Col span={3} style={{ textAlign: "center" }}>
               <Tag>阀门: {data['valve'] < 0 ? '关闭' : data['valve'] + "号"}</Tag>
             </Col>
             <Col span={3} style={{ textAlign: "center" }}>
-              <Tag>NO: {data['nox']['no']} ppm</Tag>
+              <Tag>NO: {data['nox']['no'].toFixed(2)} ppm</Tag>
             </Col>
             <Col span={3} style={{ textAlign: "center" }}>
-              <Tag>NOx: {data['nox']['nox']} ppm</Tag>
+              <Tag>NOx: {data['nox']['nox'].toFixed(2)} ppm</Tag>
             </Col>
           </>
         }

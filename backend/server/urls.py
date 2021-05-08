@@ -20,4 +20,5 @@ urlpatterns = [
     path('purging/', views.Purging.as_view()),
     path('setting/', views.Setting.as_view()),
     path('log/', views.Log.as_view()),
+    path('mfc/', views.Mfc.as_view()),
 ]

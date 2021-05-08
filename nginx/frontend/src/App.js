@@ -181,7 +181,7 @@ function App() {
       <Row>
         <Col span={18} offset={3}>
           <Divider orientation="left"></Divider>
-          <p style={{ textAlign: 'center', fontSize: '8px', marginTop: '30px' }}>
+          <p style={{ textAlign: 'center', fontSize: '12px', marginTop: '30px' }}>
             © Copyright 2021. All Rights Reserved.
             <br></br>北京嘉时高科科技发展有限公司
           </p>

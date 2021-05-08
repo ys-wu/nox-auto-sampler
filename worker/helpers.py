@@ -1,5 +1,10 @@
 from gpiozero import LED
+import board
+import busio
+import adafruit_ads1x15.ads1115 as ADS
+from adafruit_ads1x15.analog_in import AnalogIn
 
+from time import sleep
 from datetime import datetime
 import socket
 
@@ -36,6 +41,12 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.settimeout(1)
 s.connect((ANALYZER['ip'], ANALYZER['port']))
 
+# Create the I2C bus
+i2c = busio.I2C(board.SCL, board.SDA)
+# Create the ADC object using the I2C bus
+ads = ADS.ADS1115(i2c, address=0x48)
+# Create single-ended input on channel 0
+chan = AnalogIn(ads, ADS.P0)
 
 def init_workder():
   print("Worker stated ...")
@@ -62,14 +73,22 @@ def set_valve(position):
   else:
     print('Worker turn off all valves.')
 
-def get_mfc():
-  return {
-    'set': 1,
-    'read': 0.99,
-  }
+def read_mfc():
+  return chan.voltage / 5 * 2
 
-def set_mfc():
-  pass
+def get_mfc():
+  try:
+    mfc_set = float(r.get('mfc'))
+  except:
+    mfc_set = None
+  try:
+    read = read_mfc()
+  except:
+    read = None
+  return {
+    'set': mfc_set,
+    'read': read,
+  }
 
 def turn_off_valves_mfc():
   pass
@@ -130,8 +149,8 @@ def process_mock_data(data):
     'noxCoef': 1.05,
   }
   new_data['mfc'] = {
-    'set': data['mfcSet'],
-    'read': data['mfcRead']
+    'set': 1.0,
+    'read': 0.9,
   }
   new_data['valve'] = get_valve()
   return new_data
