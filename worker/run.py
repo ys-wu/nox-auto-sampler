@@ -2,59 +2,21 @@ import redis
 import json
 from time import sleep
 
+from helpers import (
+  init_workder,
+  set_valve,
+  set_mfc,
+  turn_off_valves_mfc,
+  process_data,
+  process_mock_data,
+)
 
-def turn_off_valves_mfc():
-  pass
 
-def get_mfc():
-  pass
-
-def set_mfc():
-  pass
-
-def get_valve():
-  return -1
-
-def set_valve(position):
-  print(f'Worker opened vavle {position}')
-
-def process_mock_data (data):
-  new_data = {};
-  new_data['power'] = data['power']
-  new_data['nox'] = {
-    'no': data['no'],
-    'nox': data['nox'],
-    'noxRange': 200,
-    'aveTime': 60,
-    'noBkg': 0.2,
-    'noxBkg': 0.25,
-    'noCoef': 1.02,
-    'no2Coef': 0.98,
-    'noxCoef': 1.05
-  }
-  new_data['mfc'] = {
-    'set': data['mfcSet'],
-    'read': data['mfcRead']
-  }
-  new_data['valve'] = get_valve()
-  return new_data
+r = redis.Redis(host='localhost', port=6379, db=0)
 
 
 if __name__ == '__main__':
-
-  print("Worker stated ...")
-
-  host = 'redis'
-  r = redis.Redis(host=host, port=6379, db=0)
-  r.set('status', 'idle')
-  r.set('mock', 'off')
-  r.set('analyzing', 'false')
-  r.set('purging', 'false')
-  r.set('valve', -1)
-  while r.llen('mock_data') > 0:
-    r.rpop('mock_data')
-  while r.llen('data') > 0:
-    r.rpop('data')
+  init_workder()
 
   data = None
   keep_list_length = 10
@@ -66,13 +28,13 @@ if __name__ == '__main__':
         data = r.rpop('mock_data')
       data = json.loads(data)
       data = process_mock_data(data)
-      # print('Worker produce mock data', data)
+      print('Worker produce mock data', data)
     elif r.get('mock') == b'off':
-      while r.llen('mock_data') > 0:
-        r.rpop('mock_data')
-      data = None
+      data = process_data()
+      print('Worker produce real data', data)
 
     if r.get('status') == b'run':
+      print('System is running...')
       if r.get('analyzing') == b'true':
         if r.get('purging') == b'true':
           set_valve(0)
@@ -85,7 +47,6 @@ if __name__ == '__main__':
       else:
         set_valve(-1)
         r.set('valve', -1)
-
     else:
       turn_off_valves_mfc()
     

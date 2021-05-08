@@ -23,12 +23,12 @@ services:
       - "80:80"
     depends_on:
       - backend
-  worker:
-    build: ./worker
-    restart: always
-    command: python run.py
-    depends_on:
-      - redis
+  # worker:
+  #   build: ./worker
+  #   restart: always
+  #   command: python run.py
+  #   depends_on:
+  #     - redis
   redis:
     image: "redis:6.0.10-alpine"
     restart: always
