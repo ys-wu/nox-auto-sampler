@@ -12,10 +12,12 @@ from helpers import (
 )
 
 
+turn_off_valves_mfc()
 r = redis.Redis(host='localhost', port=6379, db=0)
 
 
 if __name__ == '__main__':
+
   init_workder()
 
   data = None
@@ -51,6 +53,8 @@ if __name__ == '__main__':
     if data:
       # print('Worker is measuring:', data)
       r.lpush('data', json.dumps(data))
+    else:
+      sleep(0.5)
     
     # pop old data in queue
     while r.llen('mock_data') > keep_list_length:

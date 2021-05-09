@@ -17,7 +17,6 @@ export default function ResultTable({seriesName}) {
 
   const hostname = window.location.hostname;
   const port = window.location.port;
-  const url = `http://${hostname}:${port}/api/`
   const urlSeries = `http://${hostname}:${port}/api/series/`;
   const urlSample = `http://${hostname}:${port}/api/sample/`;
 
@@ -102,7 +101,7 @@ export default function ResultTable({seriesName}) {
   ];
 
   const updateSeriesList = data => {
-    const newList = data['results'].map(item => item['name']);
+    const newList = data.map(item => item['name']);
     setSeriesList(newList);
     return data;
   };
@@ -116,7 +115,7 @@ export default function ResultTable({seriesName}) {
   };
 
   const updateTable = data => {
-    let newTableData = data['results'].filter(item => item['series'] === series);
+    let newTableData = data.filter(item => item['series'] === series);
     newTableData.reverse();
     newTableData = newTableData.map((item, index) => {
       const newItem = {...item};

@@ -9,7 +9,7 @@ from time import sleep
 i2c = busio.I2C(board.SCL, board.SDA)
  
 # Initialize MCP4725.
-dac = adafruit_mcp4725.MCP4725(i2c, address=0x63)
+dac = adafruit_mcp4725.MCP4725(i2c, address=0x60)
  
 # There are a three ways to set the DAC output, you can use any of these:
 dac.value = 65535  # Use the value property with a 16-bit number just like

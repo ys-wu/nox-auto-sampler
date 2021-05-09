@@ -390,7 +390,7 @@ export default function AnalysisPanel({
     get(
       urlSeries,
       data => {
-        const nameList = data["results"].map(item => item["name"]);
+        const nameList = data.map(item => item["name"]);
         const index = nameList.indexOf(seriesName);
         if (index >= 0) {
           setAnalyzing(true);

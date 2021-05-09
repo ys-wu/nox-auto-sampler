@@ -15,11 +15,17 @@ r = redis.Redis(host='localhost', port=6379, db=0)
 
 VALVES = [
   LED(4), LED(5), LED(6), LED(7), LED(8), 
-  LED(9), LED(10), LED(11), LED(12), LED(13), 
+  LED(9), LED(10), LED(26), LED(12), LED(13), 
   LED(14), LED(15), LED(16), LED(17), LED(18), 
   LED(19), LED(20), LED(21), LED(22), LED(23), 
   LED(24), LED(25), 
 ]
+
+def turn_off_valves_mfc():
+  for valve in VALVES:
+    valve.off()
+
+turn_off_valves_mfc()
 
 ANALYZER = {
   'ip': '169.254.109.100',
@@ -90,9 +96,6 @@ def get_mfc():
     'read': read,
   }
 
-def turn_off_valves_mfc():
-  pass
-
 nox_parsers = [
   lambda string: float(string.split(' ')[1]) / 1000,
   lambda string: float(string.split(' ')[1]) / 1000,
@@ -132,6 +135,8 @@ def process_data():
   data = {}
   data['datetime'] = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
   data['nox'] = get_nox()
+  if data['nox'] is None:
+    return None
   data['valve'] = get_valve()
   data['mfc'] = get_mfc()
   return data
