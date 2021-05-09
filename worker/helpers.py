@@ -106,24 +106,27 @@ nox_parsers = [
 ]
 
 def get_nox():
-  nox = []
-  for i in range(2):
-    s.send(ANALYZER['commands'][i])
-    s.settimeout(3)
-    string = s.recv(2048).decode('utf-8')
-    nox.append(nox_parsers[i](string))
-  data = {
-    'no': nox[0], # ppm
-    'nox': nox[1], # ppm
-    # 'noxRange': nox[2], # ppm
-    # 'aveTime': nox[3], # sec
-    # 'noBkg': nox[4], # ppm
-    # 'noxBkg': nox[5], # ppm
-    # 'noCoef': nox[6],
-    # 'no2Coef': nox[7],
-    # 'noxCoef': nox[8],
-  }
-  return data
+  try:
+    nox = []
+    for i in range(len(nox_parsers)):
+      s.send(ANALYZER['commands'][i])
+      s.settimeout(3)
+      string = s.recv(2048).decode('utf-8')
+      nox.append(nox_parsers[i](string))
+    data = {
+      'no': nox[0], # ppm
+      'nox': nox[1], # ppm
+      'noxRange': nox[2], # ppm
+      'aveTime': nox[3], # sec
+      'noBkg': nox[4], # ppm
+      'noxBkg': nox[5], # ppm
+      'noCoef': nox[6],
+      'no2Coef': nox[7],
+      'noxCoef': nox[8],
+    }
+    return data
+  except:
+    return None
 
 def process_data():
   data = {}

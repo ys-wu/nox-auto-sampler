@@ -58,4 +58,4 @@ if __name__ == '__main__':
     while r.llen('data') > keep_list_length:
       r.rpop('data')
 
-    sleep(1)
+    # sleep(1)

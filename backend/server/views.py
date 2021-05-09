@@ -23,8 +23,7 @@ from server.serializers import (
 setting_url = '/app/setting/setting.json'
 log_url = '/app/dbdata/log.txt'
 
-host = 'redis'
-r = redis.Redis(host=host, port=6379, db=0)
+r = redis.Redis(host='redis', port=6379, db=0)
 r.set('status', 'idel')
 r.set('mock', 'off')
 r.set('analyzing', 'false')

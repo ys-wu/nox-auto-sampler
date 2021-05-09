@@ -68,7 +68,7 @@ export default function SeriesTable({
   }, [data]);
 
   const updateNameList = data => {
-    const list = data['results'].map(item => item["name"])
+    const list = data.map(item => item["name"])
     setNameList(list);
     return list;
   };
@@ -203,7 +203,7 @@ export default function SeriesTable({
   };
 
   const handleDeleteSample = data => {
-    const filteredSamples = data['results'].filter(item => item['series'] === name);
+    const filteredSamples = data.filter(item => item['series'] === name);
     const urls = filteredSamples.map(item => `${urlSample}${item['id']}/`)
     urls.forEach(item => { apiDelete(item) });
     return data;
@@ -240,7 +240,7 @@ export default function SeriesTable({
   };
 
   const filterSeries = data => {
-    const filterData = data['results'].filter(item => item['series'] === loadName);
+    const filterData = data.filter(item => item['series'] === loadName);
     const cleanedData = filterData.map(item => {
       const newItem = {...item};
       newItem['type'] = item['sampleType']
