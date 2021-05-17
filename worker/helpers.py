@@ -23,11 +23,14 @@ VALVES = [
 ]
 
 def check_ups_current():
+  # 0: power off
+  # 1: power on
+  # 2: UPS error
   try: 
     current = ina219.getCurrent_mA()
-    is_power_on = True if (current > 0) else False
+    is_power_on = 1 if (current > 0) else 0
   except:
-    is_power_on = False
+    is_power_on = 2
 
 ANALYZER = {
   # 'ip': '192.168.1.100',
@@ -157,6 +160,7 @@ def process_data(r, s):
     return None
   data['valve'] = get_valve(r)
   data['mfc'] = get_mfc(r)
+  data['power'] = check_ups_current()
   return data
 
 
