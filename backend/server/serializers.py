@@ -19,7 +19,7 @@ class SeriesSerializer(serializers.HyperlinkedModelSerializer):
       'ambTemp',
       'ambRh',
       'ambPress',
-      'stv',
+      # 'stv',
       'noxRange',
       'aveTime',
       'noBkg',

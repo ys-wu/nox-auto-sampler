@@ -12,7 +12,7 @@ class Series(models.Model):
   ambTemp = models.FloatField(null=True)
   ambRh = models.FloatField(null=True)
   ambPress = models.FloatField(null=True)
-  stv = models.FloatField(null=True)
+  # stv = models.FloatField(null=True)
   noxRange = models.FloatField(null=True)
   aveTime = models.FloatField(null=True)
   noBkg = models.FloatField(null=True)

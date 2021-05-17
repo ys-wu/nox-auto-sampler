@@ -36,7 +36,7 @@ export default function RawRecordForm({ start, setting, data, seriesName }) {
     ambTemp: null,
     ambRh: null,
     ambPress: null,
-    stv: null,
+    // stv: null,
     noxRange: null,
     aveTime: null,
     noBkg: null,
@@ -114,12 +114,12 @@ export default function RawRecordForm({ start, setting, data, seriesName }) {
     setState(newState);
   };
 
-  const onChangeStv = e => {
-    const value = e.target.value;
-    const newState = { ...state };
-    newState['stv'] = value;
-    setState(newState);
-  };
+  // const onChangeStv = e => {
+  //   const value = e.target.value;
+  //   const newState = { ...state };
+  //   newState['stv'] = value;
+  //   setState(newState);
+  // };
 
   const onChangeRange = e => {
     const value = e.target.value;
@@ -245,9 +245,9 @@ export default function RawRecordForm({ start, setting, data, seriesName }) {
         <Input placeholder="大气压 (Mpa)" onChange={onChangeAmbPress} />
       </Form.Item>
 
-      <Form.Item name="stv" label="STV">
+      {/* <Form.Item name="stv" label="STV">
         <Input placeholder="数据稳定判断值" onChange={onChangeStv} />
-      </Form.Item>
+      </Form.Item> */}
 
       <Form.Item name="noxRange" label="量程">
         <Input
