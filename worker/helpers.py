@@ -7,14 +7,12 @@ import adafruit_mcp4725
 
 from time import sleep
 from datetime import datetime
-import socket
 import redis
 
 from INA219 import INA219
 
-ina219 = INA219(addr=0x42)
 
-r = redis.Redis(host='localhost', port=6379, db=0)
+ina219 = INA219(addr=0x42)
 
 VALVES = [
   LED(4), LED(5), LED(6), LED(7), LED(8), 
@@ -30,12 +28,6 @@ def check_ups_current():
     is_power_on = True if (current > 0) else False
   except:
     is_power_on = False
-
-def turn_off_valves_mfc():
-  for valve in VALVES:
-    valve.off()
-
-turn_off_valves_mfc()
 
 ANALYZER = {
   # 'ip': '192.168.1.100',
@@ -55,11 +47,6 @@ ANALYZER = {
   ]
 }
 
-print(f"NOx Analyzer IP: {ANALYZER['ip']}")
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.settimeout(1)
-s.connect((ANALYZER['ip'], ANALYZER['port']))
-
 # Create the I2C bus
 i2c = busio.I2C(board.SCL, board.SDA)
 # Create the ADC object using the I2C bus
@@ -72,9 +59,8 @@ dac = adafruit_mcp4725.MCP4725(i2c, address=0x60)
 dac.raw_value = 0
 dac.normalized_value = 1.0
 
-def init_workder():
+def init_workder(r):
   print("Worker stated ...")
-  r = redis.Redis(host='localhost', port=6379, db=0)
   r.set('status', 'idle')
   r.set('mock', 'off')
   r.set('analyzing', 'false')
@@ -85,7 +71,7 @@ def init_workder():
   while r.llen('data') > 0:
     r.rpop('data')
 
-def get_valve():
+def get_valve(r):
   return int(r.get('valve'))
 
 def set_valve(position):
@@ -97,7 +83,7 @@ def set_valve(position):
   else:
     print('Worker turn off all valves.')
 
-def set_mfc():
+def set_mfc(r):
   try:
     mfc_set = float(r.get('mfc'))
     dac.raw_value = int(max(min(4095.0, 4096.0 * mfc_set / 2), 0.0))
@@ -107,7 +93,7 @@ def set_mfc():
 def read_mfc():
   return chan.voltage / 5 * 2
 
-def get_mfc():
+def get_mfc(r):
   try:
     mfc_set = float(r.get('mfc'))
   except:
@@ -121,6 +107,13 @@ def get_mfc():
     'read': read,
   }
 
+def turn_off_valves_mfc():
+  for valve in VALVES:
+    valve.off()
+  dac.raw_value = 0 
+
+turn_off_valves_mfc()
+
 nox_parsers = [
   lambda string: float(string.split(' ')[1]) / 1000,
   lambda string: float(string.split(' ')[1]) / 1000,
@@ -133,41 +126,41 @@ nox_parsers = [
   lambda string: float(string.split(' ')[2].split('*')[0]),
 ]
 
-def get_nox():
-  try:
-    nox = []
-    for i in range(len(nox_parsers)):
-      s.send(ANALYZER['commands'][i])
-      s.settimeout(3)
-      string = s.recv(2048).decode('utf-8')
-      nox.append(nox_parsers[i](string))
-    data = {
-      'no': nox[0], # ppm
-      'nox': nox[1], # ppm
-      'noxRange': nox[2], # ppm
-      'aveTime': nox[3], # sec
-      'noBkg': nox[4], # ppm
-      'noxBkg': nox[5], # ppm
-      'noCoef': nox[6],
-      'no2Coef': nox[7],
-      'noxCoef': nox[8],
-    }
-    return data
-  except:
-    return None
+def get_nox(s):
+  # try:
+  nox = []
+  for i in range(len(nox_parsers)):
+    s.send(ANALYZER['commands'][i])
+    s.settimeout(3)
+    string = s.recv(2048).decode('utf-8')
+    nox.append(nox_parsers[i](string))
+  data = {
+    'no': nox[0], # ppm
+    'nox': nox[1], # ppm
+    'noxRange': nox[2], # ppm
+    'aveTime': nox[3], # sec
+    'noBkg': nox[4], # ppm
+    'noxBkg': nox[5], # ppm
+    'noCoef': nox[6],
+    'no2Coef': nox[7],
+    'noxCoef': nox[8],
+  }
+  return data
+  # except:
+  #   return None
 
-def process_data():
+def process_data(r, s):
   data = {}
   data['datetime'] = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
-  data['nox'] = get_nox()
+  data['nox'] = get_nox(s)
   if data['nox'] is None:
     return None
-  data['valve'] = get_valve()
-  data['mfc'] = get_mfc()
+  data['valve'] = get_valve(r)
+  data['mfc'] = get_mfc(r)
   return data
 
 
-def process_mock_data(data):
+def process_mock_data(r, data):
   new_data = {};
   new_data['power'] = data['power']
   new_data['nox'] = {
@@ -185,5 +178,5 @@ def process_mock_data(data):
     'set': 1.0,
     'read': 0.9,
   }
-  new_data['valve'] = get_valve()
+  new_data['valve'] = get_valve(r)
   return new_data
