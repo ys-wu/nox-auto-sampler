@@ -24,9 +24,12 @@ VALVES = [
   LED(24), LED(25), 
 ]
 
-# def check_ups_current():
-#   current = ina219.getCurrent_mA() 
-#   is_power_on = True if 
+def check_ups_current():
+  try: 
+    current = ina219.getCurrent_mA()
+    is_power_on = True if (current > 0) else False
+  except:
+    is_power_on = False
 
 def turn_off_valves_mfc():
   for valve in VALVES:

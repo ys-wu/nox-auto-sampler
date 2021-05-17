@@ -1,11 +1,16 @@
 [Unit]
 Description=nox-auto-sample docker up
+Requires=docker.service
+After=docker.service
 
 [Service]
 User=pi
-WorkingDirectory=/home/pi/no-nox-sampler/
-ExecStart=docker-compose up
-Restart=always
+WorkingDirectory=/home/pi/nox-auto-sampler/
+Type=oneshot
+RemainAfterExit=true
+ExecStart=docker-compose up  -d --remove-orphans
+ExecStop=docker-compose down
+# Restart=always
 
 [Install]
 WantedBy=multi-user.target
