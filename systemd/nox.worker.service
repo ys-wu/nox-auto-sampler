@@ -3,8 +3,8 @@ Description=nox-auto-sample worker
 
 [Service]
 User=pi
-WorkingDirectory=/home/pi/nox-auto-sampler/worker
-ExecStart=python3.7 run.py
+WorkingDirectory=/home/pi/nox-auto-sampler/worker/
+ExecStart=python3.7 /home/pi/nox-auto-sampler/worker/run.py
 Restart=always
 
 [Install]

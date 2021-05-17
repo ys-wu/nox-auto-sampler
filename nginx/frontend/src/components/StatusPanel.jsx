@@ -125,7 +125,7 @@ export default function StatusPanel({
         {
           data === null
             ? 
-          ( start ? <p>无法获取数据</p> : null )
+          ( start ? <p>正在尝试获取数据</p> : null )
             : 
           <>
             <Col span={2} style={{ textAlign: "center" }}>

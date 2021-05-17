@@ -374,10 +374,12 @@ export default function SeriesTable({
       {
         data.length === 0 ? null :
           <>
-            <Button
-              style={{ height: 40, fontSize: "1.2em", color: "DarkBlue", width: 150, float: "right" }}
-              onClick={handleSaveTable}> 确认序列列表
-            </Button>
+            <Popconfirm title="确认提交?">
+              <Button
+                style={{ height: 40, fontSize: "1.2em", color: "DarkBlue", width: 150, float: "right" }}
+                onClick={handleSaveTable}> 确认序列列表
+              </Button>
+            </Popconfirm>
             <Popconfirm title="确认提交?" onConfirm={onConfirm} onCancel={onCancel}>
               <Button
                 style={{ height: 40, fontSize: "1.2em", color: "DarkBlue", width: 150, float: "right" }}

@@ -8,7 +8,7 @@ User=pi
 WorkingDirectory=/home/pi/nox-auto-sampler/
 Type=oneshot
 RemainAfterExit=true
-ExecStart=docker-compose up  -d --remove-orphans
+ExecStart=docker-compose up -d --remove-orphans
 ExecStop=docker-compose down
 # Restart=always
 

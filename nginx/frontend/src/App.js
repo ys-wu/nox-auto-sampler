@@ -79,9 +79,15 @@ function App() {
     return newData;
   };
 
+  // cannot get data
+  const getDataError = e => {
+    setData(null)
+    console.error(e)
+  };
+
   // fetch data with given interval
   useInterval( () => {
-    get(urlData, saveData);
+    get(urlData, saveData, getDataError);
   }, start ? delay : null);
 
   const switchSampling = (value) => {
