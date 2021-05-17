@@ -6,6 +6,7 @@ from helpers import (
   init_workder,
   get_valve,
   set_valve,
+  set_mfc,
   turn_off_valves_mfc,
   process_data,
   process_mock_data,
@@ -24,6 +25,8 @@ if __name__ == '__main__':
   keep_list_length = 10
 
   while True:
+
+    set_mfc()
     
     if r.get('mock') == b'on' and r.llen('mock_data') > 0:
       while r.llen('mock_data') > 0:

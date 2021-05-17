@@ -3,13 +3,16 @@ import board
 import busio
 import adafruit_ads1x15.ads1115 as ADS
 from adafruit_ads1x15.analog_in import AnalogIn
+import adafruit_mcp4725
 
 from time import sleep
 from datetime import datetime
 import socket
-
 import redis
 
+from INA219 import INA219
+
+ina219 = INA219(addr=0x42)
 
 r = redis.Redis(host='localhost', port=6379, db=0)
 
@@ -21,6 +24,10 @@ VALVES = [
   LED(24), LED(25), 
 ]
 
+# def check_ups_current():
+#   current = ina219.getCurrent_mA() 
+#   is_power_on = True if 
+
 def turn_off_valves_mfc():
   for valve in VALVES:
     valve.off()
@@ -28,7 +35,9 @@ def turn_off_valves_mfc():
 turn_off_valves_mfc()
 
 ANALYZER = {
-  'ip': '169.254.109.100',
+  # 'ip': '192.168.1.100',
+  # 'ip': '169.254.109.100',
+  'ip': '169.254.1.100',
   'port': 9880,
   'commands': [
     b'no\r',
@@ -43,6 +52,7 @@ ANALYZER = {
   ]
 }
 
+print(f"NOx Analyzer IP: {ANALYZER['ip']}")
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.settimeout(1)
 s.connect((ANALYZER['ip'], ANALYZER['port']))
@@ -53,6 +63,11 @@ i2c = busio.I2C(board.SCL, board.SDA)
 ads = ADS.ADS1115(i2c, address=0x48)
 # Create single-ended input on channel 0
 chan = AnalogIn(ads, ADS.P0)
+
+# Initialize MCP4725.
+dac = adafruit_mcp4725.MCP4725(i2c, address=0x60)
+dac.raw_value = 0
+dac.normalized_value = 1.0
 
 def init_workder():
   print("Worker stated ...")
@@ -78,6 +93,13 @@ def set_valve(position):
     print(f'Worker opened vavle {position}')
   else:
     print('Worker turn off all valves.')
+
+def set_mfc():
+  try:
+    mfc_set = float(r.get('mfc'))
+    dac.raw_value = int(max(min(4095.0, 4096.0 * mfc_set / 2), 0.0))
+  except:
+    dac.raw_value = 0
 
 def read_mfc():
   return chan.voltage / 5 * 2

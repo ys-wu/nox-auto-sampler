@@ -25,9 +25,10 @@ export default function AnalysisPanel({
   passAnalyzing = f => f,
 }) {
 
-  const purgeTime = 10;   // purge interval in (sec)
-  const noxInterval = 4;      // interval in (sec)
-  const noxCountLimit = 5;   // up limit number of data
+  const zeroPurgeTime = 60;   // zero purge time in (sec)
+  const noxPurgeTime = 180;   // nox purge time in (sec)
+  const noxInterval = 8;      // interval in (sec)
+  const noxCountLimit = 18;   // up limit number of data
 
   const hostname = window.location.hostname;
   const port = window.location.port;
@@ -133,9 +134,13 @@ export default function AnalysisPanel({
     }, 0) / (data.length - 1));
   };
 
-  const checkPurge = () => timeCounter < purgeTime;
+  const checkPurge = () => timeCounter < zeroPurgeTime;
 
-  const checkNewPoint = () => (timeCounter - purgeTime) % noxInterval === 0;
+  const checkNewPoint = () => {
+    if (timeCounter - zeroPurgeTime - noxPurgeTime > 0)
+      return (timeCounter - zeroPurgeTime - noxPurgeTime) % noxInterval === 0;
+    return false;
+  };
 
   const getBias = () => parseFloat(series[analysisIndex]['bias']) / 100.0;
 
@@ -336,8 +341,8 @@ export default function AnalysisPanel({
     },
     {
       title: 'NO2 原始值',
-      dataIndex: 'no2MeasCoef',
-      key: 'no2MeasCoef',
+      dataIndex: 'no2MeasConc',
+      key: 'no2MeasConc',
       render: value => value ? value.toFixed(2) : null
     },
     {
