@@ -1,0 +1,11 @@
+[Unit]
+Description=nox-auto-sample docker up
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/no-nox-sampler/
+ExecStart=docker-compose up
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
