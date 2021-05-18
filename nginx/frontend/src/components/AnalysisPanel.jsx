@@ -325,49 +325,49 @@ export default function AnalysisPanel({
       title: 'NO 浓度',
       dataIndex: 'noInputConc',
       key: 'noInputConc',
-      render: value => value ? value.toFixed(2) : null
+      render: value => value ? parseFloat(value).toFixed(2) : null
     },
     {
       title: 'NO2 浓度',
       dataIndex: 'no2InputConc',
       key: 'no2InputConc',
-      render: value => value ? value.toFixed(2) : null
+      render: value => value ? parseFloat(value).toFixed(2) : null
     },
     {
       title: 'NO 原始值',
       dataIndex: 'noMeasConc',
       key: 'noMeasConc',
-      render: value => value ? value.toFixed(2) : null
+      render: value => value ? parseFloat(value).toFixed(2) : null
     },
     {
       title: 'NO2 原始值',
       dataIndex: 'no2MeasConc',
       key: 'no2MeasConc',
-      render: value => value ? value.toFixed(2) : null
+      render: value => value ? parseFloat(value).toFixed(2) : null
     },
     {
       title: 'NO 校正系数',
       dataIndex: 'noMeasCoef',
       key: 'noMeasCoef',
-      render: value => value ? value.toFixed(2) : null
+      render: value => value ? parseFloat(value).toFixed(2) : null
     },
     {
       title: 'NO2 校正系数',
       dataIndex: 'no2MeasCoef',
       key: 'no2MeasCoef',
-      render: value => value ? value.toFixed(2) : null
+      render: value => value ? parseFloat(value).toFixed(2) : null
     },
     {
       title: 'NO 修正值',
       dataIndex: 'noRevised',
       key: 'noRevised',
-      render: value => value ? value.toFixed(2) : null
+      render: value => value ? parseFloat(value).toFixed(2) : null
     },
     {
       title: 'NO2 修正值',
       dataIndex: 'no2Revised',
       key: 'no2Revised',
-      render: value => value ? value.toFixed(2) : null
+      render: value => value ? parseFloat(value).toFixed(2) : null
     },
     {
       title: '压力',
