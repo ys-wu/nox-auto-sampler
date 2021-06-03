@@ -91,7 +91,13 @@ export default function AnalysisPanel({
     if (series) {
       if (analysisIndex < series.length) {
         if (purging) {
-          post({ analyzing: "true" }, urlAnalyzing);
+          post(
+            {
+              analyzing: "true",
+              valve: 0,
+            }, 
+            urlAnalyzing
+          );
           post({ purging: "true" }, urlPurging);
           setStatus(analysisIndex, "purging");
         } else if (analyzing && timeCounter > 1) {
