@@ -7,6 +7,7 @@ import Select from 'antd/lib/select';
 import Button from 'antd/lib/button';
 import Popconfirm from 'antd/lib/popconfirm';
 import Form from 'antd/lib/form'
+import Pagination from 'antd/lib/pagination';
 
 import SampleLine from './SampleLine';
 
@@ -39,6 +40,9 @@ export default function SeriesTable({
   const [nextIndex, setNextIndex] = useState(1);
   const [addIndex, setAddIndex] = useState(-1);
   const [pasteIndex, setPasteIndex] = useState(-1);
+  const [page, setPage] = useState(1);
+
+  const pageSize = 10;
 
   // define table columns
   const blankLine = {
@@ -76,6 +80,10 @@ export default function SeriesTable({
   const onChangeName = e => {
     const value = e.target.value;
     setName(value);
+  };
+
+  const onChangePage = (page, _) => {
+    setPage(page);
   };
 
   const blankDataFatory = () => {
@@ -298,15 +306,29 @@ export default function SeriesTable({
 
       {
         !data ? null : 
-          data.map((item, index) => <SampleLine 
-            key={ item['id'] }
-            index={ index }
-            setting={ setting }
-            data={ {...item} }
-            onUpdate={ onUpdate }
-            onDeleteLine={ handleDeleteLine }
-            onCopyLine={ handleCopyLine }
-          /> )
+          data
+            .slice((page - 1) * pageSize, Math.min(page * pageSize, data.length))
+            .map((item, index) => <SampleLine 
+              key={ item['id'] }
+              index={ index + (page - 1) * pageSize }
+              setting={ setting }
+              data={ {...item} }
+              onUpdate={ onUpdate }
+              onDeleteLine={ handleDeleteLine }
+              onCopyLine={ handleCopyLine }
+            /> )
+      }
+
+      {
+        data.length === 0 ? null :
+          <Pagination
+            style={{ paddingLeft: 40, margin: 20 }}
+            defaultValue={1}
+            pageSize={pageSize}
+            total={data.length}
+            showSizeChanger={false}
+            onChange={onChangePage}
+          />
       }
 
       <Row style={{ marginTop: 10 }}>
