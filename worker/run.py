@@ -13,6 +13,7 @@ from helpers import (
   turn_off_valves_mfc,
   process_data,
   process_mock_data,
+  save_serie_report,
 )
 
 
@@ -91,6 +92,14 @@ if __name__ == '__main__':
         r.rpop('mock_data')
       while r.llen('data') > keep_list_length:
         r.rpop('data')
+
+      if r.get('serie_report') != b'false':
+        try:
+          save_serie_report()
+        except:
+          print('Serie report save fail.')
+        finally:
+          r.set('serie_report', 'false')
 
       # sleep(1)
     

@@ -5,12 +5,19 @@ import adafruit_ads1x15.ads1115 as ADS
 from adafruit_ads1x15.analog_in import AnalogIn
 import adafruit_mcp4725
 
+import sys
 from time import sleep
 from datetime import datetime
 import redis
+from docxtpl import DocxTemplate
 
 from INA219 import INA219
 
+
+template_dir = sys.path[0]
+template_file = 'serie_report.docx'
+template = template_dir + '/' + template_file
+doc = DocxTemplate(template)
 
 ina219 = INA219(addr=0x42)
 
@@ -184,3 +191,50 @@ def process_mock_data(r, data):
   }
   new_data['valve'] = get_valve(r)
   return new_data
+
+
+def save_serie_report():
+  date = '20210101'
+  temp = 'temp'
+  rh = 'rh'
+  atm_pres = 'atm_pres'
+  std_id = '18210-G8130817'
+  std_conc = 'std_conc'
+  pres = 'pres'
+  range_ = 'range'
+  ave_time = 'ave_time'
+  flow = 'flow'
+  bkg = 'bkg'
+  no_c = 'no_c'
+  no2_c = 'no2_c'
+  nox_c = 'nox_c'
+  serie_id = "20210616test200"
+  results = 'results'
+
+  context = {
+    'date': date,
+    'temp': temp,
+    'rh': rh,
+    'atm_pres': atm_pres,
+    'std_id': std_id,
+    'std_conc': std_conc,
+    'pres': pres,
+    'range': range_,
+    'ave_time': ave_time,
+    'flow': flow,
+    'bkg': bkg,
+    'no_c': no_c,
+    'no2_c': no2_c,
+    'nox_c': nox_c,
+    'serie_id': serie_id,
+    'results': results,
+  }
+
+  doc.render(context)
+  
+  dttm = datetime.now().strftime("%Y%m%d%H%M%S")
+  output_dir = '/home/pi/nox-auto-sampler/reports/'
+  output_file = '序列报告'
+  output = output_dir + output_file
+  output = f'{output}_{dttm}.docx'
+  doc.save(output)

@@ -28,6 +28,7 @@ r.set('status', 'idel')
 r.set('mock', 'off')
 r.set('analyzing', 'false')
 r.set('purging', 'false')
+r.set('serie_report', 'false')
 while r.llen('mock_data') > 0:
   r.rpop('mock_data')
 while r.llen('data') > 0:
@@ -167,9 +168,8 @@ class SerieReport(View):
     try:
       # data = json.loads(request.body)
       data = request.body.decode("utf-8")[1:-1]
-      print(data)
-      print(type(data))
       print('Receive serie number:', data)
+      r.set('serie_report', data)
       return JsonResponse({'Message': f'Serie ID: {data}'})
     except:
       print('Error in handle post data')
