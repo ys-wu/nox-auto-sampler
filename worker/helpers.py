@@ -194,23 +194,54 @@ def process_mock_data(r, data):
   return new_data
 
 
-def save_serie_report():
-  date = '20210101'
-  temp = 'temp'
-  rh = 'rh'
-  atm_pres = 'atm_pres'
-  std_id = '18210-G8130817'
-  std_conc = 'std_conc'
-  pres = 'pres'
-  range_ = 'range'
-  ave_time = 'ave_time'
-  flow = 'flow'
-  bkg = 'bkg'
-  no_c = 'no_c'
-  no2_c = 'no2_c'
-  nox_c = 'nox_c'
-  serie_id = "20210616test200"
-  results = 'results'
+def save_serie_report(data):
+  serie = data[0]
+  samples = data[1]
+
+  serie_id = samples[0]['series'] or '/'
+  date = serie['created'].split('T')[0] or '/'
+  temp = serie.get('ambTemp', '/') or '/'
+  rh = serie.get('ambRh', '/') or '/'
+  atm_pres = serie.get('ambPress', '/') or '/'
+  range_ = serie.get('noxRange', '/') or '/'
+  ave_time = serie.get('aveTime', '/') or '/'
+  flow = serie.get('balanceFlow', '/') or '/'
+  no_bkg = serie.get('noBkg', '/') or '/'
+  nox_bkg = serie.get('noxBkg', '/') or '/'
+  bkg = f"{no_bkg}, {nox_bkg}" if (no_bkg != '/') or (nox_bkg != '/') else '/'
+  no_c = serie.get('noCoef', '/') or '/'
+  no2_c = serie.get('no2Coef', '/') or '/'
+  nox_c = serie.get('noxCoef', '/') or '/'
+  
+  try:
+    std_sample = [d for d in samples if d['sampleType'] == '校准'][0]
+  except:
+    std_sample = {}
+  std_id = std_sample.get('sampleId', '/') or '/'
+  std_no = std_sample.get('noInputConc', '/') or '/'
+  std_nox = std_sample.get('noxInputConc', '/') or '/'
+  if (std_nox != '/') and (std_no != '/'):
+    std_no2 = std_nox - std_no
+  std_conc = f"{std_no}, {std_no2}" or '/'
+  pres = std_sample.get('bottlePres', '/') or '/'
+
+  results = [
+    (
+      str((d['index'] + 1) or '/') + '，' +
+      str(d['sampleType'] or '/') + '，' +
+      str(d['position'] or '/') + '，' +
+      str(d['sampleId'] or '/') + '，' +
+      str(d['bottleType'] or '/') + '，' +
+      str(d['noInputConc'] or '/') + '，' +
+      str(d['no2InputConc'] or '/') + '；' +
+      str(d['noMeasCoef'] or '/') + '，' +
+      str(d['no2MeasCoef'] or '/') + '；' +
+      str(d['noRevised'] or '/') + '，' +
+      str(d['no2Revised'] or '/') + '；' +
+      str(d['bottlePres'] or '/') + '。'
+    ) for d in samples
+  ]
+  results = '\n'.join(results) or '/'
 
   context = {
     'date': date,

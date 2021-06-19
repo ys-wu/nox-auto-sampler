@@ -96,8 +96,7 @@ if __name__ == '__main__':
       if (r.get('serie_report') != b'false') and (r.get('serie_report') is not None):
         try:
           data = json.loads(r.get('serie_report'))
-          print(data)
-          save_serie_report()
+          save_serie_report(data)
         except:
           print('Serie report save fail.')
         finally:
