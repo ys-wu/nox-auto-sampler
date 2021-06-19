@@ -135,7 +135,7 @@ class Purging(View):
 
 
 class Log(View):
-   def post(self, request):
+  def post(self, request):
     try:
       data = json.loads(request.body)
       print('Receive log:', data)
@@ -150,7 +150,7 @@ class Log(View):
 
 
 class Mfc(View):
-   def post(self, request):
+  def post(self, request):
     try:
       data = json.loads(request.body)
       print('Receive MFC set:', data)
@@ -160,3 +160,17 @@ class Mfc(View):
     except:
       print('Error in handle post data')
       return JsonResponse({'Message': 'Mfc fail'})
+
+
+class SerieReport(View):
+  def post(self, request):
+    try:
+      # data = json.loads(request.body)
+      data = request.body.decode("utf-8")[1:-1]
+      print(data)
+      print(type(data))
+      print('Receive serie number:', data)
+      return JsonResponse({'Message': f'Serie ID: {data}'})
+    except:
+      print('Error in handle post data')
+      return JsonResponse({'Message': 'Serie report fail'})

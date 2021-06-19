@@ -21,4 +21,5 @@ urlpatterns = [
     path('setting/', views.Setting.as_view()),
     path('log/', views.Log.as_view()),
     path('mfc/', views.Mfc.as_view()),
+    path('serie_report/', views.SerieReport.as_view()),
 ]

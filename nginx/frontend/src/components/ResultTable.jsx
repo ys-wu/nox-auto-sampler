@@ -19,6 +19,7 @@ export default function ResultTable({seriesName}) {
   const port = window.location.port;
   const urlSeries = `http://${hostname}:${port}/api/series/`;
   const urlSample = `http://${hostname}:${port}/api/sample/`;
+  const urlReport = `http://${hostname}:${port}/api/serie_report/`;
 
   const [series, setSeries] = useState(seriesName);
   const [seriesList, setSeriesList] = useState([seriesName]);
@@ -207,7 +208,7 @@ export default function ResultTable({seriesName}) {
   };
 
   const onGetReports = () => {
-
+    post(currentSeries, urlReport);
   };
 
   return (
