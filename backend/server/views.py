@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.views import View
+from django.core.serializers.json import DjangoJSONEncoder
 from rest_framework import viewsets
 
 from datetime import datetime
@@ -166,10 +167,16 @@ class Mfc(View):
 class SerieReport(View):
   def post(self, request):
     try:
-      # data = json.loads(request.body)
       data = request.body.decode("utf-8")[1:-1]
       print('Receive serie number:', data)
-      r.set('serie_report', data)
+      serie = Series.objects.filter(name=data).values()[0]
+      samples = list(Sample.objects.filter(series=data).values())
+      r.set('serie_report', json.dumps(
+        [serie, samples],
+        sort_keys=True,
+        indent=1,
+        cls=DjangoJSONEncoder
+      ))
       return JsonResponse({'Message': f'Serie ID: {data}'})
     except:
       print('Error in handle post data')

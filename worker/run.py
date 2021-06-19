@@ -93,8 +93,10 @@ if __name__ == '__main__':
       while r.llen('data') > keep_list_length:
         r.rpop('data')
 
-      if r.get('serie_report') != b'false':
+      if (r.get('serie_report') != b'false') and (r.get('serie_report') is not None):
         try:
+          data = json.loads(r.get('serie_report'))
+          print(data)
           save_serie_report()
         except:
           print('Serie report save fail.')

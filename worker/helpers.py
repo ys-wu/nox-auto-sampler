@@ -75,6 +75,7 @@ def init_workder(r):
   r.set('mock', 'off')
   r.set('analyzing', 'false')
   r.set('purging', 'false')
+  r.set('serie_report', 'false')
   r.set('valve', -1)
   while r.llen('mock_data') > 0:
     r.rpop('mock_data')
