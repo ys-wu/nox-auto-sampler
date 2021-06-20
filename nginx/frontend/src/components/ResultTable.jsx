@@ -5,6 +5,7 @@ import Form from 'antd/lib/form';
 import Select from 'antd/lib/select';
 import Button from 'antd/lib/button';
 import Table from 'antd/lib/table';
+import Popconfirm from 'antd/lib/popconfirm';
 
 import get from '../helpers/apiGet';
 import post from '../helpers/apiPost';
@@ -279,19 +280,21 @@ export default function ResultTable({seriesName}) {
             >
               保存结果
             </Button>
-
-            <Button
-              style={{
-                height: 35,
-                fontSize: "1em",
-                color: "DarkBlue",
-                width: 120,
-                margin: 10,
-              }}
-              onClick={onGetReports}
-            >
-              生产报表
-            </Button>
+            
+            <Popconfirm title="确认提交?">
+              <Button
+                style={{
+                  height: 35,
+                  fontSize: "1em",
+                  color: "DarkBlue",
+                  width: 120,
+                  margin: 10,
+                }}
+                onClick={onGetReports}
+              >
+                生产报表
+              </Button>
+            </Popconfirm>
           </Row>
         </> : null
       }
