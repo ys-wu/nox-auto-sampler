@@ -14,11 +14,6 @@ from docxtpl import DocxTemplate
 from INA219 import INA219
 
 
-template_dir = sys.path[0]
-template_file = 'serie_report.docx'
-template = template_dir + '/' + template_file
-doc = DocxTemplate(template)
-
 ina219 = INA219(addr=0x42)
 
 VALVES = [
@@ -70,7 +65,7 @@ dac.raw_value = 0
 dac.normalized_value = 1.0
 
 def init_workder(r):
-  print("Worker stated ...")
+  print("Worker started ...")
   r.set('status', 'idle')
   r.set('mock', 'off')
   r.set('analyzing', 'false')
@@ -199,6 +194,8 @@ def save_serie_report(data):
   samples = data[1]
 
   serie_id = samples[0]['series'] or '/'
+  print('serie_id', serie_id)
+
   date = serie['created'].split('T')[0] or '/'
   temp = serie.get('ambTemp', '/') or '/'
   rh = serie.get('ambRh', '/') or '/'
@@ -212,7 +209,7 @@ def save_serie_report(data):
   no_c = serie.get('noCoef', '/') or '/'
   no2_c = serie.get('no2Coef', '/') or '/'
   nox_c = serie.get('noxCoef', '/') or '/'
-  
+
   try:
     std_sample = [d for d in samples if d['sampleType'] == '校准'][0]
   except:
@@ -222,6 +219,8 @@ def save_serie_report(data):
   std_nox = std_sample.get('noxInputConc', '/') or '/'
   if (std_nox != '/') and (std_no != '/'):
     std_no2 = std_nox - std_no
+  else:
+    std_no2 = '/'
   std_conc = f"{std_no}, {std_no2}" or '/'
   pres = std_sample.get('bottlePres', '/') or '/'
 
@@ -262,11 +261,16 @@ def save_serie_report(data):
     'results': results,
   }
 
-  doc.render(context)
-  
+  template_dir = sys.path[0]
+  template_file = 'serie_report.docx'
+  template = template_dir + '/' + template_file
+
   dttm = datetime.now().strftime("%Y%m%d%H%M%S")
   output_dir = '/home/pi/nox-auto-sampler/reports/'
   output_file = '序列报告'
   output = output_dir + output_file
   output = f'{output}_{dttm}.docx'
+
+  doc = DocxTemplate(template)
+  doc.render(context)
   doc.save(output)
