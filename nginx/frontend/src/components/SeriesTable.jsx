@@ -29,6 +29,7 @@ export default function SeriesTable({
   const hostname = window.location.hostname;
   const port = window.location.port;
   const urlSeries = `http://${hostname}:${port}/api/seriestemplate/`;
+  const urlSeriesNames = `http://${hostname}:${port}/api/seriestemplatenames/`;
   const urlSample = `http://${hostname}:${port}/api/sampletemplate/`;
 
   const [name, setName] = useState('');
@@ -61,7 +62,7 @@ export default function SeriesTable({
 
   // get all templates
   useEffect(() => {
-    get(urlSeries, updateNameList);
+    get(urlSeriesNames, updateNameList);
   }, []);
 
   // remove copy button if there is no data
