@@ -164,6 +164,13 @@ export default function SeriesTable({
     console.log('SeriesTable after deltele a line, new state:', newState);
   };
 
+  const handleDeleteAll = () => {
+    setData([]);
+    setState([]);
+    setAddIndex(-1);
+    setPasteIndex(-1);
+  };
+
   const handleSaveTable = () => {
     if (analyzing) {
       alert("正在分析，无法确认列表");
@@ -406,7 +413,13 @@ export default function SeriesTable({
               <Button
                 style={{ height: 40, fontSize: "1.2em", color: "DarkBlue", width: 150, float: "right" }}
                 onClick={handleSaveTemplate}> 保存为模版
-            </Button>
+              </Button>
+            </Popconfirm>
+            <Popconfirm title="确认删除?">
+              <Button
+                style={{ height: 40, fontSize: "1.2em", color: "DarkBlue", width: 150, float: "right" }}
+                onClick={handleDeleteAll}> 删除全部
+              </Button>
             </Popconfirm>
           </>
       }
