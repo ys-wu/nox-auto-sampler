@@ -199,8 +199,27 @@ class SampleTemplateName(View):
     try:
       data = SampleTemplate.objects.filter(series=name).values()
       data = [{i:d[i] for i in d if i!='created'} for d in data]
-      print(data)
-      print(type(data))
       return JsonResponse(data, safe=False)
     except:
-      return JsonResponse({'Message': 'Get sample template with name fail'})
+      return JsonResponse({'Message': 'Get sample template by name fail'})
+
+
+class SeriesNames(View):
+  def get(self, request):
+    try:
+      data = Series.objects.values_list('name')
+      data = [{'name': d[0]} for d in data][::-1]
+      print('Series name list:', data)
+      return JsonResponse(data, safe=False)
+    except:
+      return JsonResponse({'Message': 'Get series names fail'})
+
+
+class SampleName(View):
+  def get(self, request, name):
+    try:
+      data = Sample.objects.filter(series=name).values()
+      data = [{i:d[i] for i in d} for d in data]
+      return JsonResponse(data, safe=False)
+    except:
+      return JsonResponse({'Message': 'Get sample by name fail'})

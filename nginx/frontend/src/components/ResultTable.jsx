@@ -18,8 +18,10 @@ export default function ResultTable({seriesName}) {
 
   const hostname = window.location.hostname;
   const port = window.location.port;
-  const urlSeries = `http://${hostname}:${port}/api/series/`;
+  // const urlSeries = `http://${hostname}:${port}/api/series/`;
+  const urlSeriesNames = `http://${hostname}:${port}/api/seriesnames/`;
   const urlSample = `http://${hostname}:${port}/api/sample/`;
+  const urlSampleByName = `http://${hostname}:${port}/api/samplebyname/`;
   const urlReport = `http://${hostname}:${port}/api/serie_report/`;
 
   const [series, setSeries] = useState(seriesName);
@@ -109,7 +111,7 @@ export default function ResultTable({seriesName}) {
   };
 
   const onGetSeries = () => {
-    get(urlSeries, updateSeriesList);
+    get(urlSeriesNames, updateSeriesList);
   };
 
   const onSelect = value => {
@@ -134,7 +136,7 @@ export default function ResultTable({seriesName}) {
 
   const onFinish = () => {
     setCurrentSeries(series);
-    get(urlSample, updateTable);
+    get(urlSampleByName + series + '/', updateTable);
   };
 
   const rowSelection = {
