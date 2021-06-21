@@ -182,6 +182,7 @@ class SerieReport(View):
       print('Error in handle post data')
       return JsonResponse({'Message': 'Serie report fail'})
 
+
 class SeriesTemplateNames(View):
   def get(self, request):
     try:
@@ -191,3 +192,15 @@ class SeriesTemplateNames(View):
       return JsonResponse(data, safe=False)
     except:
       return JsonResponse({'Message': 'Get series template names fail'})
+
+
+class SampleTemplateName(View):
+  def get(self, request, name):
+    try:
+      data = SampleTemplate.objects.filter(series=name).values()
+      data = [{i:d[i] for i in d if i!='created'} for d in data]
+      print(data)
+      print(type(data))
+      return JsonResponse(data, safe=False)
+    except:
+      return JsonResponse({'Message': 'Get sample template with name fail'})

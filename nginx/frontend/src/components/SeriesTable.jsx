@@ -31,6 +31,7 @@ export default function SeriesTable({
   const urlSeries = `http://${hostname}:${port}/api/seriestemplate/`;
   const urlSeriesNames = `http://${hostname}:${port}/api/seriestemplatenames/`;
   const urlSample = `http://${hostname}:${port}/api/sampletemplate/`;
+  const urlSampleByName = `http://${hostname}:${port}/api/sampletemplatebyname/`;
 
   const [name, setName] = useState('');
   const [loadName, setLoadName] = useState('');
@@ -272,7 +273,7 @@ export default function SeriesTable({
     setName('');
     setData([]);
     setState([]);
-    get(urlSample, filterSeries);
+    get(urlSampleByName + loadName + '/', filterSeries);
   };
 
   return (

@@ -23,4 +23,5 @@ urlpatterns = [
     path('mfc/', views.Mfc.as_view()),
     path('serie_report/', views.SerieReport.as_view()),
     path('seriestemplatenames/', views.SeriesTemplateNames.as_view()),
+    path('sampletemplatebyname/<name>/', views.SampleTemplateName.as_view()),
 ]
