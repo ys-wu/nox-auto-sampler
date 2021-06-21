@@ -312,8 +312,8 @@ export default function SeriesTable({
       }
 
       {
-        !data ? null : 
-          data
+        !state ? null : 
+          state
             .slice((page - 1) * pageSize, Math.min(page * pageSize, data.length))
             .map((item, index) => <SampleLine 
               key={ item['id'] }
