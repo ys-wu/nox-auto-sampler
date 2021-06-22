@@ -22,8 +22,10 @@ urlpatterns = [
     path('log/', views.Log.as_view()),
     path('mfc/', views.Mfc.as_view()),
     path('serie_report/', views.SerieReport.as_view()),
+    path('sample_report/', views.SampleReport.as_view()),
     path('seriestemplatenames/', views.SeriesTemplateNames.as_view()),
     path('sampletemplatebyname/<name>/', views.SampleTemplateName.as_view()),
     path('seriesnames/', views.SeriesNames.as_view()),
     path('samplebyname/<name>/', views.SampleName.as_view()),
+    path('samplebyid/<id>/', views.SampleId.as_view()),
 ]

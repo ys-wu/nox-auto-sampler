@@ -5,8 +5,10 @@ import Form from 'antd/lib/form';
 import Input from 'antd/lib/input';
 import Button from 'antd/lib/button';
 import Table from 'antd/lib/table';
+import Popconfirm from 'antd/lib/popconfirm';
 
 import get from '../helpers/apiGet';
+import post from '../helpers/apiPost';
 
 
 export default function ReporPanel() {
@@ -18,23 +20,31 @@ export default function ReporPanel() {
 
   const hostname = window.location.hostname;
   const port = window.location.port;
-  const urlSample = `http://${hostname}:${port}/api/sample/`
+  // const urlSample = `http://${hostname}:${port}/api/sample/`
+  const urlSample = `http://${hostname}:${port}/api/samplebyid/`
+  const urlReport = `http://${hostname}:${port}/api/sample_report/`;
 
   const onFinish = value => {
     setSampleId(value['sampleId']);
   };
 
   const updateTable = data => {
-    const samples = data['results'].filter(item => item['sampleId'] === sampleId);
+    const samples = data.filter(item => item['sampleId'] === sampleId);
     setTabledata(samples);
     return data;
   };
 
   useEffect(() => {
-    get(urlSample, updateTable);
+    get(urlSample + sampleId + '/', updateTable);
   }, [sampleId]);
 
   const columns = [
+    {
+      title: '序列名称',
+      dataIndex: 'series',
+      key: 'series',
+      render: value => value
+    },
     {
       title: 'NO 浓度',
       dataIndex: 'noInputConc',
@@ -62,7 +72,7 @@ export default function ReporPanel() {
   ];
 
   const onGetReports = () => {
-
+    post(sampleId, urlReport);
   };
 
   return (
@@ -93,18 +103,20 @@ export default function ReporPanel() {
             />
           </Row>
 
-          <Button
-            style={{
-              height: 35,
-              fontSize: "1em",
-              color: "DarkBlue",
-              width: 120,
-              margin: 10,
-            }}
-            onClick={onGetReports}
-          >
-            生产报表
-          </Button>
+          <Popconfirm title="确认提交?">
+            <Button
+              style={{
+                height: 35,
+                fontSize: "1em",
+                color: "DarkBlue",
+                width: 120,
+                margin: 10,
+              }}
+              onClick={onGetReports}
+            >
+              生产报表
+            </Button>
+          </Popconfirm>
         </>
       }
     </>

@@ -183,6 +183,25 @@ class SerieReport(View):
       return JsonResponse({'Message': 'Serie report fail'})
 
 
+class SampleReport(View):
+  def post(self, request):
+    try:
+      id = request.body.decode("utf-8")[1:-1]
+      print('Receive sample id:', id)
+      data = Sample.objects.filter(sampleId=id).values()
+      data = [{i:d[i] for i in d} for d in data]
+      r.set('serie_report', json.dumps(
+        data,
+        sort_keys=True,
+        indent=1,
+        cls=DjangoJSONEncoder
+      ))
+      return JsonResponse({'Message': f'Sample ID: {id}'})
+    except:
+      print('Error in handle post data')
+      return JsonResponse({'Message': 'Sample report fail'})
+
+
 class SeriesTemplateNames(View):
   def get(self, request):
     try:
@@ -223,3 +242,13 @@ class SampleName(View):
       return JsonResponse(data, safe=False)
     except:
       return JsonResponse({'Message': 'Get sample by name fail'})
+
+
+class SampleId(View):
+  def get(self, request, id):
+    try:
+      data = Sample.objects.filter(sampleId=id).values()
+      data = [{i:d[i] for i in d} for d in data]
+      return JsonResponse(data, safe=False)
+    except:
+      return JsonResponse({'Message': 'Get sample by ID fail'})
