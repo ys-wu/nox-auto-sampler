@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import Form from 'antd/lib/form';
+import Tag from 'antd/lib/tag';
 import Input from 'antd/lib/input';
 import Button from 'antd/lib/button';
 import Select from 'antd/lib/select';
@@ -202,7 +203,14 @@ export default function RawRecordForm({ start, setting, data, seriesName }) {
       name="control-hooks" 
     >
       <Form.Item name="name" label="序列名称">
-        <Input placeholder={seriesName} defaultValue={seriesName} value={seriesName} disabled={true}/>
+        {/* <Input
+          placeholder={seriesName}
+          defaultValue={seriesName}
+          value={seriesName}
+          disabled={true}
+        /> */}
+        {/* <Tag color="#2db7f5">{seriesName}</Tag> */}
+        {seriesName}
       </Form.Item>
 
       <Form.Item name="projectName" label="项目名称">
