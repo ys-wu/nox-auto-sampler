@@ -149,20 +149,20 @@ function App() {
         />
       }
       <Row>
-        <Col span={18} offset={3} >
+        <Col span={20} offset={2} >
           <h1 style={{ float: 'left' }}>氮氧化物自动进样系统</h1>
           <img style={{ float: 'right', marginTop: '10px'}}src={ js_logo } alt={"Logo"} width={100}/>
         </Col>
       </Row>
       <Row>
         { mock === false ? null :
-          <Col span={18} offset={3}>
+          <Col span={20} offset={2}>
             <MockPanel quitMock={ () => setMock(false) }/>
           </Col>
         }
       </Row>
       <Row>
-        <Col span={18} offset={3}>
+        <Col span={20} offset={2}>
           <StatusPanel
             data={data}
             analyzing={analyzing}
@@ -172,7 +172,7 @@ function App() {
         </Col>
       </Row>
       <Row>
-        <Col span={18} offset={3}>
+        <Col span={20} offset={2}>
           <TabFrame 
             start={ start }
             setting={ setting }
@@ -185,7 +185,7 @@ function App() {
         </Col>
       </Row>
       <Row>
-        <Col span={18} offset={3}>
+        <Col span={20} offset={2}>
           <Divider orientation="left"></Divider>
           <p style={{ textAlign: 'center', fontSize: '12px', marginTop: '30px' }}>
             © Copyright 2021. All Rights Reserved.

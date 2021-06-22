@@ -139,7 +139,7 @@ export default function SampleLine({
       <Row style={{ marginTop: 1 }}>
         <Col span={20}>
           <Row>
-            <Col span={1} offset={1}>
+            <Col span={1} offset={0}>
               <p>{ index + 1 }</p>
             </Col>
             <Col span={2}>
@@ -156,7 +156,7 @@ export default function SampleLine({
               <Input placeholder="样品位置" defaultValue={ position } onChange={ onChangePosition } />
             </Col>
             
-            <Col span={2}>
+            <Col span={3}>
               <Input placeholder="样品编号" defaultValue={sampleId} onChange={onChangeSampleId} />
             </Col>
 

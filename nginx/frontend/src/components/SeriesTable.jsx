@@ -295,11 +295,11 @@ export default function SeriesTable({
             {
               !data ? null :
                 <Row>
-                  <Col style={{ textAlign: "center" }} span={1} offset={1}>行</Col>
+                  <Col style={{ textAlign: "center" }} span={1} offset={0}>行</Col>
                   <Col style={{ textAlign: "center" }} span={2}>类型</Col>
                   <Col style={{ textAlign: "center" }} span={2}>样品名称</Col>
                   <Col style={{ textAlign: "center" }} span={2}>样品位置</Col>
-                  <Col style={{ textAlign: "center" }} span={2}>样品标号</Col>
+                  <Col style={{ textAlign: "center" }} span={3}>样品编号</Col>
                   <Col style={{ textAlign: "center" }} span={2}>NO 浓度</Col>
                   <Col style={{ textAlign: "center" }} span={2}>NOx 浓度</Col>
                   <Col style={{ textAlign: "center" }} span={2}>偏差</Col>
