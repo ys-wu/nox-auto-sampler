@@ -6,3 +6,7 @@ dbdata/
 venv/
 reports/
 .DS_Store
+
+*.pdf
+*.doc
+*.docx

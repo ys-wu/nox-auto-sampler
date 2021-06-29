@@ -10,6 +10,7 @@ from time import sleep
 from datetime import datetime
 import redis
 from docxtpl import DocxTemplate
+from math import log10, floor
 
 from INA219 import INA219
 
@@ -189,6 +190,11 @@ def process_mock_data(r, data):
   return new_data
 
 
+# round x to n significant figures
+def round_to(x, n):
+  return round(x, n - int(floor(log10(abs(x)))) - 1)
+
+
 def save_serie_report(data):
   serie = data[0]
   samples = data[1]
@@ -233,10 +239,10 @@ def save_serie_report(data):
       str(d['bottleType'] or '/') + '，' +
       str(d['noInputConc'] or '/') + '，' +
       str(d['no2InputConc'] or '/') + '；' +
-      str(d['noMeasCoef'] or '/') + '，' +
-      str(d['no2MeasCoef'] or '/') + '；' +
-      str(d['noRevised'] or '/') + '，' +
-      str(d['no2Revised'] or '/') + '；' +
+      str(round_to(d['noMeasCoef'], 6) or '/') + '，' +
+      str(round_to(d['no2MeasCoef'], 6) or '/') + '；' +
+      str(round_to(d['noRevised'], 4) or '/') + '，' +
+      str(round_to(d['no2Revised'], 4) or '/') + '；' +
       str(d['bottlePres'] or '/') + '。'
     ) for d in samples
   ]
