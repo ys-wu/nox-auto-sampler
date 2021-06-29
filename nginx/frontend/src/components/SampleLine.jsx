@@ -152,11 +152,11 @@ export default function SampleLine({
               <Input placeholder="样品名称" defaultValue={ name } onChange={ onChangeName }/>  
             </Col>
 
-            <Col span={2}>
+            <Col span={1}>
               <Input placeholder="样品位置" defaultValue={ position } onChange={ onChangePosition } />
             </Col>
             
-            <Col span={3}>
+            <Col span={4}>
               <Input placeholder="样品编号" defaultValue={sampleId} onChange={onChangeSampleId} />
             </Col>
 
