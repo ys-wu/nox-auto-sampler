@@ -152,14 +152,22 @@ export default function ResultTable({seriesName}) {
 
   const reCalcTableData = (stdList, noCoef, noxCoef) => {
     const newData = tableData.map((item, index) => {
-      if (stdList[0] <= index <= stdList[stdList.length-1]) {
+      if (selectedRows.includes(index)) {
         const newItem = {...item};
         newItem['noRevised'] = item['noMeasConc'] * noCoef;
-        newItem['noxRevised'] = item['noxMeasConc'] * noxCoef;
-        newItem['no2Revised'] = newItem['noxRevised'] - newItem['noRevised'];
-        newItem['noMeasCoef'] = noCoef;
-        newItem['noxMeasCoef'] = noxCoef;
-        newItem['no2MeasCoef'] = newItem['no2Revised'] / item['no2MeasConc'];
+        if (item['noxInputConc'] !== null) {
+          newItem['noxRevised'] = item['noxMeasConc'] * noxCoef;
+          newItem['no2Revised'] = newItem['noxRevised'] - newItem['noRevised'];
+          newItem['noMeasCoef'] = noCoef;
+          newItem['noxMeasCoef'] = noxCoef;
+          newItem['no2MeasCoef'] = newItem['no2Revised'] / item['no2MeasConc'];
+        } else {
+          newItem['noxRevised'] = null;
+          newItem['no2Revised'] = null;
+          newItem['noMeasCoef'] = noCoef;
+          newItem['noxMeasCoef'] = noxCoef;
+          newItem['no2MeasCoef'] = null;
+        }
         const bias = (newItem['noRevised'] - newItem['noInputConc']) / newItem['noRevised'];
         newItem['bias'] = (bias * 100).toFixed(2) + " %";
         return newItem
