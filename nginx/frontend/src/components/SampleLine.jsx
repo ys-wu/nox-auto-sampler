@@ -92,14 +92,14 @@ export default function SampleLine({
   const onChangeNoInput = e => {
     const value = e.target.value;
     const newState = { ...state };
-    newState['noInputConc'] = value;
+    newState['noInputConc'] = parseFloat(value);
     setState(newState);
   }; 
 
   const onChangeNoxInput = e => {
     const value = e.target.value;
     const newState = { ...state };
-    newState['noxInputConc'] = value;
+    newState['noxInputConc'] = parseFloat(value);
     setState(newState);
   }; 
 
