@@ -53,7 +53,12 @@ export default function AnalysisPanel({
         newItem['key'] = index;
         newItem['status'] = 'waiting';
         newItem['series'] = seriesName;
-        newItem['no2InputConc'] = newItem['noxInputConc'] - newItem['noInputConc'];
+        const no2Input = newItem["noxInputConc"] - newItem["noInputConc"]
+        if (no2Input < 0) {
+          newItem["no2InputConc"] = null;
+        } else {
+          newItem["no2InputConc"] = no2Input;
+        };
         return newItem;
       });
       setTableData(newData);
@@ -194,7 +199,14 @@ export default function AnalysisPanel({
     const nox = parseFloat(noxAnalyzer["nox"]);
     newData["index"] = analysisIndex;
     newData["series"] = seriesName;
-    newData["no2InputConc"] = newData["noxInputConc"] - newData["noInputConc"]
+
+    const no2Input = newData["noxInputConc"] - newData["noInputConc"]
+    if (no2Input < 0) {
+      newData["no2InputConc"] = null;
+    } else {
+      newData["no2InputConc"] = no2Input;
+    };
+
     newData["noMeasConc"] = no;
     newData["no2MeasConc"] = nox - no;
     newData["noxMeasConc"] = nox;

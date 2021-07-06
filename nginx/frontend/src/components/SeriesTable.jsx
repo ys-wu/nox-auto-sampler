@@ -263,7 +263,9 @@ export default function SeriesTable({
       newItem['type'] = item['sampleType']
       return newItem;
     });
-    const orderedData = cleanedData.reverse();
+    const orderedData = cleanedData.sort(
+      (a, b) => (a.index > b.index) ? 1 : -1
+    );
     setData(orderedData);
     setState(orderedData);
     return data;
@@ -298,8 +300,8 @@ export default function SeriesTable({
                   <Col style={{ textAlign: "center" }} span={1} offset={0}>行</Col>
                   <Col style={{ textAlign: "center" }} span={2}>类型</Col>
                   <Col style={{ textAlign: "center" }} span={2}>样品名称</Col>
-                  <Col style={{ textAlign: "center" }} span={1}>样品位置</Col>
-                  <Col style={{ textAlign: "center" }} span={4}>样品编号</Col>
+                  <Col style={{ textAlign: "center" }} span={2}>样品位置</Col>
+                  <Col style={{ textAlign: "center" }} span={3}>样品编号</Col>
                   <Col style={{ textAlign: "center" }} span={2}>NO 浓度</Col>
                   <Col style={{ textAlign: "center" }} span={2}>NOx 浓度</Col>
                   <Col style={{ textAlign: "center" }} span={2}>偏差</Col>

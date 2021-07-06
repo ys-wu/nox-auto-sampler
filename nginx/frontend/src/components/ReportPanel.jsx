@@ -103,7 +103,7 @@ export default function ReporPanel() {
             />
           </Row>
 
-          <Popconfirm title="确认提交?">
+          {/* <Popconfirm title="确认提交?">
             <Button
               style={{
                 height: 35,
@@ -116,7 +116,7 @@ export default function ReporPanel() {
             >
               生产报表
             </Button>
-          </Popconfirm>
+          </Popconfirm> */}
         </>
       }
     </>

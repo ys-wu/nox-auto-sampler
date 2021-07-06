@@ -10,3 +10,5 @@ reports/
 *.pdf
 *.doc
 *.docx
+*.xls
+*.xlsx

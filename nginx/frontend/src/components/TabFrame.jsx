@@ -66,9 +66,9 @@ export default function TabFrame({
         <ResultTable seriesName={seriesName} />
       </TabPane>
 
-      {/* <TabPane tab="报告输出" key="5">
+      <TabPane tab="样品查询" key="5">
         <ReportPanel />
-      </TabPane> */}
+      </TabPane>
 
       <TabPane tab="基本设置" key="6" >
         <SettingList onUpdateSetting={onUpdateSetting} />

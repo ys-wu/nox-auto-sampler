@@ -46,30 +46,26 @@ export default function ResultTable({seriesName}) {
       key: 'sampleType'
     },
     {
-      title: '样品名称',
-      dataIndex: 'sampleId',
-      key: 'sampleId'
-    },
-    {
-      title: '样品位置',
-      dataIndex: 'position',
-      key: 'position'
-    },
-    {
       title: '样品编号',
       dataIndex: 'sampleId',
       key: 'sampleId'
     },
     {
-      title: 'NO 浓度',
+      title: 'NO(制备值)',
       dataIndex: 'noInputConc',
       key: 'noInputConc',
       render: value => value ? value.toFixed(2) : null
     },
     {
-      title: 'NOx 浓度',
-      dataIndex: 'noxInputConc',
-      key: 'noxInputConc',
+      title: 'NO(分析值)',
+      dataIndex: 'noMeasConc',
+      key: 'noMeasConc',
+      render: value => value ? value.toFixed(2) : null
+    },
+    {
+      title: 'NO2(分析值)',
+      dataIndex: 'no2MeasConc',
+      key: 'no2MeasConc',
       render: value => value ? value.toFixed(2) : null
     },
     {
@@ -78,24 +74,21 @@ export default function ResultTable({seriesName}) {
       key: 'bias'
     },
     {
-      title: '气瓶压力',
-      dataIndex: 'bottleType',
-      key: 'bottleType'
+      title: 'NO(再校准)',
+      dataIndex: 'noRevised',
+      key: 'noRevised',
+      render: value => value ? value.toFixed(2) : null
     },
     {
-      title: '压力',
-      dataIndex: 'bottlePres',
-      key: 'bottlePres'
+      title: 'NO2(再校准)',
+      dataIndex: 'no2Revised',
+      key: 'no2Revised',
+      render: value => value ? value.toFixed(2) : null
     },
     {
       title: '检测日期',
       dataIndex: 'finishedDate',
       key: 'finishedDate'
-    },
-    {
-      title: '检测人',
-      dataIndex: 'operator',
-      key: 'operator'
     },
     {
       title: '备注',
@@ -120,7 +113,7 @@ export default function ResultTable({seriesName}) {
 
   const updateTable = data => {
     let newTableData = data.filter(item => item['series'] === series);
-    newTableData.reverse();
+    newTableData.sort((a, b) => (a.index > b.index) ? 1 : -1);
     newTableData = newTableData.map((item, index) => {
       const newItem = {...item};
       newItem['lineNum'] = index + 1;
@@ -179,8 +172,9 @@ export default function ResultTable({seriesName}) {
 
   const onReCal = () => {
     const stdList = selectedRows.filter(item => tableData[item]['sampleType'] === '校准');
-    if (selectedRows.length < 2) {
-      alert("请至少选择两行类型为‘校准’的数据");
+    if (selectedRows.length < 1) {
+      // alert("请至少选择两行类型为‘校准’的数据");
+      alert("请至少选择一行类型为‘校准’的数据");
     } else {
       const [noCoef, noxCoef] = calcCoefs(stdList);
       reCalcTableData(stdList, noCoef, noxCoef);
