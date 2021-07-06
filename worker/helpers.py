@@ -239,10 +239,10 @@ def save_serie_report(data):
       str(d['bottleType'] or '/') + '，' +
       str(d['noInputConc'] or '/') + '，' +
       str(d['no2InputConc'] or '/') + '；' +
-      str(round_to(d['noMeasCoef'], 6) or '/') + '，' +
-      str(round_to(d['no2MeasCoef'], 6) or '/') + '；' +
-      str(round_to(d['noRevised'], 4) or '/') + '，' +
-      str(round_to(d['no2Revised'], 4) or '/') + '；' +
+      str(round_to(d['noMeasCoef'], 6)) if d['noMeasCoef'] else '/' + '，' +
+      str(round_to(d['no2MeasCoef'], 6)) if d['no2MeasCoef'] else '/' + '，' +
+      str(round_to(d['noRevised'], 4)) if d['noRevised'] else '/' + '，' +
+      str(round_to(d['no2Revised'], 4)) if d['no2Revised'] else '/' + '，' +
       str(d['bottlePres'] or '/') + '。'
     ) for d in samples
   ]
