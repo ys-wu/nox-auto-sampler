@@ -29,7 +29,9 @@ export default function ReporPanel() {
   };
 
   const updateTable = data => {
-    const samples = data.filter(item => item['sampleId'] === sampleId);
+    const samples = data
+      .filter(item => item['sampleId'] === sampleId)
+      .sort((a, b) => (a.id > b.id) ? 1 : -1);
     setTabledata(samples);
     return data;
   };
