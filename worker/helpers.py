@@ -192,7 +192,14 @@ def process_mock_data(r, data):
 
 # round x to n significant figures
 def round_to(x, n):
-  return round(x, n - int(floor(log10(abs(x)))) - 1)
+  x = float(x)
+  x = str(round(x, n - int(floor(log10(abs(x)))) - 1))
+  x1, x2 = x.split('.')
+  if x1 == '0':
+    x2 += '0' * (n - len(x2))
+  else:
+    x2 += '0' * (n - len(x2) - len(x1))
+  return f'{x1}.{x2}'
 
 
 def save_serie_report(data):
@@ -210,11 +217,21 @@ def save_serie_report(data):
   ave_time = serie.get('aveTime', '/') or '/'
   flow = serie.get('balanceFlow', '/') or '/'
   no_bkg = serie.get('noBkg', '/') or '/'
+  if no_bkg != '/': 
+    no_bkg = round_to(no_bkg, 4)
   nox_bkg = serie.get('noxBkg', '/') or '/'
+  if nox_bkg != '/': 
+    nox_bkg = round_to(nox_bkg, 4)
   bkg = f"{no_bkg}, {nox_bkg}" if (no_bkg != '/') or (nox_bkg != '/') else '/'
   no_c = serie.get('noCoef', '/') or '/'
+  if no_c != '/': 
+    no_c = round_to(no_c, 4)
   no2_c = serie.get('no2Coef', '/') or '/'
+  if no2_c != '/': 
+    no2_c = round_to(no2_c, 4)
   nox_c = serie.get('noxCoef', '/') or '/'
+  if nox_c != '/': 
+    nox_c = round_to(nox_c, 4)
 
   try:
     std_sample = [d for d in samples if d['sampleType'] == '校准'][0]
@@ -239,10 +256,10 @@ def save_serie_report(data):
       str(d['bottleType'] or '/') + '，' +
       str(d['noInputConc'] or '/') + '，' +
       str(d['no2InputConc'] or '/') + '；' +
-      str(round_to(d['noMeasCoef'], 6)) if d['noMeasCoef'] else '/' + '，' +
-      str(round_to(d['no2MeasCoef'], 6)) if d['no2MeasCoef'] else '/' + '，' +
-      str(round_to(d['noRevised'], 4)) if d['noRevised'] else '/' + '，' +
-      str(round_to(d['no2Revised'], 4)) if d['no2Revised'] else '/' + '，' +
+      (round_to(d['noMeasCoef'], 6) if d['noMeasCoef'] else '/') + '，' +
+      (round_to(d['no2MeasCoef'], 6) if d['no2MeasCoef'] else '/') + '，' +
+      (round_to(d['noRevised'], 4) if d['noRevised'] else '/') + '，' +
+      (round_to(d['no2Revised'], 4) if d['no2Revised'] else '/') + '，' +
       str(d['bottlePres'] or '/') + '。'
     ) for d in samples
   ]
