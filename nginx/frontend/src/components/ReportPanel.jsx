@@ -70,6 +70,18 @@ export default function ReporPanel() {
     //   render: value => value ? value.toFixed(2) : null
     // },
     {
+      title: 'NO 分析值',
+      dataIndex: 'noMeasConc',
+      key: 'noMeasConc',
+      render: value => value ? value.toFixed(2) : null
+    },
+    {
+      title: 'NO2 分析值',
+      dataIndex: 'no2MeasConc',
+      key: 'no2MeasConc',
+      render: value => value ? value.toFixed(2) : null
+    },
+    {
       title: 'NO 修正值',
       dataIndex: 'noRevised',
       key: 'noRevised',
