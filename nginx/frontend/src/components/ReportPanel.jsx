@@ -45,7 +45,11 @@ export default function ReporPanel() {
       title: '序列名称',
       dataIndex: 'series',
       key: 'series',
-      render: value => value
+    },
+    {
+      title: '类型',
+      dataIndex: 'sampleType',
+      key: 'sampleType',
     },
     {
       title: 'NO 浓度',
@@ -54,11 +58,17 @@ export default function ReporPanel() {
       render: value => value ? value.toFixed(2) : null
     },
     {
-      title: 'NOx 浓度',
-      dataIndex: 'noxInputConc',
-      key: 'noxInputConc',
+      title: 'NO2 浓度',
+      dataIndex: 'no2InputConc',
+      key: 'no2InputConc',
       render: value => value ? value.toFixed(2) : null
     },
+    // {
+    //   title: 'NOx 浓度',
+    //   dataIndex: 'noxInputConc',
+    //   key: 'noxInputConc',
+    //   render: value => value ? value.toFixed(2) : null
+    // },
     {
       title: 'NO 修正值',
       dataIndex: 'noRevised',
@@ -66,10 +76,32 @@ export default function ReporPanel() {
       render: value => value ? value.toFixed(2) : null
     },
     {
-      title: 'NOx 修正值',
-      dataIndex: 'noxRevised',
-      key: 'noxRevised',
+      title: 'NO2 修正值',
+      dataIndex: 'no2Revised',
+      key: 'no2Revised',
       render: value => value ? value.toFixed(2) : null
+    },
+    // {
+    //   title: 'NOx 修正值',
+    //   dataIndex: 'noxRevised',
+    //   key: 'noxRevised',
+    //   render: value => value ? value.toFixed(2) : null
+    // },
+    {
+      title: '气瓶压力',
+      dataIndex: 'bottlePres',
+      key: 'bottlePres',
+    },
+    {
+      title: '检测人员',
+      dataIndex: 'operator',
+      key: 'operator',
+    },
+    {
+      title: '检测日期',
+      dataIndex: 'created',
+      key: 'created',
+      render: t => t.slice(0,10)
     },
   ];
 
