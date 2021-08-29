@@ -23,6 +23,7 @@ export default function AnalysisPanel({
   seriesName,
   series,
   passAnalyzing = f => f,
+  setting,
 }) {
 
   const zeroPurgeTime = 60;   // zero purge time in (sec)
@@ -154,6 +155,7 @@ export default function AnalysisPanel({
   };
 
   const getBias = () => parseFloat(series[analysisIndex]['bias']) / 100.0;
+  const getRsd = () => parseFloat(setting['rsd'][0]) / 100.0;
 
   const checkStatble = () => {
     // get NOx data, calculate derived parameters based on NOx
@@ -170,14 +172,14 @@ export default function AnalysisPanel({
       cleanUp();
     };
     const RSD = s / mean;
-    const bias = getBias();
-    if (Number.isNaN(bias)) {
+    const rsd = getRsd();
+    if (Number.isNaN(rsd)) {
       alert("偏差设置错误！已停止分析！");
       setStatus(analysisIndex, "stopped");
       cleanUp();
     }
-    console.log(`AnalysisPanel checkStable: c1 ${c1}, c2 ${c2}, c3 ${c3}, RSD ${RSD}, bias limit ${bias}`);
-    return (RSD < bias) || (noxCounter >= noxCountLimit);
+    console.log(`AnalysisPanel checkStable: c1 ${c1}, c2 ${c2}, c3 ${c3}, RSD ${RSD}, rsd limit ${rsd}`);
+    return (RSD < RSD) || (noxCounter >= noxCountLimit);
   };
 
   const calculateNoxCoef = () => {
@@ -254,6 +256,15 @@ export default function AnalysisPanel({
     };
     const data = deriveData(coefs);
     updateTableData(data);
+    if (series[analysisIndex]["type"] === "质控") {
+      const biasRef = getBias();
+      const noRef = data["noInputConc"];
+      const noMeas = data["noMeasConc"];
+      const biasMeas = Math.abs(noMeas - noRef) / noRef;
+      if ( biasMeas > biasRef) {
+        alert("质控偏差过大！已停止分析！");
+      };
+    };
     const postData = {...data};
     delete postData.id;
     delete postData.name;

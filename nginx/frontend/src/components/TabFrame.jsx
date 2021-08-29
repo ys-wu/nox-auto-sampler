@@ -59,6 +59,7 @@ export default function TabFrame({
           seriesName={seriesName}
           series={series}
           passAnalyzing={receiveAnalyzing}
+          setting={setting}
         />
       </TabPane>
 

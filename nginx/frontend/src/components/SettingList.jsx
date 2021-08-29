@@ -17,6 +17,7 @@ export default function SettingList({ onUpdateSetting = f => f }) {
   const defaultSetting = [
     { 'name': '样品流量', 'tags': ['1.0']},
     { 'name': '类型', 'tags': ['校准', '质控', '样品'] },
+    { 'name': 'RSD', 'tags': ['0.5 %']},
     { 'name': '偏差', 'tags': ['0.1 %', '0.5 %', '1 %'] },
     {
       'name': '气瓶类型',
@@ -83,6 +84,8 @@ export default function SettingList({ onUpdateSetting = f => f }) {
       alert("样品流量只能是一项！")
     } else if (isNaN(tempSetting[0]['tags'][0]) ) {
       alert("样品流量必须是个数！");
+    } else if (tempSetting[2]['tags'].length !== 1) {
+      alert("RSD只能是一项！");
     } else {
       setTemp([...tempSetting]);
       setCurrent([...tempSetting]);

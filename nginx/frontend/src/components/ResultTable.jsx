@@ -296,7 +296,7 @@ export default function ResultTable({seriesName}) {
                 }}
                 onClick={onGetReports}
               >
-                生产报表
+                产生报表
               </Button>
             </Popconfirm>
           </Row>

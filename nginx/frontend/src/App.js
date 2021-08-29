@@ -103,6 +103,7 @@ function App() {
     const nameMapping = {
       "样品流量": "flowSet",
       "类型": "type",
+      "RSD": "rsd",
       "偏差": "bias",
       "气瓶类型": "bottleType",
       "气瓶压力": "bottlePres",
