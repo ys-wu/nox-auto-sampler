@@ -63,9 +63,9 @@ export default function ResultTable({seriesName}) {
       render: value => value ? value.toFixed(2) : null
     },
     {
-      title: 'NO2(分析值)',
-      dataIndex: 'no2MeasConc',
-      key: 'no2MeasConc',
+      title: 'NOx(分析值)',
+      dataIndex: 'noxMeasConc',
+      key: 'noxMeasConc',
       render: value => value ? value.toFixed(2) : null
     },
     {
@@ -83,6 +83,12 @@ export default function ResultTable({seriesName}) {
       title: 'NO2(再校准)',
       dataIndex: 'no2Revised',
       key: 'no2Revised',
+      render: value => value ? value.toFixed(2) : null
+    },
+    {
+      title: 'NOx(再校准)',
+      dataIndex: 'noxRevised',
+      key: 'noxRevised',
       render: value => value ? value.toFixed(2) : null
     },
     {

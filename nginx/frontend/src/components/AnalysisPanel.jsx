@@ -357,9 +357,9 @@ export default function AnalysisPanel({
       render: value => value ? parseFloat(value).toFixed(2) : null
     },
     {
-      title: 'NO2 浓度',
-      dataIndex: 'no2InputConc',
-      key: 'no2InputConc',
+      title: 'NOx 浓度',
+      dataIndex: 'noxInputConc',
+      key: 'noxInputConc',
       render: value => value ? parseFloat(value).toFixed(2) : null
     },
     {
@@ -369,9 +369,9 @@ export default function AnalysisPanel({
       render: value => value ? parseFloat(value).toFixed(2) : null
     },
     {
-      title: 'NO2 原始值',
-      dataIndex: 'no2MeasConc',
-      key: 'no2MeasConc',
+      title: 'NOx 原始值',
+      dataIndex: 'noxMeasConc',
+      key: 'noxMeasConc',
       render: value => value ? parseFloat(value).toFixed(2) : null
     },
     {
@@ -381,9 +381,9 @@ export default function AnalysisPanel({
       render: value => value ? parseFloat(value).toFixed(2) : null
     },
     {
-      title: 'NO2 校正系数',
-      dataIndex: 'no2MeasCoef',
-      key: 'no2MeasCoef',
+      title: 'NOx 校正系数',
+      dataIndex: 'noxMeasCoef',
+      key: 'noxMeasCoef',
       render: value => value ? parseFloat(value).toFixed(2) : null
     },
     {
@@ -393,9 +393,9 @@ export default function AnalysisPanel({
       render: value => value ? parseFloat(value).toFixed(2) : null
     },
     {
-      title: 'NO2 修正值',
-      dataIndex: 'no2Revised',
-      key: 'no2Revised',
+      title: 'NOx 修正值',
+      dataIndex: 'noxRevised',
+      key: 'noxRevised',
       render: value => value ? parseFloat(value).toFixed(2) : null
     },
     {

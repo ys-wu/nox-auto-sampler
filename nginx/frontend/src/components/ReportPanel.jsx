@@ -57,18 +57,18 @@ export default function ReporPanel() {
       key: 'noInputConc',
       render: value => value ? value.toFixed(2) : null
     },
-    {
-      title: 'NO2 浓度',
-      dataIndex: 'no2InputConc',
-      key: 'no2InputConc',
-      render: value => value ? value.toFixed(2) : null
-    },
     // {
-    //   title: 'NOx 浓度',
-    //   dataIndex: 'noxInputConc',
-    //   key: 'noxInputConc',
+    //   title: 'NO2 浓度',
+    //   dataIndex: 'no2InputConc',
+    //   key: 'no2InputConc',
     //   render: value => value ? value.toFixed(2) : null
     // },
+    {
+      title: 'NOx 浓度',
+      dataIndex: 'noxInputConc',
+      key: 'noxInputConc',
+      render: value => value ? value.toFixed(2) : null
+    },
     {
       title: 'NO 分析值',
       dataIndex: 'noMeasConc',
@@ -76,9 +76,9 @@ export default function ReporPanel() {
       render: value => value ? value.toFixed(2) : null
     },
     {
-      title: 'NO2 分析值',
-      dataIndex: 'no2MeasConc',
-      key: 'no2MeasConc',
+      title: 'NOx 分析值',
+      dataIndex: 'noxMeasConc',
+      key: 'noxMeasConc',
       render: value => value ? value.toFixed(2) : null
     },
     {
@@ -93,12 +93,12 @@ export default function ReporPanel() {
       key: 'no2Revised',
       render: value => value ? value.toFixed(2) : null
     },
-    // {
-    //   title: 'NOx 修正值',
-    //   dataIndex: 'noxRevised',
-    //   key: 'noxRevised',
-    //   render: value => value ? value.toFixed(2) : null
-    // },
+    {
+      title: 'NOx 修正值',
+      dataIndex: 'noxRevised',
+      key: 'noxRevised',
+      render: value => value ? value.toFixed(2) : null
+    },
     {
       title: '气瓶压力',
       dataIndex: 'bottlePres',
