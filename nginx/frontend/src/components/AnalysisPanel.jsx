@@ -266,6 +266,8 @@ export default function AnalysisPanel({
       };
     };
     const postData = {...data};
+    postData["sampleType"] = postData.type;
+    delete postData.type;
     delete postData.id;
     delete postData.name;
     post(postData, urlSample);
